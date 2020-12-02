@@ -470,6 +470,7 @@ MonoBehaviour:
   building_preview_prefab: {fileID: 7578841793296246740, guid: c95d992081a6fea4b90175234e41a07e,
     type: 3}
   player_camera: {fileID: 519420031}
+  grid: 0.5
 --- !u!1 &1919156117
 GameObject:
   m_ObjectHideFlags: 0

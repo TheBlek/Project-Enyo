@@ -7,6 +7,7 @@ public class BuildingControls : MonoBehaviour
     [SerializeField] private GameObject building_prefab;
     [SerializeField] private GameObject building_preview_prefab;
     [SerializeField] private Camera player_camera;
+    [SerializeField] private float grid;
 
     private GameObject preview_obj;
     private List<Bounds> buildings_bounds;
@@ -41,6 +42,9 @@ public class BuildingControls : MonoBehaviour
     {
         Vector3 position = player_camera.ScreenToWorldPoint(Input.mousePosition);
         position.z = 0;
+        position.x -= position.x % (grid) - grid / 2 * Mathf.Sign(position.x);
+        position.y -= position.y % (grid) - grid / 2 * Mathf.Sign(position.y);
+
         preview_obj.transform.position = position;
     }
 
@@ -48,19 +52,20 @@ public class BuildingControls : MonoBehaviour
     {
         Vector3 position = player_camera.ScreenToWorldPoint(Input.mousePosition);
         position.z = 0;
+        position.x -= position.x % (grid) - grid / 2 * Mathf.Sign(position.x);
+        position.y -= position.y % (grid) - grid / 2 * Mathf.Sign(position.y);
+
         GameObject building = GameObject.Instantiate(building_prefab, position, Quaternion.identity);
         Bounds bounds = building.GetComponent<BoxCollider>().bounds;
-        bool flag = false;
-        for (int i = 0; i < buildings_bounds.Count; i++)
+
+        foreach (Bounds building_bounds in buildings_bounds)
         {
-            if (buildings_bounds[i].Intersects(bounds))
+            if (building_bounds.Intersects(bounds))
             {
                 Object.Destroy(building);
-                flag = true;
-                break;
+                return;
             }
         }
-        if (!flag)
-            buildings_bounds.Add(bounds);
+        buildings_bounds.Add(bounds);
     }
 }
