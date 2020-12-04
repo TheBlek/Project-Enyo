@@ -56,23 +56,18 @@ public class BuildingControls : MonoBehaviour
 
     private void Build()
     {
-        Vector3 position = player_camera.ScreenToWorldPoint(Input.mousePosition);
-        position.z = 0;
-        position.x -= position.x % (grid) - grid / 2 * Mathf.Sign(position.x) - shift.x * grid / 2;
-        position.y -= position.y % (grid) - grid / 2 * Mathf.Sign(position.y) + shift.y * grid / 2;
-
-        GameObject building = GameObject.Instantiate(building_prefab, position, Quaternion.identity);
-        Bounds bounds = building.GetComponent<BoxCollider>().bounds;
+        Bounds bounds = preview_obj.GetComponent<BoxCollider>().bounds;
 
         foreach (Bounds building_bounds in buildings_bounds)
         {
             if (building_bounds.Intersects(bounds))
             {
-                Object.Destroy(building);
                 Debug.Log("Denied");
                 return;
             }
         }
-        buildings_bounds.Add(bounds);
+        Vector3 position = preview_obj.transform.position;
+        GameObject building = GameObject.Instantiate(building_prefab, position, Quaternion.identity);
+        buildings_bounds.Add(building.GetComponent<BoxCollider>().bounds);
     }
 }
