@@ -7,8 +7,9 @@ public class BuildingControls : MonoBehaviour
     [SerializeField] private GameObject building_prefab;
     [SerializeField] private GameObject building_preview_prefab;
     [SerializeField] private Camera player_camera;
-    [SerializeField] private float grid;
+    [SerializeField] private GameManager gameManager;
 
+    private float grid;
     private GameObject preview_obj;
     private List<Bounds> buildings_bounds;
     private bool building_mode = false;
@@ -16,6 +17,8 @@ public class BuildingControls : MonoBehaviour
 
     private void Start()
     {
+        grid = gameManager.GetGridSize();
+        grid = 0.5f;
         Vector2 building_size = building_prefab.GetComponent<Building>().GetSize();
         shift = building_size - Vector2.one;
         buildings_bounds = new List<Bounds>();
@@ -66,6 +69,7 @@ public class BuildingControls : MonoBehaviour
             if (building_bounds.Intersects(bounds))
             {
                 Object.Destroy(building);
+                Debug.Log("Denied");
                 return;
             }
         }
