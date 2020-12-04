@@ -20,7 +20,7 @@ public class PlayerControls : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             if (building_mode)
-                builder.Build(player_camera);
+                builder.Build();
             else
                 shooter.Shoot();
         }
