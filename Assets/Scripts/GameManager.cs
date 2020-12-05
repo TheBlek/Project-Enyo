@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private float grid;
     [SerializeField] private int metals;
-    [SerializeField] private BuildingControls builder;
+    [SerializeField] private Builder builder;
 
     private List<Building> buildings;
     private List<Bounds> buildings_bounds;
