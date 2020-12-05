@@ -5,12 +5,21 @@ using UnityEngine;
 public class PlayerControls : MonoBehaviour
 { 
     [SerializeField] private Camera player_camera;
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private Builder builder;
     [SerializeField] private Shooter shooter;
     [SerializeField] private Walker walker;
     private int building_num = 0;
 
+    private float grid;
+
     private bool building_mode = false;
+
+    private void Start()
+    {
+        grid = gameManager.GetGridSize();
+    }
+
     void Update()
     {
         HandleNumInput();
@@ -23,18 +32,18 @@ public class PlayerControls : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             if (building_mode)
-                builder.Build(building_num);
+                builder.Build(building_num, gameManager);
             else
                 shooter.Shoot();
         }
 
         if (building_mode)
         {
-            builder.Preview(player_camera, building_num);
+            builder.Preview(player_camera, building_num, grid);
         }
 
         walker.LookAtMouse(player_camera);
-        walker.Walk(Input.GetAxis("Vertical"), Input.GetAxis("Horizontal"));
+        walker.Walk(gameManager, Input.GetAxis("Vertical"), Input.GetAxis("Horizontal"));
     }
     public void ChangeBuildingNum(int building_number)
     {
@@ -66,6 +75,6 @@ public class PlayerControls : MonoBehaviour
             building_num = 8;
         if (Input.GetKeyDown(KeyCode.Alpha9))
             building_num = 9;
-        builder.MatchPreviewSize(building_num);
+        builder.MatchPreviewSize(building_num, grid);
     }
 }

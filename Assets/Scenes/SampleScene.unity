@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: 0.5
-  metals: 0
+  metals: 1000
   builder: {fileID: 1508687873}
 --- !u!4 &519552905
 Transform:
@@ -557,10 +557,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1508687872}
+  - component: {fileID: 1508687874}
   - component: {fileID: 1508687871}
   - component: {fileID: 1508687873}
   - component: {fileID: 1508687875}
-  - component: {fileID: 1508687874}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -581,7 +581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
-  player_camera: {fileID: 519420031}
+  collider: {fileID: 1182231753}
 --- !u!4 &1508687872
 Transform:
   m_ObjectHideFlags: 0
@@ -614,13 +614,12 @@ MonoBehaviour:
   - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
   - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
   - {fileID: 281415849733071475, guid: 2b5c0b4861721d349a167373bc7c12c6, type: 3}
-  - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
+  - {fileID: 281415849733071475, guid: bfd8f133902d3f84fa4b87118e09cd8b, type: 3}
   - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
   - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
   - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
   preview_prefab: {fileID: 7578841793296246740, guid: c95d992081a6fea4b90175234e41a07e,
     type: 3}
-  gameManager: {fileID: 519552904}
 --- !u!114 &1508687874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,8 +633,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player_camera: {fileID: 519420031}
+  gameManager: {fileID: 519552904}
   builder: {fileID: 1508687873}
   shooter: {fileID: 1508687875}
+  walker: {fileID: 1508687871}
 --- !u!114 &1508687875
 MonoBehaviour:
   m_ObjectHideFlags: 0

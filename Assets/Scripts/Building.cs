@@ -37,4 +37,9 @@ public class Building : MonoBehaviour
     {
         return cost;
     }
+
+    public virtual bool IsWalkable()
+    {
+        return true;
+    }
 }

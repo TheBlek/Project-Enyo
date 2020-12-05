@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PreviewBuilding : MonoBehaviour
 {
-    [SerializeField] protected Building building;
-
     public void MatchSizeWithBuilding(Building building, float grid)
     {
         Vector2 size = building.GetSize();
