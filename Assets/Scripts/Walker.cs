@@ -2,18 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class Walker: MonoBehaviour
 {
     [SerializeField] private float speed;
-    [SerializeField] private Camera player_camera;
 
-    void Update()
-    {
-        HandleInput();
-        LookAtMouse();
-    }
-
-    private void LookAtMouse()
+    public void LookAtMouse(Camera player_camera)
     {
         Vector3 mouse = player_camera.ScreenToWorldPoint(Input.mousePosition);
         mouse.z = 0;
@@ -22,10 +15,8 @@ public class PlayerMovement : MonoBehaviour
         transform.eulerAngles = Vector3.forward * angle;
     }
 
-    private void HandleInput()
+    public void Walk(float xInput, float yInput)
     {
-        float xInput = Input.GetAxis("Vertical");
-        float yInput = Input.GetAxis("Horizontal");
         Vector3 movement = Vector3.up * xInput + Vector3.right * yInput;
         transform.Translate(movement * speed * Time.deltaTime, Space.World);
     }

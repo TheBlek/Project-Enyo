@@ -34,7 +34,7 @@ public class Builder : MonoBehaviour
 
     public void MatchPreviewSize(int building_num)
     {
-        preview_obj.GetComponent<PreviewBuilding>().MatchSizeWithBuilding(prefabs[building_num].GetComponent<Building>());
+        preview_obj.GetComponent<PreviewBuilding>().MatchSizeWithBuilding(prefabs[building_num].GetComponent<Building>(), grid);
     }
 
     public void Preview(Camera player_camera, int building_num)

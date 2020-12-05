@@ -7,6 +7,7 @@ public class PlayerControls : MonoBehaviour
     [SerializeField] private Camera player_camera;
     [SerializeField] private Builder builder;
     [SerializeField] private Shooter shooter;
+    [SerializeField] private Walker walker;
     private int building_num = 0;
 
     private bool building_mode = false;
@@ -19,7 +20,7 @@ public class PlayerControls : MonoBehaviour
             builder.SwitchPreviewState(building_mode);
         }
 
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
             if (building_mode)
                 builder.Build(building_num);
@@ -31,6 +32,9 @@ public class PlayerControls : MonoBehaviour
         {
             builder.Preview(player_camera, building_num);
         }
+
+        walker.LookAtMouse(player_camera);
+        walker.Walk(Input.GetAxis("Vertical"), Input.GetAxis("Horizontal"));
     }
     public void ChangeBuildingNum(int building_number)
     {

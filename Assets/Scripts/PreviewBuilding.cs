@@ -5,15 +5,8 @@ using UnityEngine;
 public class PreviewBuilding : MonoBehaviour
 {
     [SerializeField] protected Building building;
-    [SerializeField] protected GameManager gameManager;
 
-    private float grid;
-    void Start()
-    {
-        grid = gameManager.GetGridSize();
-    }
-
-    public void MatchSizeWithBuilding(Building building)
+    public void MatchSizeWithBuilding(Building building, float grid)
     {
         Vector2 size = building.GetSize();
         Vector3 sizeV3 = Vector3.one;
