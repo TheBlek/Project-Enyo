@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BuildingControls : MonoBehaviour
 {
-    [SerializeField] private GameObject building_prefab;
-    [SerializeField] private GameObject building_preview_prefab;
+    [SerializeField] private GameObject[] prefabs;
+    [SerializeField] private GameObject preview_prefab;
     [SerializeField] private Camera player_camera;
     [SerializeField] private GameManager gameManager;
 
@@ -13,25 +13,27 @@ public class BuildingControls : MonoBehaviour
     private GameObject preview_obj;
     private List<Bounds> buildings_bounds;
     private bool building_mode = false;
+    private int building_num = 1;
     private Vector2 shift;
 
     private void Start()
     {
         grid = gameManager.GetGridSize();
-        grid = 0.5f;
-        Vector2 building_size = building_prefab.GetComponent<Building>().GetSize();
-        shift = building_size - Vector2.one;
+        RecalculateShift();
         buildings_bounds = new List<Bounds>();
-        preview_obj = GameObject.Instantiate(building_preview_prefab);
+        preview_obj = GameObject.Instantiate(preview_prefab);
         preview_obj.SetActive(false);
     }
     void Update()
     {
+        HandleInput();
+
         if (Input.GetKeyDown(KeyCode.E))
         {
             building_mode = !building_mode;
             preview_obj.SetActive(building_mode);
         }
+
 
         if (building_mode && Input.GetMouseButtonDown(0))
         {
@@ -42,6 +44,46 @@ public class BuildingControls : MonoBehaviour
         {
             Preview();
         }
+    }
+
+    private void HandleInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha0))
+            building_num = 0;
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            building_num = 1;
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+            building_num = 2;
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            building_num = 3;
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+            building_num = 4;
+        if (Input.GetKeyDown(KeyCode.Alpha5))
+            building_num = 5;
+        if (Input.GetKeyDown(KeyCode.Alpha6))
+            building_num = 6;
+        if (Input.GetKeyDown(KeyCode.Alpha7))
+            building_num = 7;
+        if (Input.GetKeyDown(KeyCode.Alpha8))
+            building_num = 8;
+        if (Input.GetKeyDown(KeyCode.Alpha9))
+            building_num = 9;
+        RecalculateShift();
+        preview_obj.GetComponent<PreviewBuilding>().MatchSizeWithBuilding(prefabs[building_num].GetComponent<Building>());
+    }
+
+    private void RecalculateShift()
+    {
+        Vector2 building_size = prefabs[building_num].GetComponent<Building>().GetSize();
+        shift = building_size - Vector2.one;
+    }
+
+    public void ChangeBuildingNum(int building_number)
+    {
+        if (building_number > 9 || building_number < 0)
+            return;
+
+        building_num = building_number;
     }
 
     private void Preview()
@@ -67,7 +109,7 @@ public class BuildingControls : MonoBehaviour
             }
         }
         Vector3 position = preview_obj.transform.position;
-        GameObject building = GameObject.Instantiate(building_prefab, position, Quaternion.identity);
+        GameObject building = GameObject.Instantiate(prefabs[building_num], position, Quaternion.identity);
         buildings_bounds.Add(building.GetComponent<BoxCollider>().bounds);
     }
 }

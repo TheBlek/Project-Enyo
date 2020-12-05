@@ -23,10 +23,9 @@ public class Building : MonoBehaviour
         transform.localScale = sizeV3;
     }
 
-    
-    void Update()
+    public void SelfUpdate()
     {
-        
+
     }
 
     public Vector2 GetSize()

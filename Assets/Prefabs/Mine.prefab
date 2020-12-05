@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8216768819121331993}
   - component: {fileID: -7262212156032331193}
   m_Layer: 0
-  m_Name: Building
+  m_Name: Mine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fb5289016c95ecf40af675e7c08098f2, type: 2}
+  - {fileID: 2100000, guid: 2f94dd57fc764eb4994617d0aeea1406, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cost: 0
   maxHP: 0
-  name: 
-  size: {x: 1, y: 1}
+  name: Mine
+  size: {x: 2, y: 2}
   gameManager: {fileID: 3051915012251255177, guid: 255b9a8a45df7bc418b4ecd6d53d33ca,
     type: 3}

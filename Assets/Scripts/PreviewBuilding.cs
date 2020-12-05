@@ -11,6 +11,10 @@ public class PreviewBuilding : MonoBehaviour
     void Start()
     {
         grid = gameManager.GetGridSize();
+    }
+
+    public void MatchSizeWithBuilding(Building building)
+    {
         Vector2 size = building.GetSize();
         Vector3 sizeV3 = Vector3.one;
         sizeV3.x *= size.x * grid;
@@ -19,11 +23,5 @@ public class PreviewBuilding : MonoBehaviour
         sizeV3.y -= 0.01f;
 
         transform.localScale = sizeV3;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
