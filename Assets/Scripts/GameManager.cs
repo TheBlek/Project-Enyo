@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
 
     public void BuildingInsertion(Building building)
     {
-        building.gameManager = this;
         building.Resize(grid);
 
         metals -= building.GetCost();
@@ -32,7 +31,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (Building building in buildings)
         {
-            building.SelfUpdate();
+            building.SelfUpdate(this);
         }
     }
 

@@ -8,7 +8,6 @@ public class Building : MonoBehaviour
     [SerializeField] protected float maxHP;
     [SerializeField] protected string name;
     [SerializeField] protected Vector2 size;
-    public GameManager gameManager;
 
     public void Resize(float grid)
     {
@@ -20,7 +19,7 @@ public class Building : MonoBehaviour
         transform.localScale = sizeV3;
     }
 
-    public virtual void SelfUpdate()
+    public virtual void SelfUpdate(GameManager gameManager)
     {
     }
 
