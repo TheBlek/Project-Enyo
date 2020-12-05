@@ -19,9 +19,12 @@ public class GameManager : MonoBehaviour
 
     public void BuildingInsertion(Building building)
     {
-        buildings.Add(building);
         building.gameManager = this;
+        building.Resize(grid);
+
         metals -= building.GetCost();
+
+        buildings.Add(building);
         buildings_bounds.Add(building.GetComponent<BoxCollider>().bounds);
     }
 

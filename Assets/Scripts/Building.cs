@@ -9,12 +9,9 @@ public class Building : MonoBehaviour
     [SerializeField] protected string name;
     [SerializeField] protected Vector2 size;
     public GameManager gameManager;
-    
-    private float grid;
 
-    void Start()
+    public void Resize(float grid)
     {
-        grid = gameManager.GetGridSize();
         Vector3 sizeV3 = Vector3.one;
         sizeV3.x *= size.x * grid;
         sizeV3.x -= 0.01f;
