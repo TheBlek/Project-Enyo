@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    [SerializeField] protected float cost;
+    [SerializeField] private int cost;
     [SerializeField] protected float maxHP;
     [SerializeField] protected string name;
     [SerializeField] protected Vector2 size;
@@ -35,5 +35,10 @@ public class Building : MonoBehaviour
     public string GetName()
     {
         return name;
+    }
+
+    public virtual int GetCost()
+    {
+        return cost;
     }
 }

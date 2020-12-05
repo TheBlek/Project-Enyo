@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
     private List<Bounds> buildings_bounds;
     void Start()
     {
-        metals = 0;
         builder.onBuild += BuildingInsertion;
         buildings_bounds = new List<Bounds>();
         buildings = new List<Building>();
@@ -22,6 +21,7 @@ public class GameManager : MonoBehaviour
     {
         buildings.Add(building);
         building.gameManager = this;
+        metals -= building.GetCost();
         buildings_bounds.Add(building.GetComponent<BoxCollider>().bounds);
     }
 
@@ -31,6 +31,18 @@ public class GameManager : MonoBehaviour
         {
             building.SelfUpdate();
         }
+    }
+
+    public bool IsAffordable(Building building)
+    {
+        if (building.GetCost() <= metals)
+            return true;
+        return false;
+    }
+
+    public int GetMetals()
+    {
+        return metals;
     }
 
     public float GetGridSize()

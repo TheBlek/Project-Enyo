@@ -50,6 +50,9 @@ public class Builder : MonoBehaviour
 
     public void Build(int building_num)
     {
+        if (!gameManager.IsAffordable(prefabs[building_num].GetComponent<Building>()))
+            return;
+
         List<Bounds> buildings_bounds = gameManager.GetBuildingsBounds();
 
         Bounds bounds = preview_obj.GetComponent<BoxCollider>().bounds;
