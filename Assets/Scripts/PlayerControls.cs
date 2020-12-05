@@ -43,7 +43,7 @@ public class PlayerControls : MonoBehaviour
         }
 
         walker.LookAtMouse(player_camera);
-        walker.Walk(gameManager, Input.GetAxis("Vertical"), Input.GetAxis("Horizontal"));
+        walker.Walk(Input.GetAxis("Vertical"), Input.GetAxis("Horizontal"));
     }
     public void ChangeBuildingNum(int building_number)
     {
