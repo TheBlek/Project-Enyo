@@ -465,13 +465,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 020d6b35bfea7ba48bdbea1ea7f3636b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  building_prefab: {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252,
-    type: 3}
-  building_preview_prefab: {fileID: 7578841793296246740, guid: c95d992081a6fea4b90175234e41a07e,
+  prefabs:
+  - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
+  - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
+  - {fileID: 281415849733071475, guid: 2b5c0b4861721d349a167373bc7c12c6, type: 3}
+  - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
+  - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
+  - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
+  - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
+  preview_prefab: {fileID: 7578841793296246740, guid: c95d992081a6fea4b90175234e41a07e,
     type: 3}
   player_camera: {fileID: 519420031}
-  gameManager: {fileID: 3051915012251255177, guid: 255b9a8a45df7bc418b4ecd6d53d33ca,
+  gameManager: {fileID: 1582271335}
+--- !u!114 &1582271335 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3051915012251255177, guid: 255b9a8a45df7bc418b4ecd6d53d33ca,
     type: 3}
+  m_PrefabInstance: {fileID: 3051915012338400769}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 396be6a892484a7448d0f04b8ecbe518, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1919156117
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,5 +648,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3051915012251255177, guid: 255b9a8a45df7bc418b4ecd6d53d33ca,
+        type: 3}
+      propertyPath: builder
+      value: 
+      objectReference: {fileID: 1508687873}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 255b9a8a45df7bc418b4ecd6d53d33ca, type: 3}

@@ -25,11 +25,16 @@ public class Building : MonoBehaviour
 
     public void SelfUpdate()
     {
-
+        Debug.Log(name);
     }
 
     public Vector2 GetSize()
     {
         return size;
+    }
+
+    public string GetName()
+    {
+        return name;
     }
 }

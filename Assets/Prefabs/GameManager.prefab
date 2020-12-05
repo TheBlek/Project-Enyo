@@ -44,3 +44,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grid: 0.5
+  metals: 0
+  builder: {fileID: 0}

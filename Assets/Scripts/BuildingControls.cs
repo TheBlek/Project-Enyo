@@ -9,18 +9,18 @@ public class BuildingControls : MonoBehaviour
     [SerializeField] private Camera player_camera;
     [SerializeField] private GameManager gameManager;
 
+    public delegate void OnBuild(Building building);
+    public OnBuild onBuild = null;
+
     private float grid;
     private GameObject preview_obj;
-    private List<Bounds> buildings_bounds;
+
     private bool building_mode = false;
     private int building_num = 1;
-    private Vector2 shift;
 
     private void Start()
     {
         grid = gameManager.GetGridSize();
-        RecalculateShift();
-        buildings_bounds = new List<Bounds>();
         preview_obj = GameObject.Instantiate(preview_prefab);
         preview_obj.SetActive(false);
     }
@@ -68,14 +68,13 @@ public class BuildingControls : MonoBehaviour
             building_num = 8;
         if (Input.GetKeyDown(KeyCode.Alpha9))
             building_num = 9;
-        RecalculateShift();
         preview_obj.GetComponent<PreviewBuilding>().MatchSizeWithBuilding(prefabs[building_num].GetComponent<Building>());
     }
 
-    private void RecalculateShift()
+    private Vector2 CalculateShift()
     {
         Vector2 building_size = prefabs[building_num].GetComponent<Building>().GetSize();
-        shift = building_size - Vector2.one;
+        return building_size - Vector2.one;
     }
 
     public void ChangeBuildingNum(int building_number)
@@ -88,6 +87,7 @@ public class BuildingControls : MonoBehaviour
 
     private void Preview()
     {
+        Vector2 shift = CalculateShift();
         Vector3 position = player_camera.ScreenToWorldPoint(Input.mousePosition);
         position.z = 0;
         position.x -= position.x % (grid) - grid / 2 * Mathf.Sign(position.x) - shift.x * grid / 2;
@@ -98,6 +98,8 @@ public class BuildingControls : MonoBehaviour
 
     private void Build()
     {
+        List<Bounds> buildings_bounds = gameManager.GetBuildingsBounds();
+
         Bounds bounds = preview_obj.GetComponent<BoxCollider>().bounds;
 
         foreach (Bounds building_bounds in buildings_bounds)
@@ -110,6 +112,6 @@ public class BuildingControls : MonoBehaviour
         }
         Vector3 position = preview_obj.transform.position;
         GameObject building = GameObject.Instantiate(prefabs[building_num], position, Quaternion.identity);
-        buildings_bounds.Add(building.GetComponent<BoxCollider>().bounds);
+        onBuild(building.GetComponent<Building>());
     }
 }
