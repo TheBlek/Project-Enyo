@@ -21,10 +21,10 @@ public class GameManager : MonoBehaviour
     public void BuildingInsertion(Building building)
     {
         buildings.Add(building);
+        building.gameManager = this;
         buildings_bounds.Add(building.GetComponent<BoxCollider>().bounds);
     }
 
-    // Update is called once per frame
     void Update()
     {
         foreach (Building building in buildings)
