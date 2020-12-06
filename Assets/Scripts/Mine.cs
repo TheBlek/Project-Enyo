@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Mine : Building
 {
-    private int cost = 300;
-
     private float time_since_last_addition = 0;
     private int MpS = 20;
 
@@ -17,10 +15,5 @@ public class Mine : Building
             time_since_last_addition -= 1;
             gameManager.AddMetals(MpS);
         }
-    }
-
-    public override int GetCost()
-    {
-        return cost;
     }
 }

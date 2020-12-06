@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    [SerializeField] private int cost;
     [SerializeField] protected float maxHP;
     [SerializeField] protected string name;
     [SerializeField] protected Vector2 size;
+    [SerializeField] protected int cost;
 
     public void Resize(float grid)
     {
@@ -33,13 +33,8 @@ public class Building : MonoBehaviour
         return name;
     }
 
-    public virtual int GetCost()
+    public int GetCost()
     {
         return cost;
-    }
-
-    public virtual bool IsWalkable()
-    {
-        return true;
     }
 }

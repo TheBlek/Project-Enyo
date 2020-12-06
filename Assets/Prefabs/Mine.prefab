@@ -93,10 +93,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 335c24f11bc522b49b49223960905e01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 0
   maxHP: 0
   name: Mine
   size: {x: 2, y: 2}
+  cost: 300
 --- !u!65 &3020560798716675717
 BoxCollider:
   m_ObjectHideFlags: 0
