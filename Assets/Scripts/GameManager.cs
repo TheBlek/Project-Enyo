@@ -35,31 +35,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public bool IsIntersectingWithBuildings(Bounds bounds)
-    {
-        foreach (Bounds building_bounds in buildings_bounds)
-        {
-            if (building_bounds.Intersects(bounds))
-                return true;
-        }
-        return false;
-    }
-
-    public bool IsIntersectingWithWalls(Bounds bounds)
-    {
-        for (int i = 0; i < buildings.Count; i++)
-        {
-            if (!buildings[i].IsWalkable() && buildings_bounds[i].Intersects(bounds))
-                return true;
-        }
-        return false;
-    }
-
     public bool IsAffordable(Building building)
     {
-        if (building.GetCost() <= metals)
-            return true;
-        return false;
+        return building.GetCost() <= metals;
     }
 
     public int GetMetals()

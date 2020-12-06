@@ -16,9 +16,8 @@ public class Walker: MonoBehaviour
         transform.eulerAngles = Vector3.forward * angle;
     }
 
-    public void Walk(float xInput, float yInput)
+    public void Walk(Vector2 input)
     {
-        Vector3 movement = Vector3.up * xInput + Vector3.right * yInput;
-        rig.MovePosition(rig.position + movement * speed * Time.deltaTime);
+        rig.MovePosition((Vector2)transform.position + input * speed * Time.deltaTime);
     }
 }
