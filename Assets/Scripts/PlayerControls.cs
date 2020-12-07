@@ -91,4 +91,9 @@ public class PlayerControls : MonoBehaviour
             building_type = buildings.building9;
         builder.MatchPreviewSize(building_type, grid);
     }
+
+    public Vector3 GetPlayerPosition()
+    {
+        return transform.position;
+    }
 }

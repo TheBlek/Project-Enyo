@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float grid;
     [SerializeField] private int metals;
     [SerializeField] private Builder builder;
+    [SerializeField] private PlayerControls player;
 
     private List<Building> buildings;
     private List<Bounds> buildings_bounds;
@@ -58,5 +59,10 @@ public class GameManager : MonoBehaviour
     public void AddMetals(int addition)
     {
         metals += addition;
+    }
+
+    public Vector3 GetPlayerPosition()
+    {
+        return player.GetPlayerPosition();
     }
 }
