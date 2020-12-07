@@ -18,6 +18,6 @@ public class Walker: MonoBehaviour
 
     public void Walk(Vector2 input)
     {
-        rig.MovePosition((Vector2)transform.position + input * speed * Time.deltaTime);
+        rig.MovePosition((Vector2)transform.position + input * speed * Time.fixedDeltaTime);
     }
 }

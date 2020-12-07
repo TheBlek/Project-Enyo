@@ -58,12 +58,12 @@ public class PlayerControls : MonoBehaviour
             builder.Preview(player_camera, building_type, grid);
         }
 
-        walker.LookAtMouse(player_camera);
         input_movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
 
     private void FixedUpdate()
     {
+        walker.LookAtMouse(player_camera);
         walker.Walk(input_movement);
     }
 
