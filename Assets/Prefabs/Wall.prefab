@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1320236573727131724}
   - component: {fileID: 8765649655966461045}
   - component: {fileID: -2275497087535953664}
+  - component: {fileID: 5928142210516067680}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -93,10 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff1e72f2b40827479f392fd86927d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 200
-  maxHP: 0
   name: Wall
   size: {x: 1, y: 1}
+  cost: 200
 --- !u!65 &-2275497087535953664
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -110,3 +110,16 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5928142210516067680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281415849733071475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e76f708e1513109469aff905d19478af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 150

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1320236573727131724}
   - component: {fileID: -7262212156032331193}
   - component: {fileID: -3088266260926856575}
+  - component: {fileID: -6734129094616079554}
   m_Layer: 0
   m_Name: Building
   m_TagString: Untagged
@@ -93,10 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ff1e72f2b40827479f392fd86927d96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 0
-  maxHP: 0
   name: 
   size: {x: 1, y: 1}
+  cost: 0
 --- !u!65 &-3088266260926856575
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -110,3 +110,16 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-6734129094616079554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281415849733071475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e76f708e1513109469aff905d19478af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 500

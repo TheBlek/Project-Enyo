@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1320236573727131724}
   - component: {fileID: -555068013670144776}
   - component: {fileID: 3020560798716675717}
+  - component: {fileID: -1012311748323705905}
   m_Layer: 0
   m_Name: Mine
   m_TagString: Untagged
@@ -93,7 +94,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 335c24f11bc522b49b49223960905e01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 0
   name: Mine
   size: {x: 2, y: 2}
   cost: 300
@@ -110,3 +110,16 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-1012311748323705905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281415849733071475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e76f708e1513109469aff905d19478af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHP: 500
