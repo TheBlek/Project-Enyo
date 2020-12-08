@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    [SerializeField] protected float maxHP;
     [SerializeField] protected string name;
     [SerializeField] protected Vector2 size;
     [SerializeField] protected int cost;
