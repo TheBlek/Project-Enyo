@@ -4,17 +4,13 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    [SerializeField] protected float cost;
     [SerializeField] protected float maxHP;
     [SerializeField] protected string name;
     [SerializeField] protected Vector2 size;
-    [SerializeField] protected GameManager gameManager;
-    
-    private float grid;
+    [SerializeField] protected int cost;
 
-    void Start()
+    public void Resize(float grid)
     {
-        grid = gameManager.GetGridSize();
         Vector3 sizeV3 = Vector3.one;
         sizeV3.x *= size.x * grid;
         sizeV3.x -= 0.01f;
@@ -23,14 +19,22 @@ public class Building : MonoBehaviour
         transform.localScale = sizeV3;
     }
 
-    
-    void Update()
+    public virtual void SelfUpdate(GameManager gameManager)
     {
-        
     }
 
     public Vector2 GetSize()
     {
         return size;
+    }
+
+    public string GetName()
+    {
+        return name;
+    }
+
+    public int GetCost()
+    {
+        return cost;
     }
 }

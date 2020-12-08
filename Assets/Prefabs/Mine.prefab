@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 1542532067466030811}
   - component: {fileID: 2485310924690011544}
   - component: {fileID: 1320236573727131724}
-  - component: {fileID: -7262212156032331193}
-  - component: {fileID: -3088266260926856575}
+  - component: {fileID: -555068013670144776}
+  - component: {fileID: 3020560798716675717}
   m_Layer: 0
-  m_Name: Building
+  m_Name: Mine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fb5289016c95ecf40af675e7c08098f2, type: 2}
+  - {fileID: 2100000, guid: 2f94dd57fc764eb4994617d0aeea1406, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -81,7 +81,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &-7262212156032331193
+--- !u!114 &-555068013670144776
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -90,14 +90,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 281415849733071475}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ff1e72f2b40827479f392fd86927d96, type: 3}
+  m_Script: {fileID: 11500000, guid: 335c24f11bc522b49b49223960905e01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 0
   maxHP: 0
-  name: 
-  size: {x: 1, y: 1}
---- !u!65 &-3088266260926856575
+  name: Mine
+  size: {x: 2, y: 2}
+  cost: 300
+--- !u!65 &3020560798716675717
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

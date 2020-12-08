@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 1542532067466030811}
   - component: {fileID: 2485310924690011544}
   - component: {fileID: 1320236573727131724}
-  - component: {fileID: -7262212156032331193}
-  - component: {fileID: -3088266260926856575}
+  - component: {fileID: -2275497087535953664}
+  - component: {fileID: -2851510322703418174}
   m_Layer: 0
-  m_Name: Building
+  m_Name: Gate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fb5289016c95ecf40af675e7c08098f2, type: 2}
+  - {fileID: 2100000, guid: edd55ead8b09eb04d8f1ded2ed44a44f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -81,7 +81,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &-7262212156032331193
+--- !u!65 &-2275497087535953664
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281415849733071475}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-2851510322703418174
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -90,23 +103,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 281415849733071475}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ff1e72f2b40827479f392fd86927d96, type: 3}
+  m_Script: {fileID: 11500000, guid: 0dfe2a532603bb048a42bb5d03fcb6c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 0
-  maxHP: 0
-  name: 
+  maxHP: 200
+  name: Gate
   size: {x: 1, y: 1}
---- !u!65 &-3088266260926856575
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 281415849733071475}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  cost: 100
+  player_mask:
+    serializedVersion: 2
+    m_Bits: 256
+  reaction_time: 2

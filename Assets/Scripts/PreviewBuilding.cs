@@ -4,13 +4,8 @@ using UnityEngine;
 
 public class PreviewBuilding : MonoBehaviour
 {
-    [SerializeField] protected Building building;
-    [SerializeField] protected GameManager gameManager;
-
-    private float grid;
-    void Start()
+    public void MatchSizeWithBuilding(Building building, float grid)
     {
-        grid = gameManager.GetGridSize();
         Vector2 size = building.GetSize();
         Vector3 sizeV3 = Vector3.one;
         sizeV3.x *= size.x * grid;
@@ -19,11 +14,5 @@ public class PreviewBuilding : MonoBehaviour
         sizeV3.y -= 0.01f;
 
         transform.localScale = sizeV3;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

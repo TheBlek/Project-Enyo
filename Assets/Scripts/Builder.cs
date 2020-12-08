@@ -4,24 +4,24 @@ using UnityEngine;
 
 public class Builder : MonoBehaviour
 {
-    [SerializeField] private GameObject building_prefab;
-    [SerializeField] private GameObject building_preview_prefab;
-    [SerializeField] private GameManager gameManager;
+    [SerializeField] private GameObject[] prefabs;
+    [SerializeField] private GameObject preview_prefab;
 
-    private float grid;
+    public delegate void OnBuild(Building building);
+    public OnBuild onBuild = null;
+
     private GameObject preview_obj;
-    private List<Bounds> buildings_bounds;
-    private Vector2 shift;
 
     private void Start()
     {
-        grid = gameManager.GetGridSize();
-        grid = 0.5f;
-        Vector2 building_size = building_prefab.GetComponent<Building>().GetSize();
-        shift = building_size - Vector2.one;
-        buildings_bounds = new List<Bounds>();
-        preview_obj = GameObject.Instantiate(building_preview_prefab);
+        preview_obj = GameObject.Instantiate(preview_prefab);
         preview_obj.SetActive(false);
+    }
+
+    private Vector2 CalculateShift(PlayerControls.buildings building_type)
+    {
+        Vector2 building_size = prefabs[(int)building_type].GetComponent<Building>().GetSize();
+        return building_size - Vector2.one;
     }
 
     public void SwitchPreviewState(bool state)
@@ -29,8 +29,14 @@ public class Builder : MonoBehaviour
         preview_obj.SetActive(state);
     }
 
-    public void Preview(Camera player_camera)
+    public void MatchPreviewSize(PlayerControls.buildings building_type, float grid)
     {
+        preview_obj.GetComponent<PreviewBuilding>().MatchSizeWithBuilding(prefabs[(int)building_type].GetComponent<Building>(), grid);
+    }
+
+    public void Preview(Camera player_camera, PlayerControls.buildings building_type, float grid)
+    {
+        Vector2 shift = CalculateShift(building_type);
         Vector3 position = player_camera.ScreenToWorldPoint(Input.mousePosition);
         position.z = 0;
         position.x -= position.x % (grid) - grid / 2 * Mathf.Sign(position.x) - shift.x * grid / 2;
@@ -39,20 +45,29 @@ public class Builder : MonoBehaviour
         preview_obj.transform.position = position;
     }
 
-    public void Build()
+    public void Build(PlayerControls.buildings building_type, GameManager gameManager)
     {
-        Bounds bounds = preview_obj.GetComponent<BoxCollider>().bounds;
+        if (!gameManager.IsAffordable(prefabs[(int)building_type].GetComponent<Building>()))
+            return;
 
+        if (IsIntersectingWithBuildings(preview_obj, gameManager))
+            return;
+        
+        Vector3 position = preview_obj.transform.position;
+        GameObject building = GameObject.Instantiate(prefabs[(int)building_type], position, Quaternion.identity);
+
+        onBuild(building.GetComponent<Building>());
+    }
+
+    public bool IsIntersectingWithBuildings(GameObject obj, GameManager gameManager)
+    {
+        Bounds bounds = obj.GetComponent<BoxCollider>().bounds;
+        var buildings_bounds = gameManager.GetBuildingsBounds();
         foreach (Bounds building_bounds in buildings_bounds)
         {
             if (building_bounds.Intersects(bounds))
-            {
-                Debug.Log("Denied");
-                return;
-            }
+                return true;
         }
-        Vector3 position = preview_obj.transform.position;
-        GameObject building = GameObject.Instantiate(building_prefab, position, Quaternion.identity);
-        buildings_bounds.Add(building.GetComponent<BoxCollider>().bounds);
+        return false;
     }
 }

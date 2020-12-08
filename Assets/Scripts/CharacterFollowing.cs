@@ -5,7 +5,7 @@ using UnityEngine;
 public class CharacterFollowing : MonoBehaviour
 {
     [SerializeField] private Transform player;
-    [SerializeField] private float speed;
+    [SerializeField] private float smooth_time;
     [SerializeField] private float z_offset;
     private void Start()
     {
@@ -13,9 +13,10 @@ public class CharacterFollowing : MonoBehaviour
         transform.Translate(Vector3.back * z_offset);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         Vector3 target = player.position + Vector3.back * z_offset;
-        transform.position = Vector3.Lerp(transform.position, target, Time.deltaTime * speed);
+        Vector3 velocity = Vector3.zero;
+        transform.position = Vector3.SmoothDamp(transform.position, target, ref velocity, smooth_time);
     }
 }

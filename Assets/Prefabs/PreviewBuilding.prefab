@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 9197074963838380924}
   - component: {fileID: 5239699932281319487}
   - component: {fileID: 8689926819554758123}
-  - component: {fileID: 1787205545077512894}
   - component: {fileID: 3607724044315753135}
+  - component: {fileID: 3858276038608387880}
   m_Layer: 0
   m_Name: PreviewBuilding
   m_TagString: Untagged
@@ -81,19 +81,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &1787205545077512894
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7578841793296246740}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.98, y: 0.98, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3607724044315753135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,7 +93,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acbe4cd67eec5654c89d6d13157a7a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  building: {fileID: -7262212156032331193, guid: 40441b86b43f61143b69615fa7ab9252,
-    type: 3}
-  gameManager: {fileID: 3051915012251255177, guid: 255b9a8a45df7bc418b4ecd6d53d33ca,
-    type: 3}
+--- !u!65 &3858276038608387880
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7578841793296246740}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
