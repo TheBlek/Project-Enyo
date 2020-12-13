@@ -24,7 +24,7 @@ public class Wall : Building
 
     private Dictionary<int, RendererSetUp> rendererSetUps;
 
-    private void Start()
+    private void Awake()
     {
         //Всех соседей можно представитьь в виде набора нулей и едениц. (ноль - нет, один - есть)
         //Чтобы поставить соответствие ситуаций с этими чилами нужно идти от верхнего по часовой стрелке и перевести в десятичную сис счисл
@@ -63,7 +63,9 @@ public class Wall : Building
 
     public override void SetUp(GameManager gameManager)
     {
+        //transform.eulerAngles = Vector3.forward * -90;
         pattern = GeneratePattern(gameManager);
+        Debug.Log(pattern);
         AdjustTexture();
     }
 
@@ -82,19 +84,16 @@ public class Wall : Building
         float grid = gameManager.GetGridSize();
         Vector3 pos_to_check = transform.position;
 
-        pos_to_check.x += grid;
+        pos_to_check = transform.position + Vector3.up * grid;
         pattern += gameManager.IsThereAWall(pos_to_check) ? 1 : 0;
 
-        pos_to_check.x -= grid;
-        pos_to_check.y += grid;
+        pos_to_check = transform.position + Vector3.right * grid;
         pattern += gameManager.IsThereAWall(pos_to_check) ? 2 : 0;
 
-        pos_to_check.x -= grid;
-        pos_to_check.y -= grid;
+        pos_to_check = transform.position + Vector3.down * grid;
         pattern += gameManager.IsThereAWall(pos_to_check) ? 4 : 0;
 
-        pos_to_check.x += grid;
-        pos_to_check.y -= grid;
+        pos_to_check = transform.position + Vector3.left * grid;
         pattern += gameManager.IsThereAWall(pos_to_check) ? 8 : 0;
 
         return pattern;

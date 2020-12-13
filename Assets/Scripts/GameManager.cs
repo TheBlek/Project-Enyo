@@ -29,17 +29,16 @@ public class GameManager : MonoBehaviour
         buildings_bounds.Add(building.GetComponent<BoxCollider>().bounds);
     }
     
-    public Building IsThereAWall(Vector3 pos)
+    public bool IsThereAWall(Vector3 pos)
     {
         for (int i = 0; i < buildings.Count; i++)
         {
-
-            if (buildings[i].name == "Wall" && buildings_bounds[i].Contains(pos))
+            if (buildings[i].GetName() == "Wall" && buildings_bounds[i].Contains(pos))
             {
-                return buildings[i];
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     void Update()
