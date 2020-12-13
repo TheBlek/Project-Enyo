@@ -8,6 +8,11 @@ public class Building : MonoBehaviour
     [SerializeField] protected Vector2 size;
     [SerializeField] protected int cost;
 
+    public virtual void SetUp(GameManager gameManager)
+    {
+
+    }
+
     public virtual void SelfUpdate(GameManager gameManager)
     {
     }

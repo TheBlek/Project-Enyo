@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1542532067466030811}
-  - component: {fileID: 8765649655966461045}
   - component: {fileID: -2275497087535953664}
   - component: {fileID: 5928142210516067680}
   - component: {fileID: 7211070283343541459}
+  - component: {fileID: 3728343655747523259}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -34,21 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8765649655966461045
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 281415849733071475}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ff1e72f2b40827479f392fd86927d96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  name: Wall
-  size: {x: 1, y: 1}
-  cost: 200
 --- !u!65 &-2275497087535953664
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -126,3 +111,28 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3728343655747523259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281415849733071475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7920f034093ecc14fad10cdeedb4a1d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Wall
+  size: {x: 1, y: 1}
+  cost: 200
+  sprites:
+  - {fileID: 2868539044483428322, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}
+  - {fileID: -5107677499478342438, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}
+  - {fileID: 6451264694632907309, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}
+  - {fileID: 6933618418553894829, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}
+  - {fileID: -282635231382982036, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}
+  - {fileID: 8271096184780980891, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}
+  - {fileID: -5381153769289946764, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}
+  - {fileID: -7850380311542539340, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}
+  - {fileID: 6356908062157346430, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}

@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerControls player;
 
     private List<Building> buildings;
+    private List<Wall> walls;
     private List<Bounds> buildings_bounds;
     void Start()
     {
@@ -22,8 +23,23 @@ public class GameManager : MonoBehaviour
     {
         metals -= building.GetCost();
 
+        building.SetUp(this);
+
         buildings.Add(building);
         buildings_bounds.Add(building.GetComponent<BoxCollider>().bounds);
+    }
+    
+    public Building IsThereAWall(Vector3 pos)
+    {
+        for (int i = 0; i < buildings.Count; i++)
+        {
+
+            if (buildings[i].name == "Wall" && buildings_bounds[i].Contains(pos))
+            {
+                return buildings[i];
+            }
+        }
+        return null;
     }
 
     void Update()
