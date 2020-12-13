@@ -10,12 +10,11 @@ public class Bullet : MonoBehaviour
     private void Start()
     {
         Destroy(gameObject, 3);
-        transform.GetComponent<Rigidbody>().AddForce(transform.up * speed);
+        transform.GetComponent<Rigidbody>().AddForce(-transform.up * speed);
     }
     private void OnCollisionEnter(Collision collision)
     {
         GameObject obj = collision.collider.gameObject;
-        Debug.Log(obj.name);
         try
         {
             obj.GetComponent<Damagable>().TakeDamage(damage);
@@ -27,7 +26,6 @@ public class Bullet : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         GameObject obj = other.gameObject;
-        Debug.Log(obj.name);
         try
         {
             obj.GetComponent<Damagable>().TakeDamage(damage);

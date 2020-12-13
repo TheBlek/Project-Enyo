@@ -20,8 +20,6 @@ public class GameManager : MonoBehaviour
 
     public void BuildingInsertion(Building building)
     {
-        building.Resize(grid);
-
         metals -= building.GetCost();
 
         buildings.Add(building);
