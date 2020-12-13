@@ -10,7 +10,7 @@ public class Bullet : MonoBehaviour
     private void Start()
     {
         Destroy(gameObject, 3);
-        transform.GetComponent<Rigidbody>().AddForce(-transform.up * speed);
+        transform.GetComponent<Rigidbody>().AddForce(transform.right * speed);
     }
     private void OnCollisionEnter(Collision collision)
     {
