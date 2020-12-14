@@ -6,7 +6,7 @@ using System;
 public class Walker: MonoBehaviour
 {
     [SerializeField] private float speed;
-    [SerializeField] private Rigidbody rig;
+    [SerializeField] private Rigidbody2D rig;
     [SerializeField] private Transform upper_chest;
     [SerializeField] private Transform legs;
 
@@ -33,8 +33,6 @@ public class Walker: MonoBehaviour
 
         legs.eulerAngles = Vector3.forward * angle;
 
-
-        rig.velocity = Vector3.zero;
         rig.MovePosition((Vector2)transform.position + input * speed * Time.fixedDeltaTime);
     }
 }

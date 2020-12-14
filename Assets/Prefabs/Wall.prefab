@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1542532067466030811}
-  - component: {fileID: -2275497087535953664}
   - component: {fileID: 5928142210516067680}
   - component: {fileID: 7211070283343541459}
   - component: {fileID: 3728343655747523259}
+  - component: {fileID: -5927669417007015562}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -34,19 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
---- !u!65 &-2275497087535953664
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 281415849733071475}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.49, y: 0.49, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5928142210516067680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,3 +123,29 @@ MonoBehaviour:
   - {fileID: -5381153769289946764, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}
   - {fileID: -7850380311542539340, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}
   - {fileID: 6356908062157346430, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}
+--- !u!61 &-5927669417007015562
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 281415849733071475}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.5, y: 0.5}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 0.5}
+  m_EdgeRadius: 0

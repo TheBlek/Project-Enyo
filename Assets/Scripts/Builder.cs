@@ -61,7 +61,7 @@ public class Builder : MonoBehaviour
 
     public bool IsIntersectingWithBuildings(GameObject obj, GameManager gameManager)
     {
-        Bounds bounds = obj.GetComponent<BoxCollider>().bounds;
+        Bounds bounds = obj.GetComponent<BoxCollider2D>().bounds;
         var buildings_bounds = gameManager.GetBuildingsBounds();
         foreach (Bounds building_bounds in buildings_bounds)
         {
