@@ -9,12 +9,12 @@ public class Gate : Building
 
     private float time_player_in = 0;
 
-    private BoxCollider collider;
+    private BoxCollider2D collider;
     private Material material;
 
     private void Start()
     {
-        collider = transform.GetComponent<BoxCollider>();
+        collider = transform.GetComponent<BoxCollider2D>();
         material = transform.GetComponent<Renderer>().material;
     }
 

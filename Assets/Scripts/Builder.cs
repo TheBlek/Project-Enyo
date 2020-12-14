@@ -18,7 +18,7 @@ public class Builder : MonoBehaviour
         preview_obj.SetActive(false);
     }
 
-    private Vector2 CalculateShift(PlayerControls.buildings building_type)
+    private Vector2 CalculateShift(PlayerControls.Buildings building_type)
     {
         Vector2 building_size = prefabs[(int)building_type].GetComponent<Building>().GetSize();
         return building_size - Vector2.one;
@@ -29,12 +29,12 @@ public class Builder : MonoBehaviour
         preview_obj.SetActive(state);
     }
 
-    public void MatchPreviewSize(PlayerControls.buildings building_type, float grid)
+    public void MatchPreviewSize(PlayerControls.Buildings building_type, float grid)
     {
         preview_obj.GetComponent<PreviewBuilding>().MatchSizeWithBuilding(prefabs[(int)building_type].GetComponent<Building>(), grid);
     }
 
-    public void Preview(Camera player_camera, PlayerControls.buildings building_type, float grid)
+    public void Preview(Camera player_camera, PlayerControls.Buildings building_type, float grid)
     {
         Vector2 shift = CalculateShift(building_type);
         Vector3 position = player_camera.ScreenToWorldPoint(Input.mousePosition);
@@ -45,7 +45,7 @@ public class Builder : MonoBehaviour
         preview_obj.transform.position = position;
     }
 
-    public void Build(PlayerControls.buildings building_type, GameManager gameManager)
+    public void Build(PlayerControls.Buildings building_type, GameManager gameManager)
     {
         if (!gameManager.IsAffordable(prefabs[(int)building_type].GetComponent<Building>()))
             return;
@@ -61,7 +61,7 @@ public class Builder : MonoBehaviour
 
     public bool IsIntersectingWithBuildings(GameObject obj, GameManager gameManager)
     {
-        Bounds bounds = obj.GetComponent<BoxCollider>().bounds;
+        Bounds bounds = obj.GetComponent<BoxCollider2D>().bounds;
         var buildings_bounds = gameManager.GetBuildingsBounds();
         foreach (Bounds building_bounds in buildings_bounds)
         {

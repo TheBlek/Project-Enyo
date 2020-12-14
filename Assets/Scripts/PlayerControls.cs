@@ -9,7 +9,7 @@ public class PlayerControls : MonoBehaviour
     [SerializeField] private Builder builder;
     [SerializeField] private Shooter shooter;
     [SerializeField] private Walker walker;
-    private buildings building_type = buildings.building0;
+    private Buildings building_type = Buildings.building0;
 
     private float grid;
 
@@ -17,7 +17,7 @@ public class PlayerControls : MonoBehaviour
 
     private Vector2 input_movement;
     
-    public enum buildings
+    public enum Buildings
     {
         building0,
         building1,
@@ -45,13 +45,11 @@ public class PlayerControls : MonoBehaviour
             builder.SwitchPreviewState(building_mode);
         }
 
-        if (Input.GetMouseButtonDown(0))
+        if (building_mode && (Input.GetKey(KeyCode.LeftShift) ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) )
         {
-            if (building_mode)
-                builder.Build(building_type, gameManager);
-            else
-                shooter.Shoot();
-        }
+            builder.Build(building_type, gameManager);
+        }else if (Input.GetMouseButtonDown(0))
+            shooter.Shoot();
 
         if (building_mode)
         {
@@ -70,25 +68,25 @@ public class PlayerControls : MonoBehaviour
     private void HandleNumInput()
     {
         if (Input.GetKeyDown(KeyCode.Alpha0))
-            building_type = buildings.building0;
+            building_type = Buildings.building0;
         if (Input.GetKeyDown(KeyCode.Alpha1))
-            building_type = buildings.building1;
+            building_type = Buildings.building1;
         if (Input.GetKeyDown(KeyCode.Alpha2))
-            building_type = buildings.mine;
+            building_type = Buildings.mine;
         if (Input.GetKeyDown(KeyCode.Alpha3))
-            building_type = buildings.wall;
+            building_type = Buildings.wall;
         if (Input.GetKeyDown(KeyCode.Alpha4))
-            building_type = buildings.building4;
+            building_type = Buildings.building4;
         if (Input.GetKeyDown(KeyCode.Alpha5))
-            building_type = buildings.building5;
+            building_type = Buildings.building5;
         if (Input.GetKeyDown(KeyCode.Alpha6))
-            building_type = buildings.building6;
+            building_type = Buildings.building6;
         if (Input.GetKeyDown(KeyCode.Alpha7))
-            building_type = buildings.building7;
+            building_type = Buildings.building7;
         if (Input.GetKeyDown(KeyCode.Alpha8))
-            building_type = buildings.building8;
+            building_type = Buildings.building8;
         if (Input.GetKeyDown(KeyCode.Alpha9))
-            building_type = buildings.building9;
+            building_type = Buildings.building9;
         builder.MatchPreviewSize(building_type, grid);
     }
 

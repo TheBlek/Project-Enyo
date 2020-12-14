@@ -20,19 +20,37 @@ public class GameManager : MonoBehaviour
 
     public void BuildingInsertion(Building building)
     {
-        building.Resize(grid);
-
         metals -= building.GetCost();
 
+        building.SetUp(this);
+
         buildings.Add(building);
-        buildings_bounds.Add(building.GetComponent<BoxCollider>().bounds);
+        buildings_bounds.Add(building.GetComponent<BoxCollider2D>().bounds);
+    }
+    
+    public bool IsThereAWall(Vector3 pos)
+    {
+        for (int i = 0; i < buildings.Count; i++)
+        {
+            if (buildings[i].GetName() == "Wall" && buildings_bounds[i].Contains(pos))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     void Update()
     {
-        foreach (Building building in buildings)
+        for (int i = 0; i < buildings.Count; i++)
         {
-            building.SelfUpdate(this);
+            if (buildings[i] == null)
+            {
+                buildings.Remove(buildings[i]);
+                buildings_bounds.Remove(buildings_bounds[i]);
+            }
+            else
+                buildings[i].SelfUpdate(this);
         }
     }
 
