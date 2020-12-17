@@ -65,7 +65,6 @@ public class Wall : Building
     {
         //transform.eulerAngles = Vector3.forward * -90;
         pattern = GeneratePattern(gameManager);
-        Debug.Log(pattern);
         AdjustTexture();
     }
 

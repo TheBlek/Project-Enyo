@@ -21,8 +21,10 @@ public class Gate : Building
 
     public override void SelfUpdate(GameManager gameManager)
     {
-        if (Physics.CheckSphere(transform.position, gameManager.GetGridSize(), player_mask))
+        if (Physics2D.OverlapCircle(transform.position, gameManager.GetGridSize(), player_mask))
+        {
             time_player_in += Time.deltaTime;
+        }
         else
         {
             time_player_in = 0;
