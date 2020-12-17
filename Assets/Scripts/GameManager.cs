@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
         return cells.ToArray();
     }
 
-    private Vector2Int GetGridCellIndexFromCoords(Vector2 coords)
+    public Vector2Int GetGridCellIndexFromCoords(Vector2 coords)
     {
         return new Vector2Int((int)((coords.x - grid_origin.x)/cell_size), (int)((coords.y - grid_origin.y) / cell_size));
     }
@@ -68,17 +68,30 @@ public class GameManager : MonoBehaviour
         }
 
     }
+
+    public Vector2Int[] GetCellNeighbours(Vector2Int cell)
+    {
+        List<Vector2Int> neighbours = new List<Vector2Int>
+        {
+            new Vector2Int(cell.x, cell.y + 1),
+            new Vector2Int(cell.x + 1, cell.y),
+            new Vector2Int(cell.x, cell.y - 1),
+            new Vector2Int(cell.x - 1, cell.y)
+        };
+        return neighbours.ToArray();
+    }
+
     #endregion
 
     public void BuildingInsertion(Building building)
     {
         metals -= building.GetCost();
 
-        building.SetUp(this);
-
         buildings.Add(building);
         buildings_bounds.Add(building.GetComponent<BoxCollider2D>().bounds);
         AdjustCellsForBuilding(building);
+
+        building.SetUp(this);
     }
     
     public bool IsThereAWall(Vector3 pos)
@@ -105,6 +118,13 @@ public class GameManager : MonoBehaviour
             else
                 buildings[i].SelfUpdate(this);
         }
+    }
+
+    public Building GetBuildingInCell(Vector2Int cell)
+    {
+        if (cell.x < 0 || cell.x >= map_size.x || cell.y < 0 || cell.y >= map_size.y)
+            return null;
+        return grid[cell.x, cell.y].GetBuilding();
     }
 
     public bool IsCellBuildable(Vector2Int cell)

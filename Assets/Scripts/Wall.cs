@@ -50,27 +50,25 @@ public class Wall : Building
         };
     }
 
-    public override void SelfUpdate(GameManager gameManager)
-    {
-        int new_pattern = GeneratePattern(gameManager);
-        if (new_pattern != pattern)
-        {
-            pattern = new_pattern;
-            AdjustTexture();
-        }
-
-    }
-
     public override void SetUp(GameManager gameManager)
     {
-        //transform.eulerAngles = Vector3.forward * -90;
-        pattern = GeneratePattern(gameManager);
-        Debug.Log(pattern);
-        AdjustTexture();
+        Building[] neighbourBuildings = GetNeighbourBuildings(gameManager);
+        AdjustTexture(gameManager);
+
+        foreach (Building building in neighbourBuildings)
+        {
+            try
+            {
+                if (building.GetName() == "Wall")
+                    building.AdjustTexture(gameManager);
+            }
+            catch { }
+        }
     }
 
-    private void AdjustTexture()
-    {
+    public override void AdjustTexture(GameManager gameManager)
+    { 
+        pattern = GeneratePattern(GetNeighbourBuildings(gameManager));
         SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
 
         renderer.sprite = rendererSetUps[pattern].sprite;
@@ -78,24 +76,25 @@ public class Wall : Building
         renderer.flipY = rendererSetUps[pattern].Flip_Y;
     }
 
-    private int GeneratePattern(GameManager gameManager)
+    private int GeneratePattern(Building[] neibourBuildings)
     {
         int pattern = 0;
-        float grid = gameManager.GetGridSize();
-        Vector3 pos_to_check = transform.position;
-
-        pos_to_check = transform.position + Vector3.up * grid;
-        pattern += gameManager.IsThereAWall(pos_to_check) ? 1 : 0;
-
-        pos_to_check = transform.position + Vector3.right * grid;
-        pattern += gameManager.IsThereAWall(pos_to_check) ? 2 : 0;
-
-        pos_to_check = transform.position + Vector3.down * grid;
-        pattern += gameManager.IsThereAWall(pos_to_check) ? 4 : 0;
-
-        pos_to_check = transform.position + Vector3.left * grid;
-        pattern += gameManager.IsThereAWall(pos_to_check) ? 8 : 0;
+        for (int i = 0; i < 4; i++)
+        {
+            if (neibourBuildings[i] != null && neibourBuildings[i].GetName() == "Wall")
+                pattern += (int)Mathf.Pow(2f, i);
+        }
 
         return pattern;
+    }
+
+    private Building[] GetNeighbourBuildings(GameManager gameManager)
+    {
+        Vector2Int[] neighbourCells = gameManager.GetCellNeighbours(gameManager.GetGridCellIndexFromCoords(transform.position));
+        Building[] neibourBuildings = new Building[4];
+
+        for (int i = 0; i < 4; i++)
+            neibourBuildings[i] = gameManager.GetBuildingInCell(neighbourCells[i]);
+        return neibourBuildings;
     }
 }
