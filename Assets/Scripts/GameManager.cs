@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
 
         InitGrid();
     }
-
+    #region Grid Operations
     private void InitGrid() 
     {
         grid = new GridCell[map_size.x, map_size.y];
@@ -39,12 +39,9 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private Vector2Int[] GetGridCellsIndexFromBuilding(Building building)
+    public Vector2Int[] GetGridCellsIndexForBuilding(Vector2 pos, Vector2 size)
     {
-
-        Vector2 center_pos = building.transform.position;
-        Vector2 left_corner_pos = center_pos - building.GetSize() * cell_size / 2;
-        Vector2 size = building.GetSize();
+        Vector2 left_corner_pos = pos - size * cell_size / 2;
         List<Vector2Int> cells = new List<Vector2Int>();
         for (int i = 0; i < size.x; i++)
         {
@@ -63,7 +60,7 @@ public class GameManager : MonoBehaviour
 
     private void AdjustCellsForBuilding(Building building)
     {
-        Vector2Int[] cells = GetGridCellsIndexFromBuilding(building);
+        Vector2Int[] cells = GetGridCellsIndexForBuilding(building.transform.position, building.GetSize());
         foreach (Vector2Int cell in cells)
         {
             Debug.Log("Changing state of cell on x: " + cell.x + ", y: " + cell.y);
@@ -71,6 +68,7 @@ public class GameManager : MonoBehaviour
         }
 
     }
+    #endregion
 
     public void BuildingInsertion(Building building)
     {
@@ -109,6 +107,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public bool IsCellBuildable(Vector2Int cell)
+    {
+        if (cell.x < 0 || cell.x >= map_size.x || cell.y < 0 || cell.y >= map_size.y)
+            return false;
+        return grid[cell.x, cell.y].Buildable();
+    }
     public bool IsAffordable(Building building)
     {
         return building.GetCost() <= metals;

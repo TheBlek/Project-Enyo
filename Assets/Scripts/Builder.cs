@@ -50,7 +50,7 @@ public class Builder : MonoBehaviour
         if (!gameManager.IsAffordable(prefabs[(int)building_type].GetComponent<Building>()))
             return;
 
-        if (IsIntersectingWithBuildings(preview_obj, gameManager))
+        if (!IsBuildable(building_type, preview_obj.transform.position, gameManager))
             return;
         
         Vector3 position = preview_obj.transform.position;
@@ -59,15 +59,14 @@ public class Builder : MonoBehaviour
         onBuild(building.GetComponent<Building>());
     }
 
-    public bool IsIntersectingWithBuildings(GameObject obj, GameManager gameManager)
+    private bool IsBuildable(PlayerControls.Buildings building_type, Vector2 pos, GameManager gameManager)
     {
-        Bounds bounds = obj.GetComponent<BoxCollider2D>().bounds;
-        var buildings_bounds = gameManager.GetBuildingsBounds();
-        foreach (Bounds building_bounds in buildings_bounds)
+        Vector2Int[] cells = gameManager.GetGridCellsIndexForBuilding(pos, prefabs[(int)building_type].GetComponent<Building>().GetSize());
+        foreach (Vector2Int cell in cells)
         {
-            if (building_bounds.Intersects(bounds))
-                return true;
+            if (!gameManager.IsCellBuildable(cell))
+                return false;
         }
-        return false;
+        return true;
     }
 }

@@ -11,6 +11,13 @@ public class GridCell
         building_in_cell = building;
     }
 
+    public bool Buildable()
+    {
+        if (building_in_cell == null)
+            return true;
+        return false;
+    }
+
     public Building GetBuilding()
     {
         return building_in_cell;
