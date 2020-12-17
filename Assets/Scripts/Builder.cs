@@ -36,11 +36,11 @@ public class Builder : MonoBehaviour
 
     public void Preview(Camera player_camera, PlayerControls.Buildings building_type, float grid)
     {
-        Vector2 shift = CalculateShift(building_type);
+        Vector3 shift = CalculateShift(building_type);
         Vector3 position = player_camera.ScreenToWorldPoint(Input.mousePosition);
         position.z = 0;
-        position.x -= position.x % (grid) - grid / 2 * Mathf.Sign(position.x) - shift.x * grid / 2;
-        position.y -= position.y % (grid) - grid / 2 * Mathf.Sign(position.y) + shift.y * grid / 2;
+        position.x -= position.x % grid - grid / 2 * Mathf.Sign(position.x) - shift.x * grid / 2;
+        position.y -= position.y % grid - grid / 2 * Mathf.Sign(position.y) + shift.y * grid / 2;
 
         preview_obj.transform.position = position;
     }

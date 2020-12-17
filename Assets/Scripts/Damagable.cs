@@ -7,7 +7,7 @@ public class Damagable : MonoBehaviour
     [SerializeField] private float maxHP;
 
     public delegate void OnKill();
-    OnKill onKill;
+    public OnKill onKill;
 
     private float HP;
 

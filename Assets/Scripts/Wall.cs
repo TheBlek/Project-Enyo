@@ -7,6 +7,8 @@ public class Wall : Building
 
     [SerializeField] private Sprite[] sprites;
     private int pattern;
+    private Building[] neighbourBuildings;
+    private GameManager gameManager;
 
     public class RendererSetUp
     {
@@ -48,27 +50,20 @@ public class Wall : Building
             { 14, new RendererSetUp(sprites[6], false, true) },
             { 15, new RendererSetUp(sprites[7], false, false) }
         };
+        gameObject.GetComponent<Damagable>().onKill += OnDeath;
     }
 
-    public override void SetUp(GameManager gameManager)
+    public override void SetUp(GameManager _gameManager)
     {
-        Building[] neighbourBuildings = GetNeighbourBuildings(gameManager);
-        AdjustTexture(gameManager);
-
-        foreach (Building building in neighbourBuildings)
-        {
-            try
-            {
-                if (building.GetName() == "Wall")
-                    building.AdjustTexture(gameManager);
-            }
-            catch { }
-        }
+        gameManager = _gameManager;
+        AdjustTexture();
+        RecallNeighbours();
     }
 
-    public override void AdjustTexture(GameManager gameManager)
+    public override void AdjustTexture()
     { 
-        pattern = GeneratePattern(GetNeighbourBuildings(gameManager));
+        SetNeighbourBuildings();
+        pattern = GeneratePattern();
         SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
 
         renderer.sprite = rendererSetUps[pattern].sprite;
@@ -76,25 +71,43 @@ public class Wall : Building
         renderer.flipY = rendererSetUps[pattern].Flip_Y;
     }
 
-    private int GeneratePattern(Building[] neibourBuildings)
+    private int GeneratePattern()
     {
         int pattern = 0;
         for (int i = 0; i < 4; i++)
         {
-            if (neibourBuildings[i] != null && neibourBuildings[i].GetName() == "Wall")
+            if (neighbourBuildings[i] != null && neighbourBuildings[i].GetName() == "Wall")
                 pattern += (int)Mathf.Pow(2f, i);
         }
-
         return pattern;
     }
 
-    private Building[] GetNeighbourBuildings(GameManager gameManager)
+    private void SetNeighbourBuildings()
     {
         Vector2Int[] neighbourCells = gameManager.GetCellNeighbours(gameManager.GetGridCellIndexFromCoords(transform.position));
-        Building[] neibourBuildings = new Building[4];
+        Building[] _neibourBuildings = new Building[4];
 
         for (int i = 0; i < 4; i++)
-            neibourBuildings[i] = gameManager.GetBuildingInCell(neighbourCells[i]);
-        return neibourBuildings;
+            _neibourBuildings[i] = gameManager.GetBuildingInCell(neighbourCells[i]);
+        neighbourBuildings = _neibourBuildings;
+    }
+
+    private void RecallNeighbours()
+    {
+        foreach (Building building in neighbourBuildings)
+        {
+            try
+            {
+                if (building.GetName() == "Wall")
+                    building.AdjustTexture();
+            }
+            catch { }
+        }
+    }
+
+    private void OnDeath()
+    {
+        name = "Wal";
+        RecallNeighbours();
     }
 }

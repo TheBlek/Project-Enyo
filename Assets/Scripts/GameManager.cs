@@ -63,7 +63,6 @@ public class GameManager : MonoBehaviour
         Vector2Int[] cells = GetGridCellsIndexForBuilding(building.transform.position, building.GetSize());
         foreach (Vector2Int cell in cells)
         {
-            Debug.Log("Changing state of cell on x: " + cell.x + ", y: " + cell.y);
             grid[cell.x, cell.y].SetBuilding(building);
         }
 
@@ -88,8 +87,9 @@ public class GameManager : MonoBehaviour
         metals -= building.GetCost();
 
         buildings.Add(building);
-        buildings_bounds.Add(building.GetComponent<BoxCollider2D>().bounds);
         AdjustCellsForBuilding(building);
+
+        buildings_bounds.Add(building.GetComponent<BoxCollider2D>().bounds);
 
         building.SetUp(this);
     }

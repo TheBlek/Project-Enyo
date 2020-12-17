@@ -18,7 +18,7 @@ public class Building : MonoBehaviour
 
     }
 
-    public virtual void AdjustTexture(GameManager gameManager)
+    public virtual void AdjustTexture()
     {
 
     }
