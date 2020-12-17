@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private float grid;
+    [SerializeField] private float grid_size;
     [SerializeField] private int metals;
     [SerializeField] private Builder builder;
     [SerializeField] private PlayerControls player;
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
 
     public float GetGridSize()
     {
-        return grid;
+        return grid_size;
     }
 
     public List<Bounds> GetBuildingsBounds()

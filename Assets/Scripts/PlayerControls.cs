@@ -52,9 +52,7 @@ public class PlayerControls : MonoBehaviour
             shooter.Shoot();
 
         if (building_mode)
-        {
             builder.Preview(player_camera, building_type, grid);
-        }
 
         input_movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
