@@ -4,18 +4,56 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private float grid_size;
+    [SerializeField] private float cell_size;
     [SerializeField] private int metals;
     [SerializeField] private Builder builder;
     [SerializeField] private PlayerControls player;
+    [SerializeField] private Vector2 map_size;
 
     private List<Building> buildings;
     private List<Bounds> buildings_bounds;
+
+    private GridCell[,] grid;
     void Start()
     {
         builder.onBuild += BuildingInsertion;
         buildings_bounds = new List<Bounds>();
         buildings = new List<Building>();
+
+        grid = new GridCell[(int)map_size.x, (int)map_size.y];
+    }
+
+    private Vector2Int[] GetGridCellsIndexFromBuilding(Building building)
+    {
+
+        Vector2 center_pos = building.transform.position;
+        Vector2 left_corner_pos = center_pos - building.GetSize() * cell_size / 2;
+        Vector2 right_corner_pos = center_pos + building.GetSize() * cell_size / 2;
+        List<Vector2Int> cells = new List<Vector2Int>();
+        for (float i = left_corner_pos.x; i < right_corner_pos.x; i += cell_size)
+        {
+            for (float j = left_corner_pos.y; j < right_corner_pos.y; j += cell_size)
+            {
+                cells.Add(GetGridCellIndexFromCoords(new Vector2(i, j)));
+            }
+        }
+        return cells.ToArray();
+    }
+
+    private Vector2Int GetGridCellIndexFromCoords(Vector2 coords)
+    {
+        return new Vector2Int((int)coords.x, (int)coords.y);
+    }
+
+    private void AdjustCellsForBuilding(Building building)
+    {
+
+        Vector2Int[] cells = GetGridCellsIndexFromBuilding(building);
+        foreach (Vector2Int cell in cells)
+        {
+            grid[cell.x, cell.y].SetBuilding(building);
+        }
+
     }
 
     public void BuildingInsertion(Building building)
@@ -66,7 +104,7 @@ public class GameManager : MonoBehaviour
 
     public float GetGridSize()
     {
-        return grid_size;
+        return cell_size;
     }
 
     public List<Bounds> GetBuildingsBounds()
