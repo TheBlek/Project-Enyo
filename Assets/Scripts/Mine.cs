@@ -23,7 +23,7 @@ public class Mine : Building
             time_since_last_addition -= 1;
             gameManager.AddMetals(MpS);
         }
-        AdjustSpriteToState();
+        //AdjustSpriteToState();
     }
 
     private void AdjustSpriteToState()
