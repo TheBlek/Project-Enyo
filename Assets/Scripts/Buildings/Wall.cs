@@ -76,7 +76,7 @@ public class Wall : Building
         int pattern = 0;
         for (int i = 0; i < 4; i++)
         {
-            if (neighbourBuildings[i] != null && neighbourBuildings[i].GetName() == "Wall")
+            if (neighbourBuildings[i] != null && CheckName(neighbourBuildings[i].GetName()))
                 pattern += (int)Mathf.Pow(2f, i);
         }
         return pattern;
@@ -98,7 +98,7 @@ public class Wall : Building
         {
             try
             {
-                if (building.GetName() == "Wall")
+                if (CheckName(building.GetName()))
                     building.AdjustTexture();
             }
             catch { }
@@ -109,5 +109,10 @@ public class Wall : Building
     {
         name = "Wal";
         RecallNeighbours();
+    }
+
+    private bool CheckName(string name)
+    {
+        return name == "Wall" || name == "Gate";
     }
 }

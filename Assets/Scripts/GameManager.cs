@@ -120,6 +120,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    #region Some Get Methods
     public Building GetBuildingInCell(Vector2Int cell)
     {
         if (cell.x < 0 || cell.x >= map_size.x || cell.y < 0 || cell.y >= map_size.y)
@@ -162,4 +163,5 @@ public class GameManager : MonoBehaviour
     {
         return player.GetPlayerPosition();
     }
+    #endregion
 }
