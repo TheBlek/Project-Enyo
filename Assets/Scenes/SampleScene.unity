@@ -656,6 +656,7 @@ MonoBehaviour:
     type: 3}
   muzzleflash_prefab: {fileID: 40827626099787679, guid: a1f0cd6def38fe147847868f5fb22463,
     type: 3}
+  fires_per_sec: 2
 --- !u!61 &1508687876
 BoxCollider2D:
   m_ObjectHideFlags: 0

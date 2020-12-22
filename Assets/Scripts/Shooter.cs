@@ -33,5 +33,7 @@ public class Shooter : MonoBehaviour
         Destroy(muzzleflash, 0.5f);
 
         time_since_last_shot -= delay;
+        if (time_since_last_shot < 0)
+            time_since_last_shot = 0;
     }
 }

@@ -7,6 +7,8 @@ public class Damagable : MonoBehaviour
     [SerializeField] private float maxHP;
 
     public delegate void OnKill();
+    public delegate void OnDamage();
+    OnDamage onDamage;
     OnKill onKill;
 
     private float HP;
@@ -15,11 +17,13 @@ public class Damagable : MonoBehaviour
     {
         HP = maxHP;
         onKill += Destroy;
+        onDamage += StartWhiteEffect;
     }
 
     public void TakeDamage(float damage)
     {
         HP -= damage;
+        onDamage();
         if (HP <= 0)
             onKill();
     }
@@ -34,5 +38,23 @@ public class Damagable : MonoBehaviour
     private void Destroy()
     {
         Destroy(gameObject);
+    }
+
+    private void StartWhiteEffect()
+    {
+        StartCoroutine(WhiteColorEffect());
+    }
+
+    IEnumerator WhiteColorEffect()
+    {
+        try
+        {
+            Material mat = transform.GetComponent<Renderer>().material;
+            Color col = mat.color;
+            mat.color = new Color(1, 0, 0, 1f);
+            yield return new WaitForSeconds(.1f);
+            mat.color = col;
+        }
+        finally { }
     }
 }
