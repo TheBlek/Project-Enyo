@@ -5,6 +5,7 @@ using UnityEngine;
 public class Damagable : MonoBehaviour
 {
     [SerializeField] private float maxHP;
+    [SerializeField] private Color hurtColor;
 
     public delegate void OnKill();
     public delegate void OnDamage();
@@ -49,11 +50,11 @@ public class Damagable : MonoBehaviour
     {
         try
         {
-            Material mat = transform.GetComponent<Renderer>().material;
+            SpriteRenderer mat = transform.GetComponent<SpriteRenderer>();
             Color col = mat.color;
-            mat.color = new Color(1, 0, 0, 1f);
-            yield return new WaitForSeconds(.1f);
-            mat.color = col;
+            mat.color = hurtColor;
+            yield return new WaitForSeconds(.05f);
+            mat.color = Color.white;
         }
         finally { }
     }
