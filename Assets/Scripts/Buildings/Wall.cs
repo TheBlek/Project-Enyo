@@ -113,6 +113,6 @@ public class Wall : Building
 
     private bool CheckName(string name)
     {
-        return name == "Wall" || name == "Gate";
+        return name == Buildings.Wall.ToString() || name == Buildings.Gate.ToString();
     }
 }

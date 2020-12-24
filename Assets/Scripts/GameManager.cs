@@ -10,75 +10,22 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerControls player;
     [SerializeField] private Vector2Int map_size;
 
-    private Vector2 grid_origin;
     private List<Building> buildings;
     private List<Bounds> buildings_bounds;
+    private GridManager gridManager;
 
-    private GridCell[,] grid;
     void Start()
     {
         builder.onBuild += BuildingInsertion;
         buildings_bounds = new List<Bounds>();
         buildings = new List<Building>();
 
-        InitGrid();
+        gridManager = new GridManager();
+        gridManager.InitGrid(map_size, cell_size);
     }
     #region Grid Operations
-    private void InitGrid() 
-    {
-        grid = new GridCell[map_size.x, map_size.y];
-        grid_origin = -Vector2.one * cell_size * map_size / 2;
-        
-        for (int i = 0; i < map_size.x; i++)
-        {
-            for (int j = 0; j < map_size.y; j++)
-            {
-                grid[i, j] = new GridCell();
-            }
-        }
 
-    }
 
-    public Vector2Int[] GetGridCellsIndexForBuilding(Vector2 pos, Vector2 size)
-    {
-        Vector2 left_corner_pos = pos - size * cell_size / 2;
-        List<Vector2Int> cells = new List<Vector2Int>();
-        for (int i = 0; i < size.x; i++)
-        {
-            for (int j = 0; j < size.x; j++)
-            {
-                cells.Add(GetGridCellIndexFromCoords(left_corner_pos + new Vector2(i,j) * cell_size));
-            }
-        }
-        return cells.ToArray();
-    }
-
-    public Vector2Int GetGridCellIndexFromCoords(Vector2 coords)
-    {
-        return new Vector2Int((int)((coords.x - grid_origin.x)/cell_size), (int)((coords.y - grid_origin.y) / cell_size));
-    }
-
-    private void AdjustCellsForBuilding(Building building)
-    {
-        Vector2Int[] cells = GetGridCellsIndexForBuilding(building.transform.position, building.GetSize());
-        foreach (Vector2Int cell in cells)
-        {
-            grid[cell.x, cell.y].SetBuilding(building);
-        }
-
-    }
-
-    public Vector2Int[] GetCellNeighbours(Vector2Int cell)
-    {
-        List<Vector2Int> neighbours = new List<Vector2Int>
-        {
-            new Vector2Int(cell.x, cell.y + 1),
-            new Vector2Int(cell.x + 1, cell.y),
-            new Vector2Int(cell.x, cell.y - 1),
-            new Vector2Int(cell.x - 1, cell.y)
-        };
-        return neighbours.ToArray();
-    }
 
     #endregion
 
@@ -87,7 +34,7 @@ public class GameManager : MonoBehaviour
         metals -= building.GetCost();
 
         buildings.Add(building);
-        AdjustCellsForBuilding(building);
+        gridManager.AdjustCellsForBuilding(building);
 
         buildings_bounds.Add(building.GetComponent<BoxCollider2D>().bounds);
 
@@ -121,19 +68,30 @@ public class GameManager : MonoBehaviour
     }
 
     #region Some Get Methods
+    #region Grid Getters
     public Building GetBuildingInCell(Vector2Int cell)
     {
-        if (cell.x < 0 || cell.x >= map_size.x || cell.y < 0 || cell.y >= map_size.y)
-            return null;
-        return grid[cell.x, cell.y].GetBuilding();
+        return gridManager.GetBuildingInCell(cell);
     }
-
     public bool IsCellBuildable(Vector2Int cell)
     {
-        if (cell.x < 0 || cell.x >= map_size.x || cell.y < 0 || cell.y >= map_size.y)
-            return false;
-        return grid[cell.x, cell.y].Buildable();
+        return gridManager.IsCellBuildable(cell);
+    } 
+    public Vector2Int[] GetGridCellsIndexForBuilding(Vector2 pos, Vector2 size)
+    {
+        return gridManager.GetGridCellsIndexInRect(pos, size);
     }
+
+    public Vector2Int GetGridCellIndexFromCoords(Vector2 coords)
+    {
+        return gridManager.GetGridCellIndexFromCoords(coords);
+    }
+
+    public Vector2Int[] GetCellNeighbours(Vector2Int cell)
+    {
+        return gridManager.GetCellNeighbours(cell);
+    }
+    #endregion
     public bool IsAffordable(Building building)
     {
         return building.GetCost() <= metals;
