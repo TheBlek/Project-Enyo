@@ -9,6 +9,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float life_time;
 
     private Animator animator;
+    private bool is_in_animation;
 
     private void Start()
     {
@@ -19,6 +20,8 @@ public class Bullet : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         GameObject obj = collision.collider.gameObject;
+        if (is_in_animation)
+            return;
         try
         {
             obj.GetComponent<Damagable>().TakeDamage(damage);
@@ -29,6 +32,8 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (is_in_animation)
+            return;
         GameObject obj = other.gameObject;
         try
         {
@@ -41,11 +46,12 @@ public class Bullet : MonoBehaviour
     private void HandleBlowAnimation()
     {
         var rb = transform.GetComponent<Rigidbody2D>();
-        rb.isKinematic = true;
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
         rb.freezeRotation = true;
-        rb.velocity = Vector3.zero;
-
         transform.GetComponent<BoxCollider2D>().isTrigger = true;
+        
+        is_in_animation = true;
+        
         animator.Play("Blow");
         Destroy(gameObject, .5f);
     }
