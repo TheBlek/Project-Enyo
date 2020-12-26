@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6241438508888077517}
   - component: {fileID: -4469651472110001973}
   - component: {fileID: 7954290277072298993}
+  - component: {fileID: 351517702}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -49,7 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 400
   damage: 100
-  live_time: 2
+  life_time: 1
 --- !u!212 &1939749243
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -89,7 +90,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c765cb6e21b6aa44c812912074f135d2, type: 3}
+  m_Sprite: {fileID: -3499586986166329302, guid: 525542f3d68eef84887810fc14d9ad04,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -117,7 +119,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.21875, y: 0.21875}
+    oldSize: {x: 0.28125, y: 0.28125}
     newSize: {x: 0.5, y: 0.25}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -161,9 +163,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LightType: 3
   m_BlendStyleIndex: 0
-  m_FalloffIntensity: 0.938
-  m_Color: {r: 0.8584906, g: 0.23891956, b: 0.23891956, a: 1}
-  m_Intensity: 0.71
+  m_FalloffIntensity: 1
+  m_Color: {r: 0.9150943, g: 0.85692984, b: 0.15107687, a: 1}
+  m_Intensity: 0.83
   m_LightVolumeOpacity: 0
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
@@ -174,8 +176,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensity: 0
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
-  m_PointLightInnerRadius: 0.13
-  m_PointLightOuterRadius: 0.22
+  m_PointLightInnerRadius: 0.09
+  m_PointLightOuterRadius: 0.22912768
   m_PointLightDistance: 3
   m_PointLightQuality: 1
   m_ShapeLightParametricSides: 5
@@ -188,3 +190,22 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!95 &351517702
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4085345854065207460}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5ee065dff10cad34ca52b32b7ccd0529, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
