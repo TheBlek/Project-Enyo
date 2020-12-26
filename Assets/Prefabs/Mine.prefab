@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHP: 500
-  hurtColor: {r: 1, g: 0.0141509175, b: 0.0141509175, a: 1}
+  hurtColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!212 &2505739306516396071
 SpriteRenderer:
   m_ObjectHideFlags: 0

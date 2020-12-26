@@ -23,7 +23,6 @@ public class Bullet : MonoBehaviour
         {
             obj.GetComponent<Damagable>().TakeDamage(damage);
             HandleBlowAnimation();
-            Destroy(gameObject, .5f);
         }
         catch { };
     }
@@ -35,14 +34,19 @@ public class Bullet : MonoBehaviour
         {
             obj.GetComponent<Damagable>().TakeDamage(damage);
             HandleBlowAnimation();
-            Destroy(gameObject, .5f);
         }
         catch { };
     }
 
     private void HandleBlowAnimation()
     {
-        transform.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+        var rb = transform.GetComponent<Rigidbody2D>();
+        rb.isKinematic = true;
+        rb.freezeRotation = true;
+        rb.velocity = Vector3.zero;
+
+        transform.GetComponent<BoxCollider2D>().isTrigger = true;
         animator.Play("Blow");
+        Destroy(gameObject, .5f);
     }
 }

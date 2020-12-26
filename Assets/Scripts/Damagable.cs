@@ -19,6 +19,8 @@ public class Damagable : MonoBehaviour
         HP = maxHP;
         onKill += Destroy;
         onDamage += StartWhiteEffect;
+        if (hurtColor.a == 0)
+            hurtColor = Color.red;
     }
 
     public void TakeDamage(float damage)
