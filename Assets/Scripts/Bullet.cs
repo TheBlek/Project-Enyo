@@ -19,25 +19,21 @@ public class Bullet : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        GameObject obj = collision.collider.gameObject;
-        if (is_in_animation)
-            return;
-        try
-        {
-            obj.GetComponent<Damagable>().TakeDamage(damage);
-            HandleBlowAnimation();
-        }
-        catch { };
+        HandleCollision(collision.gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        HandleCollision(other.gameObject);
+    }
+
+    private void HandleCollision(GameObject collider)
+    {
         if (is_in_animation)
             return;
-        GameObject obj = other.gameObject;
         try
         {
-            obj.GetComponent<Damagable>().TakeDamage(damage);
+            collider.GetComponent<Damagable>().TakeDamage(damage);
             HandleBlowAnimation();
         }
         catch { };
