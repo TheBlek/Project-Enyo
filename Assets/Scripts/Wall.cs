@@ -6,6 +6,7 @@ public class Wall : Building
 {
 
     [SerializeField] private Sprite[] sprites;
+    [SerializeField] private Animator blow_animator;
     private int pattern;
 
     public class RendererSetUp
@@ -48,6 +49,10 @@ public class Wall : Building
             { 14, new RendererSetUp(sprites[6], false, true) },
             { 15, new RendererSetUp(sprites[7], false, false) }
         };
+
+        var d = transform.GetComponent<Damagable>();
+        d.death_offset = .25f;
+        d.onKill += PlayBlowAnimation;
     }
 
     public override void SelfUpdate(GameManager gameManager)
@@ -96,5 +101,10 @@ public class Wall : Building
         pattern += gameManager.IsThereAWall(pos_to_check) ? 8 : 0;
 
         return pattern;
+    }
+
+    private void PlayBlowAnimation()
+    {
+        blow_animator.Play("Blow");
     }
 }
