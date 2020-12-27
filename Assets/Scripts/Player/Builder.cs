@@ -18,7 +18,7 @@ public class Builder : MonoBehaviour
         preview_obj.SetActive(false);
     }
 
-    private Vector2 CalculateShift(PlayerControls.Buildings building_type)
+    private Vector2 CalculateShift(Buildings building_type)
     {
         Vector2 building_size = prefabs[(int)building_type].GetComponent<Building>().GetSize();
         return building_size - Vector2.one;
@@ -29,12 +29,12 @@ public class Builder : MonoBehaviour
         preview_obj.SetActive(state);
     }
 
-    public void MatchPreviewSize(PlayerControls.Buildings building_type, float grid)
+    public void MatchPreviewSize(Buildings building_type, float grid)
     {
         preview_obj.GetComponent<PreviewBuilding>().MatchSizeWithBuilding(prefabs[(int)building_type].GetComponent<Building>(), grid);
     }
 
-    public void Preview(Camera player_camera, PlayerControls.Buildings building_type, float grid)
+    public void Preview(Camera player_camera, Buildings building_type, float grid)
     {
         Vector3 shift = CalculateShift(building_type);
         Vector3 position = player_camera.ScreenToWorldPoint(Input.mousePosition);
@@ -45,12 +45,12 @@ public class Builder : MonoBehaviour
         preview_obj.transform.position = position;
     }
 
-    public void Build(PlayerControls.Buildings building_type, GameManager gameManager)
+    public void Build(Buildings building_type, GameManager gameManager)
     {
         if (!gameManager.IsAffordable(prefabs[(int)building_type].GetComponent<Building>()))
             return;
 
-        if (IsIntersectingWithBuildings(preview_obj, gameManager))
+        if (!IsBuildable(building_type, preview_obj.transform.position, gameManager))
             return;
         
         Vector3 position = preview_obj.transform.position;
@@ -59,15 +59,14 @@ public class Builder : MonoBehaviour
         onBuild(building.GetComponent<Building>());
     }
 
-    public bool IsIntersectingWithBuildings(GameObject obj, GameManager gameManager)
+    private bool IsBuildable(Buildings building_type, Vector2 pos, GameManager gameManager)
     {
-        Bounds bounds = obj.GetComponent<BoxCollider2D>().bounds;
-        var buildings_bounds = gameManager.GetBuildingsBounds();
-        foreach (Bounds building_bounds in buildings_bounds)
+        Vector2Int[] cells = gameManager.GetGridCellsIndexForBuilding(pos, prefabs[(int)building_type].GetComponent<Building>().GetSize());
+        foreach (Vector2Int cell in cells)
         {
-            if (building_bounds.Intersects(bounds))
-                return true;
+            if (!gameManager.IsCellBuildable(cell))
+                return false;
         }
-        return false;
+        return true;
     }
 }

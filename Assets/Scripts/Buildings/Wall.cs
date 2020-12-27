@@ -7,6 +7,8 @@ public class Wall : Building
 
     [SerializeField] private Sprite[] sprites;
     private int pattern;
+    private Building[] neighbourBuildings;
+    private GameManager gameManager;
 
     public class RendererSetUp
     {
@@ -48,28 +50,20 @@ public class Wall : Building
             { 14, new RendererSetUp(sprites[6], false, true) },
             { 15, new RendererSetUp(sprites[7], false, false) }
         };
+        gameObject.GetComponent<Damagable>().onKill += OnDeath;
     }
 
-    public override void SelfUpdate(GameManager gameManager)
+    public override void SetUp(GameManager _gameManager)
     {
-        int new_pattern = GeneratePattern(gameManager);
-        if (new_pattern != pattern)
-        {
-            pattern = new_pattern;
-            AdjustTexture();
-        }
-
-    }
-
-    public override void SetUp(GameManager gameManager)
-    {
-        //transform.eulerAngles = Vector3.forward * -90;
-        pattern = GeneratePattern(gameManager);
+        gameManager = _gameManager;
         AdjustTexture();
+        RecallNeighbours();
     }
 
-    private void AdjustTexture()
-    {
+    public override void AdjustTexture()
+    { 
+        SetNeighbourBuildings();
+        pattern = GeneratePattern();
         SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
 
         renderer.sprite = rendererSetUps[pattern].sprite;
@@ -77,24 +71,48 @@ public class Wall : Building
         renderer.flipY = rendererSetUps[pattern].Flip_Y;
     }
 
-    private int GeneratePattern(GameManager gameManager)
+    private int GeneratePattern()
     {
         int pattern = 0;
-        float grid = gameManager.GetGridSize();
-        Vector3 pos_to_check = transform.position;
-
-        pos_to_check = transform.position + Vector3.up * grid;
-        pattern += gameManager.IsThereAWall(pos_to_check) ? 1 : 0;
-
-        pos_to_check = transform.position + Vector3.right * grid;
-        pattern += gameManager.IsThereAWall(pos_to_check) ? 2 : 0;
-
-        pos_to_check = transform.position + Vector3.down * grid;
-        pattern += gameManager.IsThereAWall(pos_to_check) ? 4 : 0;
-
-        pos_to_check = transform.position + Vector3.left * grid;
-        pattern += gameManager.IsThereAWall(pos_to_check) ? 8 : 0;
-
+        for (int i = 0; i < 4; i++)
+        {
+            if (neighbourBuildings[i] != null && CheckName(neighbourBuildings[i].GetName()))
+                pattern += (int)Mathf.Pow(2f, i);
+        }
         return pattern;
+    }
+
+    private void SetNeighbourBuildings()
+    {
+        Vector2Int[] neighbourCells = gameManager.GetCellNeighbours(gameManager.GetGridCellIndexFromCoords(transform.position));
+        Building[] _neibourBuildings = new Building[4];
+
+        for (int i = 0; i < 4; i++)
+            _neibourBuildings[i] = gameManager.GetBuildingInCell(neighbourCells[i]);
+        neighbourBuildings = _neibourBuildings;
+    }
+
+    private void RecallNeighbours()
+    {
+        foreach (Building building in neighbourBuildings)
+        {
+            try
+            {
+                if (CheckName(building.GetName()))
+                    building.AdjustTexture();
+            }
+            catch { }
+        }
+    }
+
+    private void OnDeath()
+    {
+        name = "Wal";
+        RecallNeighbours();
+    }
+
+    private bool CheckName(string name)
+    {
+        return name == Buildings.Wall.ToString() || name == Buildings.Gate.ToString();
     }
 }

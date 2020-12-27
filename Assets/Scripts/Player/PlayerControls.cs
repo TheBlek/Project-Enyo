@@ -17,19 +17,6 @@ public class PlayerControls : MonoBehaviour
 
     private Vector2 input_movement;
     
-    public enum Buildings
-    {
-        building0,
-        building1,
-        mine,
-        wall,
-        building4,
-        building5,
-        building6,
-        building7,
-        building8,
-        building9
-    }
 
     private void Start()
     {
@@ -70,11 +57,11 @@ public class PlayerControls : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
             building_type = Buildings.building1;
         if (Input.GetKeyDown(KeyCode.Alpha2))
-            building_type = Buildings.mine;
+            building_type = Buildings.Mine;
         if (Input.GetKeyDown(KeyCode.Alpha3))
-            building_type = Buildings.wall;
+            building_type = Buildings.Wall;
         if (Input.GetKeyDown(KeyCode.Alpha4))
-            building_type = Buildings.building4;
+            building_type = Buildings.Gate;
         if (Input.GetKeyDown(KeyCode.Alpha5))
             building_type = Buildings.building5;
         if (Input.GetKeyDown(KeyCode.Alpha6))

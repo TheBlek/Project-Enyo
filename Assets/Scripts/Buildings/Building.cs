@@ -15,6 +15,12 @@ public class Building : MonoBehaviour
 
     public virtual void SelfUpdate(GameManager gameManager)
     {
+
+    }
+
+    public virtual void AdjustTexture()
+    {
+
     }
 
     public Vector2 GetSize()

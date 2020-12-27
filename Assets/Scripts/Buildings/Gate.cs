@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gate : Building
+public class Gate : Wall
 {
     [SerializeField] private LayerMask player_mask;
     [SerializeField] private float reaction_time;
@@ -10,12 +10,10 @@ public class Gate : Building
     private float time_player_in = 0;
 
     private BoxCollider2D collider;
-    private Material material;
 
     private void Start()
     {
         collider = transform.GetComponent<BoxCollider2D>();
-        material = transform.GetComponent<Renderer>().material;
     }
 
 
@@ -29,13 +27,11 @@ public class Gate : Building
         {
             time_player_in = 0;
             collider.isTrigger = false;
-            material.color = Color.yellow;
         }
 
         if (time_player_in >= reaction_time)
         {
             collider.isTrigger = true;
-            material.color = Color.cyan;
         }
     }
 

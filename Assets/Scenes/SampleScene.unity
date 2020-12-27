@@ -249,10 +249,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 396be6a892484a7448d0f04b8ecbe518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grid_size: 0.5
+  cell_size: 0.5
   metals: 4893
   builder: {fileID: 1508687873}
   player: {fileID: 1508687874}
+  map_size: {x: 100, y: 100}
 --- !u!4 &519552905
 Transform:
   m_ObjectHideFlags: 0
