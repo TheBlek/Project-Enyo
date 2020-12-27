@@ -6,6 +6,7 @@ public class Wall : Building
 {
 
     [SerializeField] private Sprite[] sprites;
+    [SerializeField] private Animator blow_animator;
     private int pattern;
     private Building[] neighbourBuildings;
     private GameManager gameManager;
@@ -50,6 +51,9 @@ public class Wall : Building
             { 14, new RendererSetUp(sprites[6], false, true) },
             { 15, new RendererSetUp(sprites[7], false, false) }
         };
+        var d = transform.GetComponent<Damagable>();
+        d.death_offset = .25f;
+        d.onKill += PlayBlowAnimation;
         gameObject.GetComponent<Damagable>().onKill += OnDeath;
     }
 
@@ -114,5 +118,10 @@ public class Wall : Building
     private bool CheckName(string name)
     {
         return name == Buildings.Wall.ToString() || name == Buildings.Gate.ToString();
+    }
+
+    private void PlayBlowAnimation()
+    {
+        blow_animator.Play("Blow");
     }
 }

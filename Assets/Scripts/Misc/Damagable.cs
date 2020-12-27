@@ -5,21 +5,29 @@ using UnityEngine;
 public class Damagable : MonoBehaviour
 {
     [SerializeField] private float maxHP;
+    [SerializeField] private Color hurtColor;
+    public float death_offset;
 
     public delegate void OnKill();
+    public delegate void OnDamage();
+    public OnDamage onDamage;
     public OnKill onKill;
 
     private float HP;
 
     private void Start()
-    {
+    { 
         HP = maxHP;
         onKill += Destroy;
+        onDamage += StartWhiteEffect;
+        if (hurtColor.a == 0)
+            hurtColor = Color.red;
     }
 
     public void TakeDamage(float damage)
     {
         HP -= damage;
+        onDamage();
         if (HP <= 0)
             onKill();
     }
@@ -33,6 +41,24 @@ public class Damagable : MonoBehaviour
 
     private void Destroy()
     {
-        Destroy(gameObject);
+        Destroy(gameObject, death_offset);
+    }
+
+    private void StartWhiteEffect()
+    {
+        StartCoroutine(WhiteColorEffect());
+    }
+
+    IEnumerator WhiteColorEffect()
+    {
+        try
+        {
+            SpriteRenderer mat = transform.GetComponent<SpriteRenderer>();
+            Color col = mat.color;
+            mat.color = hurtColor;
+            yield return new WaitForSeconds(.05f);
+            mat.color = Color.white;
+        }
+        finally { }
     }
 }
