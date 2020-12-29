@@ -22,6 +22,7 @@ public class Walker: MonoBehaviour
         mouse.z = 0;
         Vector3 relativePos = mouse - upper_chest.position;
         float angle = Mathf.Atan2(relativePos.y, relativePos.x) * Mathf.Rad2Deg;
+
         upper_chest.eulerAngles = Vector3.forward * (angle + 90);
     }
 

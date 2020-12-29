@@ -9,10 +9,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Builder builder;
     [SerializeField] private PlayerControls player;
     [SerializeField] private Vector2Int map_size;
+    [SerializeField] private GameObject enemyPrefab;
 
     private List<Building> buildings;
     private List<Bounds> buildings_bounds;
     private GridManager gridManager;
+    private Enemy enemy;
 
     void Start()
     {
@@ -22,12 +24,10 @@ public class GameManager : MonoBehaviour
 
         gridManager = new GridManager();
         gridManager.InitGrid(map_size, cell_size);
+
+        var enemyObj = Instantiate(enemyPrefab, (Vector3)(new Vector2(Random.Range(0, 2), Random.Range(0, 2))), Quaternion.identity);
+        enemy = enemyObj.GetComponent<Enemy>();
     }
-    #region Grid Operations
-
-
-
-    #endregion
 
     public void BuildingInsertion(Building building)
     {
@@ -65,6 +65,11 @@ public class GameManager : MonoBehaviour
             else
                 buildings[i].SelfUpdate(this);
         }
+    }
+
+    private void FixedUpdate()
+    {
+        enemy.SelfUpdate(this);
     }
 
     #region Some Get Methods

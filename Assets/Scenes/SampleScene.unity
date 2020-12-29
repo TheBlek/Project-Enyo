@@ -3849,6 +3849,8 @@ MonoBehaviour:
   builder: {fileID: 1508687873}
   player: {fileID: 1508687874}
   map_size: {x: 100, y: 100}
+  enemyPrefab: {fileID: 1095661051140562365, guid: 07a83ec06d5a715449f63f8f6f68ae1c,
+    type: 3}
 --- !u!4 &519552905
 Transform:
   m_ObjectHideFlags: 0
@@ -4200,7 +4202,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e76f708e1513109469aff905d19478af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHP: 100
+  maxHP: 200000
   hurtColor: {r: 0, g: 0, b: 0, a: 0}
   death_offset: 0
 --- !u!50 &1508687878
