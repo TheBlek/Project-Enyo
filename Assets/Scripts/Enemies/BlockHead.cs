@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System;
 using UnityEngine;
 public class BlockHead : Enemy
 {
@@ -6,20 +7,21 @@ public class BlockHead : Enemy
     [SerializeField] private float knock_back_cooldown;
 
     private Rigidbody2D rig;
-    private bool stop;
+    private bool stunned;
 
     private void Start()
     {
+        var _R = new System.Random();
+        target = (EnemyTargets)_R.Next(Enum.GetValues(typeof(EnemyTargets)).Length);
         rig = transform.GetComponent<Rigidbody2D>();
     }
 
     public override void SelfUpdate(GameManager gameManager)
     {
-        if (stop)
+        if (stunned)
             return;
 
-        Vector2 playerPosition = gameManager.GetPlayerPosition();
-        Vector2 relativePos = (Vector2)transform.position - playerPosition;
+        Vector2 relativePos = (Vector2)(transform.position - target_pos);
         float angle = Mathf.Atan2(relativePos.y, relativePos.x) * Mathf.Rad2Deg;
 
         transform.eulerAngles = Vector3.forward * (angle + 180);
@@ -27,19 +29,26 @@ public class BlockHead : Enemy
             rig.MovePosition(transform.position + transform.right * speed * Time.deltaTime);
     }
 
-    private void StartKnockBack()
-    {
-        StartCoroutine("KnockBack");
-    }
-
-    IEnumerator KnockBack()
+    #region Ailments
+    private void KnockBack()
     {
         rig.MovePosition(transform.position - transform.right * knock_back);
-        stop = true;
-        yield return new WaitForSeconds(knock_back_cooldown);
-        stop = false;
     }
 
+    private void Stun(float duration)
+    {
+        StartCoroutine(StunCoroutine(duration));
+    }
+
+    IEnumerator StunCoroutine(float duration)
+    {
+        stunned = true;
+        yield return new WaitForSeconds(duration);
+        stunned = false;
+    }
+    #endregion
+
+    #region Collision Handle
     private void OnCollisionEnter2D(Collision2D collision)
     {
         HandleCollision(collision.gameObject);
@@ -55,9 +64,11 @@ public class BlockHead : Enemy
         try
         {
             collider.GetComponent<Damagable>().TakeDamage(damage);
-            StartKnockBack();
+            KnockBack();
+            Stun(knock_back_cooldown);
         }
         catch { };
     }
+    #endregion
 
 }

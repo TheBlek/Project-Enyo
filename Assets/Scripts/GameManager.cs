@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -10,11 +11,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private PlayerControls player;
     [SerializeField] private Vector2Int map_size;
     [SerializeField] private GameObject enemyPrefab;
+    [SerializeField] private Superviser superviser;
 
     private List<Building> buildings;
     private List<Bounds> buildings_bounds;
     private GridManager gridManager;
-    private Enemy enemy;
+    private System.Random random;
 
     void Start()
     {
@@ -25,8 +27,7 @@ public class GameManager : MonoBehaviour
         gridManager = new GridManager();
         gridManager.InitGrid(map_size, cell_size);
 
-        var enemyObj = Instantiate(enemyPrefab, (Vector3)(new Vector2(Random.Range(0, 2), Random.Range(0, 2))), Quaternion.identity);
-        enemy = enemyObj.GetComponent<Enemy>();
+        random = new System.Random();
     }
 
     public void BuildingInsertion(Building building)
@@ -41,19 +42,8 @@ public class GameManager : MonoBehaviour
         building.SetUp(this);
     }
     
-    public bool IsThereAWall(Vector3 pos)
-    {
-        for (int i = 0; i < buildings.Count; i++)
-        {
-            if (buildings[i].GetName() == "Wall" && buildings_bounds[i].Contains(pos))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
 
-    void Update()
+    private void Update()
     {
         for (int i = 0; i < buildings.Count; i++)
         {
@@ -69,7 +59,7 @@ public class GameManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-        enemy.SelfUpdate(this);
+        superviser.SelfUpdate(this);
     }
 
     #region Some Get Methods
@@ -97,6 +87,19 @@ public class GameManager : MonoBehaviour
         return gridManager.GetCellNeighbours(cell);
     }
     #endregion
+
+    public bool IsThereAWall(Vector3 pos)
+    {
+        for (int i = 0; i < buildings.Count; i++)
+        {
+            if (buildings[i].GetName() == "Wall" && buildings_bounds[i].Contains(pos))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public bool IsAffordable(Building building)
     {
         return building.GetCost() <= metals;
@@ -125,6 +128,13 @@ public class GameManager : MonoBehaviour
     public Vector3 GetPlayerPosition()
     {
         return player.GetPlayerPosition();
+    }
+
+    public Building GetRandomBuilding()
+    {
+        if (buildings.Count == 0)
+            return null;
+        return buildings[random.Next(buildings.Count)];
     }
     #endregion
 }

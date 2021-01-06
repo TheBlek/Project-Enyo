@@ -8,10 +8,23 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float damage;
     [SerializeField] protected float speed;
     [SerializeField] protected LayerMask player_mask;
-    
+
+    protected EnemyTargets target;
+    protected Vector3 target_pos;
+
     public virtual void SelfUpdate(GameManager gameManager)
     {
 
+    }
+
+    public EnemyTargets GetTarget()
+    {
+        return target;
+    }
+
+    public void SetTarget(Vector3 _target_pos)
+    {
+        target_pos = _target_pos;
     }
 
 }
