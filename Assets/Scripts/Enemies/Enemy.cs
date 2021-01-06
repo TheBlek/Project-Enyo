@@ -12,6 +12,8 @@ public class Enemy : MonoBehaviour
     protected EnemyTargets target;
     protected Vector3 target_pos;
 
+    public bool IsTargetEleminated;
+
     public virtual void SelfUpdate(GameManager gameManager)
     {
 

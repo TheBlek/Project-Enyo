@@ -34,18 +34,23 @@ class Superviser : MonoBehaviour
                 dead_enemies.Add(enemy);
             else
             {
-                if (enemy.GetTarget() == EnemyTargets.player)
-                    enemy.SetTarget(player_pos);
-                else {
-                    var a = gameManager.GetRandomBuilding();
-                    if (a != null)
-                    {
-                        enemy.SetTarget(a.transform.position);
-                    }else
+                    if (enemy.GetTarget() == EnemyTargets.player) // If target is player then set player pos as target
                         enemy.SetTarget(player_pos);
-                }
-                    
-
+                    else
+                    {
+                        if (enemy.IsTargetEleminated)
+                        {
+                            // If previous building or any target was eliminated set new building as target
+                            var a = gameManager.GetRandomBuilding();
+                            if (a != null) // If there are some buildings
+                            {
+                                enemy.SetTarget(a.transform.position);
+                            }
+                            else
+                                enemy.SetTarget(player_pos);
+                            enemy.IsTargetEleminated = false;
+                        }
+                    }
                 enemy.SelfUpdate(gameManager);
             }
         }

@@ -13,6 +13,7 @@ public class BlockHead : Enemy
     {
         var _R = new System.Random();
         target = (EnemyTargets)_R.Next(Enum.GetValues(typeof(EnemyTargets)).Length);
+        IsTargetEleminated = false;
         rig = transform.GetComponent<Rigidbody2D>();
     }
 
@@ -27,12 +28,14 @@ public class BlockHead : Enemy
         transform.eulerAngles = Vector3.forward * (angle + 180);
         if (relativePos.magnitude > 0.3f)
             rig.MovePosition(transform.position + transform.right * speed * Time.deltaTime);
+        else
+            IsTargetEleminated = true;
     }
 
     #region Ailments
-    private void KnockBack()
+    private void KnockBack(float knock_back_distance)
     {
-        rig.MovePosition(transform.position - transform.right * knock_back);
+        rig.MovePosition(transform.position - transform.right * knock_back_distance);
     }
 
     private void Stun(float duration)
@@ -64,7 +67,7 @@ public class BlockHead : Enemy
         try
         {
             collider.GetComponent<Damagable>().TakeDamage(damage);
-            KnockBack();
+            KnockBack(knock_back);
             Stun(knock_back_cooldown);
         }
         catch { };
