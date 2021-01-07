@@ -66,7 +66,7 @@ public class Wall : Building
 
     public override void AdjustTexture()
     { 
-        SetNeighbourBuildings();
+        SetUpNeighbourBuildings();
         pattern = GeneratePattern();
         SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
 
@@ -86,14 +86,13 @@ public class Wall : Building
         return pattern;
     }
 
-    private void SetNeighbourBuildings()
+    private void SetUpNeighbourBuildings()
     {
-        Vector2Int[] neighbourCells = gameManager.GetCellNeighbours(gameManager.GetGridCellIndexFromCoords(transform.position));
-        Building[] _neibourBuildings = new Building[4];
+        Cell[] neighbourCells = gameManager.GetCellStraightNeighbours(gameManager.GetGridPositionFromGlobal(transform.position));
+        neighbourBuildings = new Building[neighbourCells.Length];
 
-        for (int i = 0; i < 4; i++)
-            _neibourBuildings[i] = gameManager.GetBuildingInCell(neighbourCells[i]);
-        neighbourBuildings = _neibourBuildings;
+        for (int i = 0; i < neighbourBuildings.Length; i++)
+            neighbourBuildings[i] = neighbourCells[i].BuildingInCell;
     }
 
     private void RecallNeighbours()

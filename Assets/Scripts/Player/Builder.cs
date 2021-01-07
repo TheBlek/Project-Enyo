@@ -11,11 +11,17 @@ public class Builder : MonoBehaviour
     public OnBuild onBuild = null;
 
     private GameObject preview_obj;
+    private Building[] buildings_prefab;
 
     private void Start()
     {
         preview_obj = GameObject.Instantiate(preview_prefab);
         preview_obj.SetActive(false);
+
+        buildings_prefab = new Building[prefabs.Length];
+
+        for (int i = 0; i < prefabs.Length; i++)
+            buildings_prefab[i] = prefabs[i].GetComponent<Building>();
     }
 
     private Vector2 CalculateShift(Buildings building_type)
@@ -47,26 +53,15 @@ public class Builder : MonoBehaviour
 
     public void Build(Buildings building_type, GameManager gameManager)
     {
-        if (!gameManager.IsAffordable(prefabs[(int)building_type].GetComponent<Building>()))
+        if (!gameManager.IsAffordable(buildings_prefab[(int)building_type]))
             return;
 
-        if (!IsBuildable(building_type, preview_obj.transform.position, gameManager))
+        Vector3 position = preview_obj.transform.position;
+        if (!gameManager.IsRectBuildable(position, buildings_prefab[(int)building_type].GetSize()))
             return;
         
-        Vector3 position = preview_obj.transform.position;
         GameObject building = GameObject.Instantiate(prefabs[(int)building_type], position, Quaternion.identity);
 
         onBuild(building.GetComponent<Building>());
-    }
-
-    private bool IsBuildable(Buildings building_type, Vector2 pos, GameManager gameManager)
-    {
-        Vector2Int[] cells = gameManager.GetGridCellsIndexForBuilding(pos, prefabs[(int)building_type].GetComponent<Building>().GetSize());
-        foreach (Vector2Int cell in cells)
-        {
-            if (!gameManager.IsCellBuildable(cell))
-                return false;
-        }
-        return true;
     }
 }

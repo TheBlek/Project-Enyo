@@ -5,12 +5,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private float cell_size;
     [SerializeField] private int metals;
     [SerializeField] private Builder builder;
     [SerializeField] private PlayerControls player;
-    [SerializeField] private Vector2Int map_size;
-    [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private Superviser superviser;
 
     private List<Building> buildings;
@@ -24,8 +21,7 @@ public class GameManager : MonoBehaviour
         buildings_bounds = new List<Bounds>();
         buildings = new List<Building>();
 
-        gridManager = new GridManager();
-        gridManager.InitGrid(map_size, cell_size);
+        gridManager = GetComponent<GridManager>();
 
         random = new System.Random();
     }
@@ -72,19 +68,20 @@ public class GameManager : MonoBehaviour
     {
         return gridManager.IsCellBuildable(cell);
     } 
-    public Vector2Int[] GetGridCellsIndexForBuilding(Vector2 pos, Vector2 size)
+
+    public bool IsRectBuildable(Vector2 pos, Vector2 size)
     {
-        return gridManager.GetGridCellsIndexInRect(pos, size);
+        return gridManager.IsRectBuildable(pos, size);
     }
 
-    public Vector2Int GetGridCellIndexFromCoords(Vector2 coords)
+    public Vector2Int GetGridPositionFromGlobal(Vector2 global_pos)
     {
-        return gridManager.GetGridCellIndexFromCoords(coords);
+        return gridManager.GetGridPositionFromGlobal(global_pos);
     }
 
-    public Vector2Int[] GetCellNeighbours(Vector2Int cell)
+    public Cell[] GetCellStraightNeighbours(Vector2Int grid_position)
     {
-        return gridManager.GetStraightNeighbours(cell);
+        return gridManager.GetStraightNeighbours(grid_position);
     }
     #endregion
 
@@ -112,7 +109,7 @@ public class GameManager : MonoBehaviour
 
     public float GetGridSize()
     {
-        return cell_size;
+        return gridManager.GetCellSize();
     }
 
     public List<Bounds> GetBuildingsBounds()

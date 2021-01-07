@@ -3826,6 +3826,7 @@ GameObject:
   - component: {fileID: 519552905}
   - component: {fileID: 519552904}
   - component: {fileID: 519552906}
+  - component: {fileID: 519552907}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3845,13 +3846,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 396be6a892484a7448d0f04b8ecbe518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cell_size: 0.5
   metals: 4893
   builder: {fileID: 1508687873}
   player: {fileID: 1508687874}
-  map_size: {x: 100, y: 100}
-  enemyPrefab: {fileID: 1095661051140562365, guid: 07a83ec06d5a715449f63f8f6f68ae1c,
-    type: 3}
   superviser: {fileID: 519552906}
 --- !u!4 &519552905
 Transform:
@@ -3883,6 +3880,21 @@ MonoBehaviour:
     type: 3}
   number_of_enemies: 4
   offset: 11.5
+--- !u!114 &519552907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519552903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b27753c4dffdf5341818f275c51641f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid_origin: {x: -50, y: -50}
+  map_size: {x: 200, y: 200}
+  cell_size: 0.5
 --- !u!1 &1003347100
 GameObject:
   m_ObjectHideFlags: 0
@@ -4223,6 +4235,7 @@ MonoBehaviour:
   maxHP: 200000
   hurtColor: {r: 1, g: 0.399, b: 0.399, a: 1}
   death_offset: 0
+  is_enemy: 0
 --- !u!50 &1508687878
 Rigidbody2D:
   serializedVersion: 4

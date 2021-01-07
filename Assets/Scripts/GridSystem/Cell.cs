@@ -5,7 +5,7 @@ using UnityEngine;
 public class Cell
 {
     public Building BuildingInCell { get; set; }
-    public Vector2Int GridPosition;
+    private Vector2Int GridPosition;
 
     public Cell(Vector2Int _grid_position)
     {
@@ -16,4 +16,6 @@ public class Cell
     {
         return BuildingInCell == null;
     }
+
+    public Vector2Int GetGridPosition() => GridPosition;
 }
