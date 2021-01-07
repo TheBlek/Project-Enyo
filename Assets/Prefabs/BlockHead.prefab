@@ -103,6 +103,7 @@ MonoBehaviour:
   player_mask:
     serializedVersion: 2
     m_Bits: 0
+  IsTargetEleminated: 0
   knock_back: 0.19
   knock_back_cooldown: 0.34
 --- !u!114 &1314622237481621226
@@ -120,6 +121,7 @@ MonoBehaviour:
   maxHP: 500
   hurtColor: {r: 0, g: 0, b: 0, a: 0}
   death_offset: 0
+  is_enemy: 1
 --- !u!50 &7301330275974522879
 Rigidbody2D:
   serializedVersion: 4

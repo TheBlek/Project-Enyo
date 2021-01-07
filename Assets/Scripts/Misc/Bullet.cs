@@ -11,6 +11,8 @@ public class Bullet : MonoBehaviour
     private Animator animator;
     private bool is_in_animation;
 
+    public bool is_enemy;
+
     private void Start()
     {
         Destroy(gameObject, life_time);
@@ -33,8 +35,14 @@ public class Bullet : MonoBehaviour
             return;
         try
         {
-            collider.GetComponent<Damagable>().TakeDamage(damage);
-            HandleBlowAnimation();
+            if (collider.GetComponent<Damagable>().is_enemy != is_enemy)
+            {
+                collider.GetComponent<Damagable>().TakeDamage(damage);
+                HandleBlowAnimation();
+                Destroy(gameObject, .5f);
+            }
+            else
+                Destroy(gameObject);
         }
         catch { };
     }
@@ -49,6 +57,5 @@ public class Bullet : MonoBehaviour
         is_in_animation = true;
         
         animator.Play("Blow");
-        Destroy(gameObject, .5f);
     }
 }

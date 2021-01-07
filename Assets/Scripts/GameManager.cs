@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
 
     public Vector2Int[] GetCellNeighbours(Vector2Int cell)
     {
-        return gridManager.GetCellNeighbours(cell);
+        return gridManager.GetStraightNeighbours(cell);
     }
     #endregion
 

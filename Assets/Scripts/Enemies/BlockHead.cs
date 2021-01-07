@@ -66,9 +66,12 @@ public class BlockHead : Enemy
     {
         try
         {
-            collider.GetComponent<Damagable>().TakeDamage(damage);
-            KnockBack(knock_back);
-            Stun(knock_back_cooldown);
+            if (!collider.GetComponent<Damagable>().is_enemy)
+            {
+                collider.GetComponent<Damagable>().TakeDamage(damage);
+                KnockBack(knock_back);
+                Stun(knock_back_cooldown);
+            }
         }
         catch { };
     }

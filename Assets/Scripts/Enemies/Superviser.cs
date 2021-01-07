@@ -45,10 +45,10 @@ class Superviser : MonoBehaviour
                             if (a != null) // If there are some buildings
                             {
                                 enemy.SetTarget(a.transform.position);
+                                enemy.IsTargetEleminated = false;
                             }
                             else
                                 enemy.SetTarget(player_pos);
-                            enemy.IsTargetEleminated = false;
                         }
                     }
                 enemy.SelfUpdate(gameManager);

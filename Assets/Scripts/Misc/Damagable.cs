@@ -13,6 +13,8 @@ public class Damagable : MonoBehaviour
     public OnDamage onDamage;
     public OnKill onKill;
 
+    public bool is_enemy;
+
     private float HP;
 
     private void Start()
@@ -46,10 +48,10 @@ public class Damagable : MonoBehaviour
 
     private void StartWhiteEffect()
     {
-        StartCoroutine(WhiteColorEffect());
+        StartCoroutine(DamageColorEffect());
     }
 
-    IEnumerator WhiteColorEffect()
+    IEnumerator DamageColorEffect()
     {
         try
         {
