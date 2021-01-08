@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dfe2a532603bb048a42bb5d03fcb6c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Gate
+  type: 4
   size: {x: 1, y: 1}
   cost: 100
   sprites:
@@ -59,6 +59,7 @@ MonoBehaviour:
   - {fileID: -2804168211388649119, guid: e7a8b5a05fa91cf43a9ccfc645aa0f62, type: 3}
   - {fileID: -2861187128415103460, guid: e7a8b5a05fa91cf43a9ccfc645aa0f62, type: 3}
   - {fileID: 530825529007904153, guid: e7a8b5a05fa91cf43a9ccfc645aa0f62, type: 3}
+  blow_animator: {fileID: 0}
   player_mask:
     serializedVersion: 2
     m_Bits: 256
@@ -76,6 +77,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHP: 200
+  hurtColor: {r: 0, g: 0, b: 0, a: 0}
+  death_offset: 0
+  is_enemy: 0
 --- !u!61 &-2349539149243187705
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -19,7 +19,7 @@ public class Gate : Wall
 
     public override void SelfUpdate(GameManager gameManager)
     {
-        if (Physics2D.OverlapCircle(transform.position, gameManager.GetGridSize(), player_mask))
+        if (Physics2D.OverlapCircle(transform.position, gameManager.GetGridManager().GetCellSize(), player_mask))
         {
             time_player_in += Time.deltaTime;
         }

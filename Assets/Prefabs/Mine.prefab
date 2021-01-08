@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 335c24f11bc522b49b49223960905e01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Mine
+  type: 2
   size: {x: 2, y: 2}
   cost: 300
 --- !u!114 &-1012311748323705905
@@ -64,6 +64,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 500
   hurtColor: {r: 0, g: 0, b: 0, a: 0}
+  death_offset: 0
+  is_enemy: 0
 --- !u!212 &2505739306516396071
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -151,6 +151,7 @@ MonoBehaviour:
   maxHP: 150
   hurtColor: {r: 0, g: 0, b: 0, a: 0}
   death_offset: 0
+  is_enemy: 0
 --- !u!212 &7211070283343541459
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -214,7 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7920f034093ecc14fad10cdeedb4a1d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  name: Wall
+  type: 3
   size: {x: 1, y: 1}
   cost: 200
   sprites:

@@ -59,31 +59,7 @@ public class GameManager : MonoBehaviour
     }
 
     #region Some Get Methods
-    #region Grid Getters
-    public Building GetBuildingInCell(Vector2Int cell)
-    {
-        return gridManager.GetBuildingInCell(cell);
-    }
-    public bool IsCellBuildable(Vector2Int cell)
-    {
-        return gridManager.IsCellBuildable(cell);
-    } 
-
-    public bool IsRectBuildable(Vector2 pos, Vector2 size)
-    {
-        return gridManager.IsRectBuildable(pos, size);
-    }
-
-    public Vector2Int GetGridPositionFromGlobal(Vector2 global_pos)
-    {
-        return gridManager.GetGridPositionFromGlobal(global_pos);
-    }
-
-    public Cell[] GetCellStraightNeighbours(Vector2Int grid_position)
-    {
-        return gridManager.GetStraightNeighbours(grid_position);
-    }
-    #endregion
+    public GridManager GetGridManager() => gridManager;
 
     public bool IsThereAWall(Vector3 pos)
     {
@@ -105,11 +81,6 @@ public class GameManager : MonoBehaviour
     public int GetMetals()
     {
         return metals;
-    }
-
-    public float GetGridSize()
-    {
-        return gridManager.GetCellSize();
     }
 
     public List<Bounds> GetBuildingsBounds()
