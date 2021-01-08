@@ -17,7 +17,7 @@ public class BlockHead : Enemy
         rig = transform.GetComponent<Rigidbody2D>();
     }
 
-    public override void SelfUpdate(GameManager gameManager)
+    public override void SelfUpdate()
     {
         if (stunned)
             return;

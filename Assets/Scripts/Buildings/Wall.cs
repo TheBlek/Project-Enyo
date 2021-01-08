@@ -55,11 +55,12 @@ public class Wall : Building
         d.death_offset = .25f;
         d.onKill += PlayBlowAnimation;
         gameObject.GetComponent<Damagable>().onKill += OnDeath;
+
+        gameManager = FindObjectOfType<GameManager>();
     }
 
-    public override void SetUp(GameManager _gameManager)
+    public override void SetUp()
     {
-        gameManager = _gameManager;
         AdjustTexture();
         RecallNeighbours();
     }

@@ -11,6 +11,7 @@ class Superviser : MonoBehaviour
 
     private List<Enemy> enemies;
     private List<Enemy> dead_enemies;
+    private GameManager gameManager;
 
     private void Awake()
     {
@@ -25,7 +26,7 @@ class Superviser : MonoBehaviour
         }
     }
 
-    public void SelfUpdate(GameManager gameManager)
+    public void SelfUpdate()
     {
         Vector3 player_pos = gameManager.GetPlayerPosition();
         foreach (Enemy enemy in enemies)

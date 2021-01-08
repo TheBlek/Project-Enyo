@@ -14,7 +14,7 @@ public class Enemy : MonoBehaviour
 
     public bool IsTargetEleminated;
 
-    public virtual void SelfUpdate(GameManager gameManager)
+    public virtual void SelfUpdate()
     {
 
     }

@@ -12,6 +12,7 @@ public class Builder : MonoBehaviour
 
     private GameObject preview_obj;
     private Building[] buildings_prefab;
+    private GameManager gameManager;
 
     private void Start()
     {
@@ -22,6 +23,8 @@ public class Builder : MonoBehaviour
 
         for (int i = 0; i < prefabs.Length; i++)
             buildings_prefab[i] = prefabs[i].GetComponent<Building>();
+
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     private Vector2 CalculateShift(Buildings building_type)
@@ -51,7 +54,7 @@ public class Builder : MonoBehaviour
         preview_obj.transform.position = position;
     }
 
-    public void Build(Buildings building_type, GameManager gameManager)
+    public void Build(Buildings building_type)
     {
         if (!gameManager.IsAffordable(buildings_prefab[(int)building_type]))
             return;

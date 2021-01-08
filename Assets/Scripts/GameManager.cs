@@ -49,13 +49,13 @@ public class GameManager : MonoBehaviour
                 buildings_bounds.Remove(buildings_bounds[i]);
             }
             else
-                buildings[i].SelfUpdate(this);
+                buildings[i].SelfUpdate();
         }
     }
 
     private void FixedUpdate()
     {
-        superviser.SelfUpdate(this);
+        superviser.SelfUpdate();
     }
 
     #region Some Get Methods
