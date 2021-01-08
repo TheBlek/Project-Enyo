@@ -80,7 +80,7 @@ public class Wall : Building
         int pattern = 0;
         for (int i = 0; i < 4; i++)
         {
-            if (neighbourBuildings[i] != null && CheckName(neighbourBuildings[i].GetName()))
+            if (neighbourBuildings[i] != null && CheckName(neighbourBuildings[i].GetBuildingType()))
                 pattern += (int)Mathf.Pow(2f, i);
         }
         return pattern;
@@ -101,7 +101,7 @@ public class Wall : Building
         {
             try
             {
-                if (CheckName(building.GetName()))
+                if (CheckName(building.GetBuildingType()))
                     building.AdjustTexture();
             }
             catch { }
@@ -110,13 +110,13 @@ public class Wall : Building
 
     private void OnDeath()
     {
-        name = "Wal";
+        type = Buildings.AboutToDie;
         RecallNeighbours();
     }
 
-    private bool CheckName(string name)
+    private bool CheckName(Buildings type)
     {
-        return name == Buildings.Wall.ToString() || name == Buildings.Gate.ToString();
+        return type == Buildings.Wall || type == Buildings.Gate;
     }
 
     private void PlayBlowAnimation()

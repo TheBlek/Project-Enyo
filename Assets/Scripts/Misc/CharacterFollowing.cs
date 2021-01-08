@@ -5,8 +5,8 @@ using UnityEngine;
 public class CharacterFollowing : MonoBehaviour
 {
     [SerializeField] private Transform player;
-    [SerializeField] private float smooth_time;
-    [SerializeField] private float z_offset;
+    [SerializeField] private float smooth_time = 0.08f;
+    [SerializeField] private float z_offset = 10f;
     private void Start()
     {
         transform.position = player.position;

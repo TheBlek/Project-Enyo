@@ -5,15 +5,15 @@ using UnityEngine;
 public class Gate : Wall
 {
     [SerializeField] private LayerMask player_mask;
-    [SerializeField] private float reaction_time;
+    [SerializeField] private float reaction_time = 1;
 
     private float time_player_in = 0;
 
-    private BoxCollider2D collider;
+    private BoxCollider2D box_collider;
 
     private void Start()
     {
-        collider = transform.GetComponent<BoxCollider2D>();
+        box_collider = transform.GetComponent<BoxCollider2D>();
     }
 
 
@@ -26,12 +26,12 @@ public class Gate : Wall
         else
         {
             time_player_in = 0;
-            collider.isTrigger = false;
+            box_collider.isTrigger = false;
         }
 
         if (time_player_in >= reaction_time)
         {
-            collider.isTrigger = true;
+            box_collider.isTrigger = true;
         }
     }
 

@@ -5,7 +5,7 @@ using System;
 
 public class Walker: MonoBehaviour
 {
-    [SerializeField] private float speed;
+    [SerializeField] private float speed = 1;
     [SerializeField] private Rigidbody2D rig;
     [SerializeField] private Transform upper_chest;
     [SerializeField] private Transform legs;

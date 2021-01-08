@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private int metals;
+    [SerializeField] private int metals = 0;
     [SerializeField] private Builder builder;
     [SerializeField] private PlayerControls player;
     [SerializeField] private Superviser superviser;
@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < buildings.Count; i++)
         {
-            if (buildings[i].GetName() == "Wall" && buildings_bounds[i].Contains(pos))
+            if (buildings[i].GetBuildingType() == Buildings.Wall && buildings_bounds[i].Contains(pos))
             {
                 return true;
             }

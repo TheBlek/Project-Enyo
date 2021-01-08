@@ -6,8 +6,8 @@ using UnityEngine;
 class Superviser : MonoBehaviour
 {
     [SerializeField] private GameObject enemyPrefab;
-    [SerializeField] private int number_of_enemies;
-    [SerializeField] private float offset;
+    [SerializeField] private int number_of_enemies = 4;
+    [SerializeField] private float offset = 10;
 
     private List<Enemy> enemies;
     private List<Enemy> dead_enemies;

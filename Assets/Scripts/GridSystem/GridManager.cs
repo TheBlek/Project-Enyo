@@ -6,7 +6,7 @@ public class GridManager : MonoBehaviour
 {
     [SerializeField] private Vector2 grid_origin;
     [SerializeField] private Vector2Int map_size;
-    [SerializeField] private float cell_size;
+    [SerializeField] private float cell_size = 0.5f;
 
     private Cell[,] grid;
     private void Start()

@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private float speed;
-    [SerializeField] private float damage;
-    [SerializeField] private float life_time;
+    [SerializeField] private float speed = 400;
+    [SerializeField] private float damage = 50;
+    [SerializeField] private float life_time = 1;
 
     private Animator animator;
     private bool is_in_animation;

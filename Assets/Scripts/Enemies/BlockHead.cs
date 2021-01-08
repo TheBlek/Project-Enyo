@@ -3,8 +3,8 @@ using System;
 using UnityEngine;
 public class BlockHead : Enemy
 {
-    [SerializeField] private float knock_back;
-    [SerializeField] private float knock_back_cooldown;
+    [SerializeField] private float knock_back = 0.19f;
+    [SerializeField] private float knock_back_cooldown = 0.34f;
 
     private Rigidbody2D rig;
     private bool stunned;
