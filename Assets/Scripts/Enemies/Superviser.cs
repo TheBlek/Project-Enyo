@@ -24,6 +24,8 @@ class Superviser : MonoBehaviour
         {
             enemies.Add(SpawnNewEnemy());
         }
+
+        gameManager = FindObjectOfType<GameManager>();
     }
 
     public void SelfUpdate()
@@ -52,7 +54,7 @@ class Superviser : MonoBehaviour
                                 enemy.SetTarget(player_pos);
                         }
                     }
-                enemy.SelfUpdate(gameManager);
+                enemy.SelfUpdate();
             }
         }
         foreach (Enemy enemy in dead_enemies)

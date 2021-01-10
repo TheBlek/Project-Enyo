@@ -17,7 +17,7 @@ public class Gate : Wall
     }
 
 
-    public override void SelfUpdate(GameManager gameManager)
+    public override void SelfUpdate()
     {
         if (Physics2D.OverlapCircle(transform.position, gameManager.GetGridManager().GetCellSize(), player_mask))
         {

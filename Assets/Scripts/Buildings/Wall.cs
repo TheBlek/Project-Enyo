@@ -9,7 +9,7 @@ public class Wall : Building
     [SerializeField] private Animator blow_animator;
     private int pattern;
     private Building[] neighbourBuildings;
-    private GameManager gameManager;
+    protected GameManager gameManager;
 
     public class RendererSetUp
     {

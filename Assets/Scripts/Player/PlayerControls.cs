@@ -34,7 +34,7 @@ public class PlayerControls : MonoBehaviour
 
         if (building_mode && (Input.GetKey(KeyCode.LeftShift) ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) )
         {
-            builder.Build(building_type, gameManager);
+            builder.Build(building_type);
         }else if (Input.GetMouseButtonDown(0))
             shooter.Shoot();
 

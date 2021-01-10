@@ -4,12 +4,19 @@ using UnityEngine;
 
 public class Cell
 {
-    public Building BuildingInCell { get; set; }
     private Vector2Int GridPosition;
+    
+    public int gCost;
+    public int hCost;
+    public Cell parent;
 
-    public Cell(Vector2Int _grid_position)
+    public Building BuildingInCell;
+    private bool walkable;
+
+    public Cell(Vector2Int _grid_position, bool _walkable)
     {
         GridPosition = _grid_position;
+        walkable = _walkable;
     }
 
     public bool Buildable()
@@ -17,5 +24,15 @@ public class Cell
         return BuildingInCell == null;
     }
 
+    public bool IsWalkable() => walkable && BuildingInCell == null;
+
     public Vector2Int GetGridPosition() => GridPosition;
+
+    public int fCost
+    {
+        get
+        {
+            return gCost + hCost;
+        }
+    }
 }

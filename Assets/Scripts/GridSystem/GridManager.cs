@@ -9,7 +9,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private float cell_size = 0.5f;
 
     private Cell[,] grid;
-    private void Start()
+    private void Awake()
     {
         InitGrid();
     }
@@ -23,7 +23,7 @@ public class GridManager : MonoBehaviour
         {
             for (int j = 0; j < map_size.y; j++)
             {
-                grid[i, j] = new Cell(new Vector2Int(i, j));
+                grid[i, j] = new Cell(new Vector2Int(i, j), true);
             }
         }
     }
@@ -63,6 +63,11 @@ public class GridManager : MonoBehaviour
     {
         Vector2Int temp = GetGridPositionFromGlobal(global);
         return grid[temp.x, temp.y];
+    }
+
+    public Vector3 GetGlobalPosition(Cell cell)
+    {
+        return grid_origin + (Vector2)cell.GetGridPosition() * cell_size + Vector2.one * cell_size/2;
     }
 
     public void AdjustCellsForBuilding(Building building)
@@ -122,8 +127,19 @@ public class GridManager : MonoBehaviour
         return position.x < 0 || position.x >= map_size.x || position.y < 0 || position.y >= map_size.y;
     }
 
-    public float GetCellSize()
+    public float GetCellSize() => cell_size;
+
+    public Vector2Int GetMapSize() => map_size;
+
+    private void OnDrawGizmos()
     {
-        return cell_size;
+        Gizmos.DrawWireCube(grid_origin + (Vector2)map_size * cell_size / 2, (Vector2)map_size * cell_size);
+        if (grid == null)
+            return;
+
+        foreach (Cell cell in grid)
+        {
+            Gizmos.DrawWireCube(GetGlobalPosition(cell), Vector3.one * (cell_size - .1f));
+        }
     }
 }

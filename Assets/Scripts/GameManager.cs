@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
 
         buildings_bounds.Add(building.GetComponent<BoxCollider2D>().bounds);
 
-        building.SetUp(this);
+        building.SetUp();
     }
     
 
