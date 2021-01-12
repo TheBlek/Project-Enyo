@@ -13,15 +13,17 @@ public class GameManager : MonoBehaviour
     private List<Building> buildings;
     private List<Bounds> buildings_bounds;
     private GridManager gridManager;
+    private PathRequestManager pathRequestManager;
     private System.Random random;
 
-    void Start()
+    void Awake()
     {
         builder.onBuild += BuildingInsertion;
         buildings_bounds = new List<Bounds>();
         buildings = new List<Building>();
 
         gridManager = GetComponent<GridManager>();
+        pathRequestManager = GetComponent<PathRequestManager>();
 
         random = new System.Random();
     }
@@ -61,31 +63,11 @@ public class GameManager : MonoBehaviour
     #region Some Get Methods
     public GridManager GetGridManager() => gridManager;
 
-    public bool IsThereAWall(Vector3 pos)
-    {
-        for (int i = 0; i < buildings.Count; i++)
-        {
-            if (buildings[i].GetBuildingType() == Buildings.Wall && buildings_bounds[i].Contains(pos))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+    public PathRequestManager GetPathRequestManager() => pathRequestManager;
 
     public bool IsAffordable(Building building)
     {
         return building.GetCost() <= metals;
-    }
-
-    public int GetMetals()
-    {
-        return metals;
-    }
-
-    public List<Bounds> GetBuildingsBounds()
-    {
-        return buildings_bounds;
     }
 
     public void AddMetals(int addition)
@@ -104,5 +86,7 @@ public class GameManager : MonoBehaviour
             return null;
         return buildings[random.Next(buildings.Count)];
     }
+
+    public bool IsThereAnyBuilding() => buildings.Count > 0;
     #endregion
 }

@@ -70,6 +70,11 @@ public class GridManager : MonoBehaviour
         return grid_origin + (Vector2)cell.GetGridPosition() * cell_size + Vector2.one * cell_size/2;
     }
 
+    public Vector3 SnapGlobalPositionToNearestCell(Vector3 global)
+    {
+        return GetGlobalPosition(GetCellFromGlobalPosition(global));
+    }
+
     public void AdjustCellsForBuilding(Building building)
     {
         Cell[] cells = GetCellsInRect(building.transform.position, building.GetSize());

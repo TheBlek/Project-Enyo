@@ -8,6 +8,11 @@ public class BlockHead : Enemy
 
     private Rigidbody2D rig;
     private bool stunned;
+    private Vector3[] waypoints;
+    private int current_waypoint;
+    private bool pathRequested;
+
+    private GameManager gameManager;
 
     private void Start()
     {
@@ -15,21 +20,68 @@ public class BlockHead : Enemy
         target = (EnemyTargets)_R.Next(Enum.GetValues(typeof(EnemyTargets)).Length);
         IsTargetEleminated = false;
         rig = transform.GetComponent<Rigidbody2D>();
+
+        gameManager = FindObjectOfType<GameManager>();
+        pathRequestManager = gameManager.GetPathRequestManager();
+
+        pathRequested = true;
+        pathRequestManager.RequestPath(transform.position, target_pos, OnPathFound);
     }
 
     public override void SelfUpdate()
     {
-        if (stunned)
+
+        if (stunned || pathRequested)
             return;
 
-        Vector2 relativePos = (Vector2)(transform.position - target_pos);
+        Vector3 target_cell = gameManager.GetGridManager().SnapGlobalPositionToNearestCell(target_pos);
+        if ((current_waypoint >= waypoints.Length || target_cell != waypoints[waypoints.Length - 1]) && !pathRequested)
+        {
+            pathRequested = true;
+            pathRequestManager.RequestPath(transform.position, target_pos, OnPathFound);
+        }
+
+        Vector2 relativePos = (Vector2)(transform.position - waypoints[current_waypoint]);
         float angle = Mathf.Atan2(relativePos.y, relativePos.x) * Mathf.Rad2Deg;
 
         transform.eulerAngles = Vector3.forward * (angle + 180);
-        if (relativePos.magnitude > 0.3f)
+        if (relativePos.magnitude > 0.01f)
+        {
             rig.MovePosition(transform.position + transform.right * speed * Time.deltaTime);
+        }
         else
-            IsTargetEleminated = true;
+        {
+            current_waypoint++;
+            if (current_waypoint >= waypoints.Length)
+                IsTargetEleminated = true;
+        }
+
+    }
+
+    public void OnPathFound(Vector3[] _waypoints, bool success)
+    {
+        if (success)
+        {
+            waypoints = _waypoints;
+            current_waypoint = 0;
+            pathRequested = false;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        if (waypoints != null && current_waypoint < waypoints.Length)
+        {
+            Gizmos.DrawLine(transform.position, waypoints[current_waypoint]);
+            Gizmos.DrawCube(waypoints[current_waypoint], Vector3.one * .1f);
+            if (current_waypoint + 1 < waypoints.Length)
+                for (int i = current_waypoint + 1; i < waypoints.Length; i++)
+                {
+                    Gizmos.DrawCube(waypoints[i], Vector3.one * .1f);
+                    Gizmos.DrawLine(waypoints[i], waypoints[i - 1]);
+                }
+        }
     }
 
     #region Ailments

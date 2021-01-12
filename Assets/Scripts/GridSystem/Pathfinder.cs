@@ -1,26 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 
-public class Pathfinder : MonoBehaviour
+public class Pathfinder
 {
     private GridManager gridManager;
-    private Vector3[] waypoints;
 
-    [SerializeField] private Transform start;
-    [SerializeField] private Transform target;
-
-    private void Start()
+    private Action<Vector3[], bool> OnPathProcessingEnd;
+    public Pathfinder (GridManager _gridManager, Action<Vector3[], bool> _OnPathProccessingEnd)
     {
-        gridManager = GetComponent<GridManager>();
+        gridManager = _gridManager;
+        OnPathProcessingEnd = _OnPathProccessingEnd;
     }
 
-    private void Update()
-    {
-        waypoints = FindPath(start.position, target.position);
-    }
-
-    public Vector3[] FindPath(Vector3 start_pos, Vector3 target_pos) // A* Algorithm
+    public IEnumerator FindPath(Vector3 start_pos, Vector3 target_pos) // A* Algorithm
     {
         Cell start = gridManager.GetCellFromGlobalPosition(start_pos);
         Cell target = gridManager.GetCellFromGlobalPosition(target_pos);
@@ -45,7 +39,9 @@ public class Pathfinder : MonoBehaviour
             
             if (target == current)
             {
-                return RetracePath(start, target);
+                Vector3[] path = RetracePath(start, target);
+                OnPathProcessingEnd(path, true);
+                yield break;
             }
 
             foreach (Cell neighbour in gridManager.GetNeighbours(current))
@@ -67,7 +63,8 @@ public class Pathfinder : MonoBehaviour
                 }
             }
         }
-        return null;
+        yield return null;
+        OnPathProcessingEnd(null, false);
     }
 
     private Vector3[] RetracePath(Cell start, Cell end)
@@ -113,18 +110,5 @@ public class Pathfinder : MonoBehaviour
         if (distX > distY)
             return 14 * distY + 10*(distX - distY);
         return 14 * distX + 10*(distY - distX);
-    }
-
-    private void OnDrawGizmos()
-    {
-        if (waypoints == null)
-            return;
-        Gizmos.color = Color.red;
-        Gizmos.DrawCube(waypoints[0], Vector3.one * 0.1f);
-        for (int i = 1; i < waypoints.Length; i++)
-        {
-            Gizmos.DrawCube(waypoints[i], Vector3.one * 0.1f);
-            Gizmos.DrawLine(waypoints[i], waypoints[i - 1]);
-        }
     }
 }

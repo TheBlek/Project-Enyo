@@ -99,7 +99,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ApS: 1
   damage: 50
-  speed: 2
+  speed: 1.19
   player_mask:
     serializedVersion: 2
     m_Bits: 0

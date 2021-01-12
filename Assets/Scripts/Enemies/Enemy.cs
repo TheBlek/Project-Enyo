@@ -11,8 +11,14 @@ public class Enemy : MonoBehaviour
 
     protected EnemyTargets target;
     protected Vector3 target_pos;
+    protected PathRequestManager pathRequestManager;
 
     public bool IsTargetEleminated;
+
+    private void Start()
+    {
+        pathRequestManager = FindObjectOfType<GameManager>().GetPathRequestManager();
+    }
 
     public virtual void SelfUpdate()
     {
