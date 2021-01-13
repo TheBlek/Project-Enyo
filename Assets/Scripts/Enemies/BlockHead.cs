@@ -16,8 +16,7 @@ public class BlockHead : Enemy
 
     private void Start()
     {
-        var _R = new System.Random();
-        target = (EnemyTargets)_R.Next(Enum.GetValues(typeof(EnemyTargets)).Length);
+        RandomizeTarget();
         IsTargetEleminated = false;
         rig = transform.GetComponent<Rigidbody2D>();
 
@@ -26,6 +25,12 @@ public class BlockHead : Enemy
 
         pathRequested = true;
         pathRequestManager.RequestPath(transform.position, target_pos, OnPathFound);
+    }
+
+    public void RandomizeTarget()
+    {
+        var _R = new System.Random();
+        target = (EnemyTargets)_R.Next(Enum.GetValues(typeof(EnemyTargets)).Length);
     }
 
     public override void SelfUpdate()
@@ -39,6 +44,7 @@ public class BlockHead : Enemy
         {
             pathRequested = true;
             pathRequestManager.RequestPath(transform.position, target_pos, OnPathFound);
+            return;
         }
 
         Vector2 relativePos = (Vector2)(transform.position - waypoints[current_waypoint]);
@@ -63,8 +69,13 @@ public class BlockHead : Enemy
         if (success)
         {
             waypoints = _waypoints;
-            current_waypoint = 0;
+            current_waypoint = 1;
             pathRequested = false;
+        }
+        else
+        {
+            pathRequested = false;
+            IsTargetEleminated = true;
         }
     }
 

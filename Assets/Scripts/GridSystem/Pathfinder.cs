@@ -46,7 +46,7 @@ public class Pathfinder
 
             foreach (Cell neighbour in gridManager.GetNeighbours(current))
             {
-                if (!neighbour.IsWalkable() || closedSet.Contains(neighbour))
+                if ((!neighbour.IsWalkable() && neighbour != target) || closedSet.Contains(neighbour))
                 {
                     continue;
                 }
