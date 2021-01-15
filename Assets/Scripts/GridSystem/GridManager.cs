@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
+    public bool ShowGizmos;
+
     [SerializeField] private Vector2 grid_origin;
     [SerializeField] private Vector2Int map_size;
     [SerializeField] private float cell_size = 0.5f;
@@ -138,6 +140,9 @@ public class GridManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        if (!ShowGizmos)
+            return;
+
         Gizmos.DrawWireCube(grid_origin + (Vector2)map_size * cell_size / 2, (Vector2)map_size * cell_size);
         if (grid == null)
             return;

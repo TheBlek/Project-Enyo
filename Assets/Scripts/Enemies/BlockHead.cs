@@ -3,6 +3,8 @@ using System;
 using UnityEngine;
 public class BlockHead : Enemy
 {
+    public bool ShowGizmos;
+
     [SerializeField] private float knock_back = 0.19f;
     [SerializeField] private float knock_back_cooldown = 0.34f;
 
@@ -13,9 +15,16 @@ public class BlockHead : Enemy
     private bool pathRequested;
 
     private GameManager gameManager;
+    private Animator animator;
 
     private void Start()
     {
+        try
+        {
+            animator = GetComponent<Animator>();
+        }
+        finally { }
+
         RandomizeTarget();
         IsTargetEleminated = false;
         rig = transform.GetComponent<Rigidbody2D>();
@@ -48,12 +57,12 @@ public class BlockHead : Enemy
         }
 
         Vector2 relativePos = (Vector2)(transform.position - waypoints[current_waypoint]);
-        float angle = Mathf.Atan2(relativePos.y, relativePos.x) * Mathf.Rad2Deg;
-
-        transform.eulerAngles = Vector3.forward * (angle + 180);
+        TurnToAngle(relativePos);
+        
         if (relativePos.magnitude > 0.01f)
         {
-            rig.MovePosition(transform.position + transform.right * speed * Time.deltaTime);
+            SetWalking(true);
+            rig.MovePosition(transform.position - transform.right * speed * Time.deltaTime);
         }
         else
         {
@@ -62,6 +71,19 @@ public class BlockHead : Enemy
                 IsTargetEleminated = true;
         }
 
+    }
+
+    private void SetWalking(bool state)
+    {
+        if (animator != null)
+            animator.SetBool("IsWalking", state);
+    }
+
+    private void TurnToAngle(Vector3 relative_pos)
+    {
+        float angle = Mathf.Atan2(relative_pos.y, relative_pos.x) * Mathf.Rad2Deg;
+
+        transform.eulerAngles = Vector3.forward * angle;
     }
 
     public void OnPathFound(Vector3[] _waypoints, bool success)
@@ -81,6 +103,9 @@ public class BlockHead : Enemy
 
     private void OnDrawGizmos()
     {
+        if (!ShowGizmos)
+            return;
+
         Gizmos.color = Color.red;
         if (waypoints != null && current_waypoint < waypoints.Length)
         {
@@ -98,7 +123,7 @@ public class BlockHead : Enemy
     #region Ailments
     private void KnockBack(float knock_back_distance)
     {
-        rig.MovePosition(transform.position - transform.right * knock_back_distance);
+        rig.MovePosition(transform.position + transform.right * knock_back_distance);
     }
 
     private void Stun(float duration)
@@ -109,6 +134,7 @@ public class BlockHead : Enemy
     IEnumerator StunCoroutine(float duration)
     {
         stunned = true;
+        SetWalking(false);
         yield return new WaitForSeconds(duration);
         stunned = false;
     }
