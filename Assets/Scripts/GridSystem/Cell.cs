@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cell
+public class Cell : IHeapItem<Cell>
 {
     private Vector2Int GridPosition;
     
@@ -12,6 +12,8 @@ public class Cell
 
     public Building BuildingInCell;
     private bool walkable;
+
+    private int heap_index;
 
     public Cell(Vector2Int _grid_position, bool _walkable)
     {
@@ -34,5 +36,25 @@ public class Cell
         {
             return gCost + hCost;
         }
+    }
+
+    public int HeapIndex
+    {
+        get
+        {
+            return heap_index;
+        }
+        set
+        {
+            heap_index = value;
+        }
+    }
+
+    public int CompareTo(Cell cellToCompare)
+    {
+        int compare = fCost.CompareTo(cellToCompare.fCost);
+        if (compare == 0)
+            compare = hCost.CompareTo(cellToCompare.hCost);
+        return -compare;
     }
 }

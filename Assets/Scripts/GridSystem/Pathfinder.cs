@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 
 public class Pathfinder
@@ -16,31 +17,28 @@ public class Pathfinder
 
     public IEnumerator FindPath(Vector3 start_pos, Vector3 target_pos) // A* Algorithm
     {
+        Stopwatch sw = new Stopwatch();
+        sw.Start();
+
         Cell start = gridManager.GetCellFromGlobalPosition(start_pos);
         Cell target = gridManager.GetCellFromGlobalPosition(target_pos);
 
-        List<Cell> openSet = new List<Cell>();
+        Heap<Cell> openSet = new Heap<Cell>(gridManager.GetMapArea());
         HashSet<Cell> closedSet = new HashSet<Cell>();
         openSet.Add(start);
 
         while (openSet.Count > 0)
         {
-            Cell current = openSet[0];
-            for (int i = 1; i < openSet.Count; i++)
-            {
-                if (openSet[i].fCost < current.fCost || (openSet[i].fCost == current.fCost && openSet[i].hCost < current.hCost))
-                {
-                    current = openSet[i];
-                }
-            }
+            Cell current = openSet.RemoveFirst();
 
-            openSet.Remove(current);
             closedSet.Add(current);
             
             if (target == current)
             {
                 Vector3[] path = RetracePath(start, target);
                 OnPathProcessingEnd(path, true);
+                sw.Stop();
+                UnityEngine.Debug.Log("Path found: " + sw.ElapsedMilliseconds + "ms");
                 yield break;
             }
 

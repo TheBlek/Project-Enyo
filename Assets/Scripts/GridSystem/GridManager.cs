@@ -138,6 +138,8 @@ public class GridManager : MonoBehaviour
 
     public Vector2Int GetMapSize() => map_size;
 
+    public int GetMapArea() => map_size.x * map_size.y;
+
     private void OnDrawGizmos()
     {
         if (!ShowGizmos)
