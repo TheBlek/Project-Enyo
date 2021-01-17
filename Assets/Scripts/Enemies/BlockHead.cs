@@ -158,6 +158,7 @@ public class BlockHead : Enemy
             if (!collider.GetComponent<Damagable>().is_enemy)
             {
                 collider.GetComponent<Damagable>().TakeDamage(damage);
+                animator.Play("Attack");
                 KnockBack(knock_back);
                 Stun(knock_back_cooldown);
             }

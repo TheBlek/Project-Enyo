@@ -17,6 +17,24 @@ TextureImporter:
   - first:
       213: -3274514476920630589
     second: blockhead-Sheet_4
+  - first:
+      213: -4049837271215160016
+    second: blockhead-Sheet_0
+  - first:
+      213: 8091751160603576590
+    second: blockhead-Sheet_1
+  - first:
+      213: 8203296352924946299
+    second: blockhead-Sheet_2
+  - first:
+      213: -1593481979245235810
+    second: blockhead-Sheet_3
+  - first:
+      213: -2375791130539760
+    second: blockhead-Sheet_4
+  - first:
+      213: 2088278751077419072
+    second: blockhead-Sheet_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -128,8 +146,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dc12b56f3c64c37a0800000000000000
-      internalID: -6396159563307212339
+      spriteID: 035451375761cc7c0800000000000000
+      internalID: -4049837271215160016
       vertices: []
       indices: 
       edges: []
@@ -149,8 +167,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 320a89256cec1c0d0800000000000000
-      internalID: -3404212492130803677
+      spriteID: e0981a20fccab4070800000000000000
+      internalID: 8091751160603576590
       vertices: []
       indices: 
       edges: []
@@ -170,8 +188,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f8946abf796e07850800000000000000
-      internalID: 6372847013165681039
+      spriteID: b7f495fe196f7d170800000000000000
+      internalID: 8203296352924946299
       vertices: []
       indices: 
       edges: []
@@ -191,8 +209,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 96631172076f078e0800000000000000
-      internalID: -1697586097966467479
+      spriteID: e91f91f1590d2e9e0800000000000000
+      internalID: -1593481979245235810
       vertices: []
       indices: 
       edges: []
@@ -212,8 +230,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3c2954fae669e82d0800000000000000
-      internalID: -3274514476920630589
+      spriteID: 0198a950b3f87fff0800000000000000
+      internalID: -2375791130539760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: blockhead-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 80
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04847fdb57e0bfc10800000000000000
+      internalID: 2088278751077419072
       vertices: []
       indices: 
       edges: []

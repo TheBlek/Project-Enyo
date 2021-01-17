@@ -38,7 +38,7 @@ public class Pathfinder
                 Vector3[] path = RetracePath(start, target);
                 OnPathProcessingEnd(path, true);
                 sw.Stop();
-                UnityEngine.Debug.Log("Path found: " + sw.ElapsedMilliseconds + "ms");
+                //UnityEngine.Debug.Log("Path found: " + sw.ElapsedMilliseconds + "ms");
                 yield break;
             }
 
