@@ -17,7 +17,7 @@ public class BlockHead : Enemy
     private GameManager gameManager;
     private Animator animator;
 
-    private void Start()
+    private void Awake()
     {
         try
         {

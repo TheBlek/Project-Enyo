@@ -7,25 +7,33 @@ class Superviser : MonoBehaviour
 {
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private int number_of_enemies = 4;
-    [SerializeField] private float offset = 10;
+    [SerializeField] private float spawn_point_offset = 10;
+    [SerializeField] private Vector2 spawn_point;
 
     private List<Enemy> enemies;
     private List<Enemy> dead_enemies;
     private GameManager gameManager;
+    private GridManager gridManager;
+    private System.Random random;
 
-    private void Awake()
+    private void Start()
     {
-        var random = new System.Random();
-        random.Next();
+        random = new System.Random();
 
+        gameManager = FindObjectOfType<GameManager>();
+        gridManager = gameManager.GetGridManager();
+
+        InitEnemies();
+    }
+
+    private void InitEnemies()
+    {
         enemies = new List<Enemy>();
         dead_enemies = new List<Enemy>();
         for (int i = 0; i < number_of_enemies; i++)
         {
             enemies.Add(SpawnNewEnemy());
         }
-
-        gameManager = FindObjectOfType<GameManager>();
     }
 
     public void SelfUpdate()
@@ -65,7 +73,12 @@ class Superviser : MonoBehaviour
 
     private Enemy SpawnNewEnemy()
     {
-        var enemyObj = Instantiate(enemyPrefab, (Vector3)(new Vector2(UnityEngine.Random.Range(0 - offset, 0 + offset), UnityEngine.Random.Range(0 - offset, 0 + offset))), Quaternion.identity);
+        Vector2 relative_pos = spawn_point_offset * new Vector2((float)random.NextDouble(), (float)random.NextDouble());
+
+        while (!gridManager.GetCellFromGlobalPosition(relative_pos + spawn_point).IsWalkable()) // Reroll pos while it's not walkable
+            relative_pos = spawn_point_offset * new Vector2((float)random.NextDouble(), (float)random.NextDouble());
+
+        var enemyObj = Instantiate(enemyPrefab, relative_pos + spawn_point, Quaternion.identity);
         return enemyObj.GetComponent<Enemy>();
     }
 
