@@ -48,13 +48,15 @@ public class BlockHead : Enemy
         if (stunned || pathRequested)
             return;
 
-        Vector3 target_cell = gameManager.GetGridManager().SnapGlobalPositionToNearestCell(target_pos);
-        if ((current_waypoint >= waypoints.Length || target_cell != waypoints[waypoints.Length - 1]) && !pathRequested)
+        if (current_waypoint >= waypoints.Length || target_pos != waypoints[waypoints.Length - 1])
         {
             pathRequested = true;
             pathRequestManager.RequestPath(transform.position, target_pos, OnPathFound);
-            return;
+
+            if (current_waypoint >= waypoints.Length)
+                return;
         }
+
 
         Vector2 relativePos = (Vector2)(transform.position - waypoints[current_waypoint]);
         TurnToAngle(relativePos);
@@ -91,13 +93,15 @@ public class BlockHead : Enemy
         if (success)
         {
             waypoints = _waypoints;
-            current_waypoint = 1;
+            current_waypoint = 1; // You don't need to go to where u stand
+            waypoints[waypoints.Length - 1] = target_pos; // Just correcting pos in cell 
             pathRequested = false;
         }
         else
         {
             pathRequested = false;
             IsTargetEleminated = true;
+            //Debug.Log("Path is not found");
         }
     }
 
