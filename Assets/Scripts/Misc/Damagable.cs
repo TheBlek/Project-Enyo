@@ -10,6 +10,9 @@ public class Damagable : MonoBehaviour
 
     public delegate void OnKill();
     public delegate void OnDamage();
+    public delegate void OnHeal();
+
+    public OnHeal onHeal;
     public OnDamage onDamage;
     public OnKill onKill;
 
@@ -39,6 +42,9 @@ public class Damagable : MonoBehaviour
         HP += heal_amount;
         if (HP > maxHP)
             HP = maxHP;
+
+        if (onHeal != null)
+            onHeal();
     }
 
     private void Destroy()
@@ -64,4 +70,7 @@ public class Damagable : MonoBehaviour
         }
         finally { }
     }
+
+    public float GetCurrentHP() => HP;
+    public float GetMaxHP() => maxHP;
 }
