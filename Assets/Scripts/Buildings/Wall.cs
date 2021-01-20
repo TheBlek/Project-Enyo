@@ -9,7 +9,7 @@ public class Wall : Building
     [SerializeField] private Animator blow_animator;
     private int pattern;
     private Building[] neighbourBuildings;
-    private GameManager gameManager;
+    protected GameManager gameManager;
 
     public class RendererSetUp
     {
@@ -55,18 +55,19 @@ public class Wall : Building
         d.death_offset = .25f;
         d.onKill += PlayBlowAnimation;
         gameObject.GetComponent<Damagable>().onKill += OnDeath;
+
+        gameManager = FindObjectOfType<GameManager>();
     }
 
-    public override void SetUp(GameManager _gameManager)
+    public override void SetUp()
     {
-        gameManager = _gameManager;
         AdjustTexture();
         RecallNeighbours();
     }
 
     public override void AdjustTexture()
     { 
-        SetNeighbourBuildings();
+        SetUpNeighbourBuildings();
         pattern = GeneratePattern();
         SpriteRenderer renderer = gameObject.GetComponent<SpriteRenderer>();
 
@@ -80,20 +81,20 @@ public class Wall : Building
         int pattern = 0;
         for (int i = 0; i < 4; i++)
         {
-            if (neighbourBuildings[i] != null && CheckName(neighbourBuildings[i].GetName()))
+            if (neighbourBuildings[i] != null && CheckName(neighbourBuildings[i].GetBuildingType()))
                 pattern += (int)Mathf.Pow(2f, i);
         }
         return pattern;
     }
 
-    private void SetNeighbourBuildings()
+    private void SetUpNeighbourBuildings()
     {
-        Vector2Int[] neighbourCells = gameManager.GetCellNeighbours(gameManager.GetGridCellIndexFromCoords(transform.position));
-        Building[] _neibourBuildings = new Building[4];
+        var grid = gameManager.GetGridManager();
+        Cell[] neighbourCells = grid.GetStraightNeighbours(grid.GetGridPositionFromGlobal(transform.position));
+        neighbourBuildings = new Building[neighbourCells.Length];
 
-        for (int i = 0; i < 4; i++)
-            _neibourBuildings[i] = gameManager.GetBuildingInCell(neighbourCells[i]);
-        neighbourBuildings = _neibourBuildings;
+        for (int i = 0; i < neighbourBuildings.Length; i++)
+            neighbourBuildings[i] = neighbourCells[i].BuildingInCell;
     }
 
     private void RecallNeighbours()
@@ -102,7 +103,7 @@ public class Wall : Building
         {
             try
             {
-                if (CheckName(building.GetName()))
+                if (CheckName(building.GetBuildingType()))
                     building.AdjustTexture();
             }
             catch { }
@@ -111,13 +112,13 @@ public class Wall : Building
 
     private void OnDeath()
     {
-        name = "Wal";
+        type = Buildings.AboutToDie;
         RecallNeighbours();
     }
 
-    private bool CheckName(string name)
+    private bool CheckName(Buildings type)
     {
-        return name == Buildings.Wall.ToString() || name == Buildings.Gate.ToString();
+        return type == Buildings.Wall || type == Buildings.Gate;
     }
 
     private void PlayBlowAnimation()

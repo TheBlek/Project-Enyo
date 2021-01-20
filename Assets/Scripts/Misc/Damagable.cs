@@ -13,6 +13,8 @@ public class Damagable : MonoBehaviour
     public OnDamage onDamage;
     public OnKill onKill;
 
+    public bool is_enemy;
+
     private float HP;
 
     private void Start()
@@ -46,18 +48,19 @@ public class Damagable : MonoBehaviour
 
     private void StartWhiteEffect()
     {
-        StartCoroutine(WhiteColorEffect());
+        StartCoroutine(DamageColorEffect());
     }
 
-    IEnumerator WhiteColorEffect()
+    IEnumerator DamageColorEffect()
     {
         try
         {
-            SpriteRenderer mat = transform.GetComponent<SpriteRenderer>();
-            Color col = mat.color;
-            mat.color = hurtColor;
+            SpriteRenderer[] sprites = transform.GetComponentsInChildren<SpriteRenderer>();
+            foreach (SpriteRenderer sprite in sprites) 
+                sprite.color = hurtColor;
             yield return new WaitForSeconds(.05f);
-            mat.color = Color.white;
+            foreach (SpriteRenderer sprite in sprites)
+                sprite.color = Color.white;
         }
         finally { }
     }

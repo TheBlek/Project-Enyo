@@ -2,81 +2,156 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridManager
+public class GridManager : MonoBehaviour
 {
-    private GridCell[,] grid;
-    private Vector2 grid_origin;
-    private Vector2Int map_size;
-    private float cell_size;
+    public bool ShowGizmos;
 
-    public void InitGrid(Vector2Int _map_size, float _cell_size)
+    [SerializeField] private Vector2 grid_origin;
+    [SerializeField] private Vector2Int map_size;
+    [SerializeField] private float cell_size = 0.5f;
+
+    private Cell[,] grid;
+    private void Awake()
     {
-        map_size = _map_size;
-        cell_size = _cell_size;
+        InitGrid();
+    }
 
-        grid = new GridCell[map_size.x, map_size.y];
+    public void InitGrid()
+    { 
+        grid = new Cell[map_size.x, map_size.y];
         grid_origin = -Vector2.one * cell_size * map_size / 2;
 
         for (int i = 0; i < map_size.x; i++)
         {
             for (int j = 0; j < map_size.y; j++)
             {
-                grid[i, j] = new GridCell();
+                grid[i, j] = new Cell(new Vector2Int(i, j), true);
             }
         }
     }
 
-    public Vector2Int[] GetGridCellsIndexInRect(Vector2 pos, Vector2 size)
+    public Cell[] GetCellsInRect(Vector2 pos, Vector2 size)
     {
         Vector2 left_corner_pos = pos - size * cell_size / 2;
-        List<Vector2Int> cells = new List<Vector2Int>();
+        List<Cell> cells = new List<Cell>();
+
         for (int i = 0; i < size.x; i++)
         {
             for (int j = 0; j < size.x; j++)
             {
-                cells.Add(GetGridCellIndexFromCoords(left_corner_pos + new Vector2(i, j) * cell_size));
+                cells.Add(GetCellFromGlobalPosition(left_corner_pos + new Vector2(i, j) * cell_size));
             }
         }
         return cells.ToArray();
     }
 
-    public Vector2Int GetGridCellIndexFromCoords(Vector2 coords)
+    public bool IsRectBuildable(Vector2 pos, Vector2 size)
     {
-        return new Vector2Int((int)((coords.x - grid_origin.x) / cell_size), (int)((coords.y - grid_origin.y) / cell_size));
+        Cell[] cells = GetCellsInRect(pos, size);
+
+        foreach (Cell cell in cells)
+            if (!cell.Buildable())
+                return false;
+
+        return true;
+    }
+
+    public Vector2Int GetGridPositionFromGlobal(Vector2 global)
+    {
+        return new Vector2Int((int)((global.x - grid_origin.x) / cell_size), (int)((global.y - grid_origin.y) / cell_size));
+    }
+
+    public Cell GetCellFromGlobalPosition(Vector2 global)
+    {
+        Vector2Int temp = GetGridPositionFromGlobal(global);
+        return grid[temp.x, temp.y];
+    }
+
+    public Vector3 GetGlobalPosition(Cell cell)
+    {
+        return grid_origin + (Vector2)cell.GetGridPosition() * cell_size + Vector2.one * cell_size/2;
+    }
+
+    public Vector3 SnapGlobalPositionToNearestCell(Vector3 global)
+    {
+        return GetGlobalPosition(GetCellFromGlobalPosition(global));
     }
 
     public void AdjustCellsForBuilding(Building building)
     {
-        Vector2Int[] cells = GetGridCellsIndexInRect(building.transform.position, building.GetSize());
-        foreach (Vector2Int cell in cells)
-        {
-            grid[cell.x, cell.y].building_in_cell = building;
-        }
-
+        Cell[] cells = GetCellsInRect(building.transform.position, building.GetSize());
+        foreach (Cell cell in cells)
+            cell.BuildingInCell = building;
     }
 
-    public Vector2Int[] GetCellNeighbours(Vector2Int cell)
+    public Cell[] GetStraightNeighbours(Vector2Int grid_position) // This returns neighbours without corners 
     {
-        List<Vector2Int> neighbours = new List<Vector2Int>
-        {
-            new Vector2Int(cell.x, cell.y + 1),
-            new Vector2Int(cell.x + 1, cell.y),
-            new Vector2Int(cell.x, cell.y - 1),
-            new Vector2Int(cell.x - 1, cell.y)
-        };
+        List<Cell> neighbours = new List<Cell>();
+
+        if (grid_position.y + 1 < map_size.y)
+            neighbours.Add(grid[grid_position.x, grid_position.y + 1]);
+        if (grid_position.x + 1 < map_size.x)
+            neighbours.Add(grid[grid_position.x + 1, grid_position.y]);
+        if (grid_position.y - 1 >= 0)
+            neighbours.Add(grid[grid_position.x, grid_position.y - 1]);
+        if (grid_position.x - 1 >= 0)
+            neighbours.Add(grid[grid_position.x - 1, grid_position.y]);
         return neighbours.ToArray();
     }
 
-    public bool IsCellBuildable(Vector2Int cell)
+    public Cell[] GetNeighbours(Cell cell) // This returns neighbours with corners
     {
-        if (cell.x < 0 || cell.x >= map_size.x || cell.y < 0 || cell.y >= map_size.y)
-            return false;
-        return grid[cell.x, cell.y].Buildable();
+        List<Cell> neighbours = new List<Cell>();
+        Vector2Int pos = cell.GetGridPosition();
+
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                if (!AbnormalGridPosition(pos + new Vector2Int(x, y)))
+                    neighbours.Add(grid[pos.x + x, pos.y + y]);
+            }
+        }
+        return neighbours.ToArray();
     }
+
+    public bool IsCellBuildable(Vector2Int grid_position)
+    {
+        if (AbnormalGridPosition(grid_position))
+            return false;
+        return grid[grid_position.x, grid_position.y].Buildable();
+    }
+
     public Building GetBuildingInCell(Vector2Int cell)
     {
-        if (cell.x < 0 || cell.x >= map_size.x || cell.y < 0 || cell.y >= map_size.y)
+        if (AbnormalGridPosition(cell))
             return null;
-        return grid[cell.x, cell.y].building_in_cell;
+        return grid[cell.x, cell.y].BuildingInCell;
+    }
+
+    public bool AbnormalGridPosition(Vector2Int position)
+    {
+        return position.x < 0 || position.x >= map_size.x || position.y < 0 || position.y >= map_size.y;
+    }
+
+    public float GetCellSize() => cell_size;
+
+    public Vector2Int GetMapSize() => map_size;
+
+    public int GetMapArea() => map_size.x * map_size.y;
+
+    private void OnDrawGizmos()
+    {
+        if (!ShowGizmos)
+            return;
+
+        Gizmos.DrawWireCube(grid_origin + (Vector2)map_size * cell_size / 2, (Vector2)map_size * cell_size);
+        if (grid == null)
+            return;
+
+        foreach (Cell cell in grid)
+        {
+            Gizmos.DrawWireCube(GetGlobalPosition(cell), Vector3.one * (cell_size - .1f));
+        }
     }
 }

@@ -1,33 +1,32 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private float cell_size;
-    [SerializeField] private int metals;
+    [SerializeField] private int metals = 0;
     [SerializeField] private Builder builder;
     [SerializeField] private PlayerControls player;
-    [SerializeField] private Vector2Int map_size;
+    [SerializeField] private Superviser superviser;
 
     private List<Building> buildings;
     private List<Bounds> buildings_bounds;
     private GridManager gridManager;
+    private PathRequestManager pathRequestManager;
+    private System.Random random;
 
-    void Start()
+    void Awake()
     {
         builder.onBuild += BuildingInsertion;
         buildings_bounds = new List<Bounds>();
         buildings = new List<Building>();
 
-        gridManager = new GridManager();
-        gridManager.InitGrid(map_size, cell_size);
+        gridManager = GetComponent<GridManager>();
+        pathRequestManager = GetComponent<PathRequestManager>();
+
+        random = new System.Random();
     }
-    #region Grid Operations
-
-
-
-    #endregion
 
     public void BuildingInsertion(Building building)
     {
@@ -38,22 +37,11 @@ public class GameManager : MonoBehaviour
 
         buildings_bounds.Add(building.GetComponent<BoxCollider2D>().bounds);
 
-        building.SetUp(this);
+        building.SetUp();
     }
     
-    public bool IsThereAWall(Vector3 pos)
-    {
-        for (int i = 0; i < buildings.Count; i++)
-        {
-            if (buildings[i].GetName() == "Wall" && buildings_bounds[i].Contains(pos))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
 
-    void Update()
+    private void Update()
     {
         for (int i = 0; i < buildings.Count; i++)
         {
@@ -63,53 +51,23 @@ public class GameManager : MonoBehaviour
                 buildings_bounds.Remove(buildings_bounds[i]);
             }
             else
-                buildings[i].SelfUpdate(this);
+                buildings[i].SelfUpdate();
         }
     }
 
+    private void FixedUpdate()
+    {
+        superviser.SelfUpdate();
+    }
+
     #region Some Get Methods
-    #region Grid Getters
-    public Building GetBuildingInCell(Vector2Int cell)
-    {
-        return gridManager.GetBuildingInCell(cell);
-    }
-    public bool IsCellBuildable(Vector2Int cell)
-    {
-        return gridManager.IsCellBuildable(cell);
-    } 
-    public Vector2Int[] GetGridCellsIndexForBuilding(Vector2 pos, Vector2 size)
-    {
-        return gridManager.GetGridCellsIndexInRect(pos, size);
-    }
+    public GridManager GetGridManager() => gridManager;
 
-    public Vector2Int GetGridCellIndexFromCoords(Vector2 coords)
-    {
-        return gridManager.GetGridCellIndexFromCoords(coords);
-    }
+    public PathRequestManager GetPathRequestManager() => pathRequestManager;
 
-    public Vector2Int[] GetCellNeighbours(Vector2Int cell)
-    {
-        return gridManager.GetCellNeighbours(cell);
-    }
-    #endregion
     public bool IsAffordable(Building building)
     {
         return building.GetCost() <= metals;
-    }
-
-    public int GetMetals()
-    {
-        return metals;
-    }
-
-    public float GetGridSize()
-    {
-        return cell_size;
-    }
-
-    public List<Bounds> GetBuildingsBounds()
-    {
-        return buildings_bounds;
     }
 
     public void AddMetals(int addition)
@@ -121,5 +79,14 @@ public class GameManager : MonoBehaviour
     {
         return player.GetPlayerPosition();
     }
+
+    public Building GetRandomBuilding()
+    {
+        if (buildings.Count == 0)
+            return null;
+        return buildings[random.Next(buildings.Count)];
+    }
+
+    public bool IsThereAnyBuilding() => buildings.Count > 0;
     #endregion
 }

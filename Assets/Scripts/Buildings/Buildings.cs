@@ -1,6 +1,6 @@
 ﻿public enum Buildings
 {
-    building0,
+    AboutToDie, // Disasterous
     building1,
     Mine,
     Wall,

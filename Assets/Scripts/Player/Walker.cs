@@ -5,7 +5,7 @@ using System;
 
 public class Walker: MonoBehaviour
 {
-    [SerializeField] private float speed;
+    [SerializeField] private float speed = 1;
     [SerializeField] private Rigidbody2D rig;
     [SerializeField] private Transform upper_chest;
     [SerializeField] private Transform legs;
@@ -22,6 +22,7 @@ public class Walker: MonoBehaviour
         mouse.z = 0;
         Vector3 relativePos = mouse - upper_chest.position;
         float angle = Mathf.Atan2(relativePos.y, relativePos.x) * Mathf.Rad2Deg;
+
         upper_chest.eulerAngles = Vector3.forward * (angle + 90);
     }
 

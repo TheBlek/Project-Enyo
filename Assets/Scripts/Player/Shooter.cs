@@ -7,7 +7,7 @@ public class Shooter : MonoBehaviour
     [SerializeField] private Transform shoot_pos;
     [SerializeField] private GameObject bullet_prefab;
     [SerializeField] private GameObject muzzleflash_prefab;
-    [SerializeField] private float fires_per_sec;
+    [SerializeField] private float fires_per_sec = 9;
 
     private float delay;
     private float time_since_last_shot;

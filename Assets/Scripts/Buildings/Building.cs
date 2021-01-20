@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    [SerializeField] protected string name;
+    [SerializeField] protected Buildings type;
     [SerializeField] protected Vector2 size;
     [SerializeField] protected int cost;
 
-    public virtual void SetUp(GameManager gameManager)
+    public virtual void SelfUpdate()
     {
 
     }
 
-    public virtual void SelfUpdate(GameManager gameManager)
+    public virtual void SetUp()
     {
 
     }
@@ -23,18 +23,10 @@ public class Building : MonoBehaviour
 
     }
 
-    public Vector2 GetSize()
-    {
-        return size;
-    }
+    public Vector2 GetSize() => size;
 
-    public string GetName()
-    {
-        return name;
-    }
+    public Buildings GetBuildingType() => type;
 
-    public int GetCost()
-    {
-        return cost;
-    }
+    public int GetCost() => cost;
+ 
 }
