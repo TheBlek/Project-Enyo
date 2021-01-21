@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
-using System.Diagnostics;
 using UnityEngine;
 
 public class Pathfinder
@@ -16,10 +15,7 @@ public class Pathfinder
     }
 
     public IEnumerator FindPath(Vector3 start_pos, Vector3 target_pos) // A* Algorithm
-    {
-        Stopwatch sw = new Stopwatch();
-        sw.Start();
-
+    { 
         Cell start = gridManager.GetCellFromGlobalPosition(start_pos);
         Cell target = gridManager.GetCellFromGlobalPosition(target_pos);
 
@@ -37,8 +33,6 @@ public class Pathfinder
             {
                 Vector3[] path = RetracePath(start, target);
                 OnPathProcessingEnd(path, true);
-                sw.Stop();
-                //UnityEngine.Debug.Log("Path found: " + sw.ElapsedMilliseconds + "ms");
                 yield break;
             }
 
@@ -70,15 +64,16 @@ public class Pathfinder
         List<Cell> cellPath = new List<Cell>();
 
         Cell current = end;
-        cellPath.Add(current);
+
         while (current != start)
         {
             cellPath.Add(current);
             current = current.parent;
         }
         cellPath.Add(current);
+
         cellPath.Reverse();
-        
+
         return SimplifyPath(cellPath);
     }
 
@@ -86,16 +81,18 @@ public class Pathfinder
     {
         Vector3 lastDirection = Vector3.zero;
         List<Vector3> path = new List<Vector3>();
-        
+
         for (int i = 1; i < cellPath.Count; i++)
         {
             Vector3 direction = (Vector2)cellPath[i].GetGridPosition() - cellPath[i - 1].GetGridPosition();
             if (direction != lastDirection)
             {
-                path.Add(gridManager.GetGlobalPosition(cellPath[i - 1]));
+                path.Add(gridManager.GetGlobalPosition(cellPath[i-1]));
                 lastDirection = direction;
             }
         }
+        path.Add(gridManager.GetGlobalPosition(cellPath[cellPath.Count - 1]));
+
         return path.ToArray();
     }
 
