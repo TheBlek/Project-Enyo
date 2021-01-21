@@ -88,5 +88,7 @@ public class GameManager : MonoBehaviour
     }
 
     public bool IsThereAnyBuilding() => buildings.Count > 0;
+
+    public float GetMetalCount() => metals;
     #endregion
 }

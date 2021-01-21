@@ -27,6 +27,7 @@ public class HealthBarController : MonoBehaviour
         
         player.onDamage += OnHealthChange;
         player.onHeal += OnHealthChange;
+        player.onHeal += ResetRedBars;
     }
 
     private void Update()
@@ -53,6 +54,16 @@ public class HealthBarController : MonoBehaviour
         foreach (RectTransform health_bar in green_health_bars)
         {
             health_bar.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, share * screen_height);
+        }
+    }
+
+    private void ResetRedBars()
+    {
+        float height = green_health_bars[0].rect.height;
+
+        foreach (RectTransform health_bar in red_health_bars)
+        {
+            health_bar.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, height);
         }
     }
 
