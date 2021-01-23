@@ -19,6 +19,7 @@ public class HealthBarController : MonoBehaviour
     private float screen_height;
     private float time_since_damage;
     private Coroutine red_bars_coroutine;
+    private Image[] children;
 
     private void Start()
     {
@@ -28,6 +29,8 @@ public class HealthBarController : MonoBehaviour
         player.onDamage += OnHealthChange;
         player.onHeal += OnHealthChange;
         player.onHeal += ResetRedBars;
+
+        children = GetComponentsInChildren<Image>();
     }
 
     private void Update()
@@ -115,19 +118,21 @@ public class HealthBarController : MonoBehaviour
 
     private void AdjustBarsAlpha(float value)
     {
-        foreach (RectTransform health_bar in green_health_bars)
+        foreach (Image image in children)
         {
-            Image image = health_bar.GetComponent<Image>();
             var target_col = image.color;
             target_col.a = value;
             image.color = target_col;
         }
 
-        foreach (RectTransform health_bar in red_health_bars)
+        if (value == 1)
+            return;
+
+        foreach (RectTransform bar in red_health_bars)
         {
-            Image image = health_bar.GetComponent<Image>();
+            Image image = bar.GetComponent<Image>();
             var target_col = image.color;
-            target_col.a = value;
+            target_col.a = 0;
             image.color = target_col;
         }
     }
