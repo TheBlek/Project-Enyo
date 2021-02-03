@@ -3980,7 +3980,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 717.4, y: -391.6}
+  m_AnchoredPosition: {x: 714, y: -404}
   m_SizeDelta: {x: 432, y: 272}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &466192592
@@ -4162,8 +4162,8 @@ GameObject:
   - component: {fileID: 519552905}
   - component: {fileID: 519552904}
   - component: {fileID: 519552906}
-  - component: {fileID: 519552907}
   - component: {fileID: 519552908}
+  - component: {fileID: 519552907}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -4227,12 +4227,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 519552903}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b27753c4dffdf5341818f275c51641f1, type: 3}
+  m_Script: {fileID: 11500000, guid: d55699c231ebd6e47a995c90afd17f9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ShowGizmos: 0
-  grid_origin: {x: -12.5, y: -12.5}
-  map_size: {x: 50, y: 50}
+  grid_origin: {x: -25, y: -25}
+  map_size: {x: 100, y: 100}
   cell_size: 0.5
 --- !u!114 &519552908
 MonoBehaviour:

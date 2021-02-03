@@ -89,8 +89,8 @@ public class Wall : Building
 
     private void SetUpNeighbourBuildings()
     {
-        var grid = gameManager.GetGridManager();
-        Cell[] neighbourCells = grid.GetStraightNeighbours(grid.GetGridPositionFromGlobal(transform.position));
+        var grid = gameManager.GetMapManager();
+        MapCell[] neighbourCells = grid.GetStraightNeighbours(grid.GetGridPositionFromGlobal(transform.position));
         neighbourBuildings = new Building[neighbourCells.Length];
 
         for (int i = 0; i < neighbourBuildings.Length; i++)

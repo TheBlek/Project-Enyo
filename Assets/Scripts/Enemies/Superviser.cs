@@ -13,7 +13,7 @@ class Superviser : MonoBehaviour
     private List<Enemy> enemies;
     private List<Enemy> dead_enemies;
     private GameManager gameManager;
-    private GridManager gridManager;
+    private MapManager mapManager;
     private System.Random random;
 
     private void Start()
@@ -21,7 +21,7 @@ class Superviser : MonoBehaviour
         random = new System.Random();
 
         gameManager = FindObjectOfType<GameManager>();
-        gridManager = gameManager.GetGridManager();
+        mapManager = gameManager.GetMapManager();
 
         InitEnemies();
     }
@@ -75,7 +75,7 @@ class Superviser : MonoBehaviour
     {
         Vector2 relative_pos = spawn_point_offset * new Vector2((float)random.NextDouble(), (float)random.NextDouble());
 
-        while (!gridManager.GetCellFromGlobalPosition(relative_pos + spawn_point).IsWalkable()) // Reroll pos while it's not walkable
+        while (!mapManager.GetCellFromGlobalPosition(relative_pos + spawn_point).IsWalkable()) // Reroll pos while it's not walkable
             relative_pos = spawn_point_offset * new Vector2((float)random.NextDouble(), (float)random.NextDouble());
 
         var enemyObj = Instantiate(enemyPrefab, relative_pos + spawn_point, Quaternion.identity);

@@ -2,23 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cell : IHeapItem<Cell>
-{
-    private Vector2Int GridPosition;
-    
+public class MapCell : GridItem, IHeapItem<MapCell>
+{   
     public int gCost;
     public int hCost;
-    public Cell parent;
+    public MapCell parent;
 
     public Building BuildingInCell;
     private bool walkable;
 
     private int heap_index;
 
-    public Cell(Vector2Int _grid_position, bool _walkable)
+    public MapCell (Vector2Int _grid_position) : base(_grid_position)
     {
-        GridPosition = _grid_position;
-        walkable = _walkable;
+        walkable = true;
     }
 
     public bool Buildable()
@@ -27,8 +24,6 @@ public class Cell : IHeapItem<Cell>
     }
 
     public bool IsWalkable() => walkable && BuildingInCell == null;
-
-    public Vector2Int GetGridPosition() => GridPosition;
 
     public int fCost
     {
@@ -50,7 +45,7 @@ public class Cell : IHeapItem<Cell>
         }
     }
 
-    public int CompareTo(Cell cellToCompare)
+    public int CompareTo(MapCell cellToCompare)
     {
         int compare = fCost.CompareTo(cellToCompare.fCost);
         if (compare == 0)

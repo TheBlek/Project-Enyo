@@ -60,7 +60,7 @@ public class Builder : MonoBehaviour
             return;
 
         Vector3 position = preview_obj.transform.position;
-        if (!gameManager.GetGridManager().IsRectBuildable(position, buildings_prefab[(int)building_type].GetSize()))
+        if (!gameManager.GetMapManager().IsRectBuildable(position, buildings_prefab[(int)building_type].GetSize()))
             return;
         
         GameObject building = GameObject.Instantiate(prefabs[(int)building_type], position, Quaternion.identity);

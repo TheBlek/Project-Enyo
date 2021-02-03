@@ -17,7 +17,7 @@ public class PathRequestManager : MonoBehaviour
     {
         requestQueue = new Queue<PathRequest>();
         gameManager = FindObjectOfType<GameManager>();
-        pathfinder = new Pathfinder(gameManager.GetGridManager(), OnPathProccessingEnd);
+        pathfinder = new Pathfinder(gameManager.GetMapManager(), OnPathProccessingEnd);
     }
 
     private struct PathRequest

@@ -20,7 +20,7 @@ public class PlayerControls : MonoBehaviour
 
     private void Start()
     {
-        grid = gameManager.GetGridManager().GetCellSize();
+        grid = gameManager.GetMapManager().GetCellSize();
     }
 
     void Update()
