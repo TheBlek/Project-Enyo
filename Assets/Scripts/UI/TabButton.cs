@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
-class TabButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+class TabButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
 
-    public Action<TabButton> OnClick;
-    public Action<TabButton> OnEnter;
-    public Action<TabButton> OnExit;
+    public UnityAction OnClick;
+    public UnityAction OnEnter;
+    public UnityAction OnExit;
+    public UnityAction OnDown; 
 
     public void ChangeSprite(Sprite sprite)
     {
@@ -18,16 +20,21 @@ class TabButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPo
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        OnClick(this);
+        OnClick();
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        OnDown();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        OnEnter(this);
+        OnEnter();
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        OnExit(this);
+        OnExit();
     }
 }

@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ChangeRequestType
+{
+    Anyway,
+    OnlyIfOff, //off already meaning this request would only turn it on
+    OnlyIfOn
+}
+
 public class PlayerControls : MonoBehaviour
 { 
     [SerializeField] private Camera player_camera;
@@ -9,7 +16,6 @@ public class PlayerControls : MonoBehaviour
     [SerializeField] private Builder builder;
     [SerializeField] private Shooter shooter;
     [SerializeField] private Walker walker;
-    private Buildings building_type = Buildings.building1;
 
     private float grid;
 
@@ -27,21 +33,50 @@ public class PlayerControls : MonoBehaviour
     {
         HandleNumInput();
         if (Input.GetKeyDown(KeyCode.E))
-        {
-            building_mode = !building_mode;
-            builder.SwitchPreviewState(building_mode);
-        }
+            ChangeBuildingStateRequest(ChangeRequestType.Anyway);
 
         if (building_mode && (Input.GetKey(KeyCode.LeftShift) ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) )
         {
-            builder.Build(building_type);
+            builder.Build(gameManager);
         }else if (Input.GetMouseButtonDown(0))
             shooter.Shoot();
 
         if (building_mode)
-            builder.Preview(player_camera, building_type, grid);
+            builder.Preview(player_camera, grid);
 
         input_movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+    }
+
+    public void ChangeBuildingStateRequest(ChangeRequestType type)
+    {
+        
+        switch (type)
+        {
+            case ChangeRequestType.Anyway:
+                building_mode = !building_mode;
+                break;
+
+            case ChangeRequestType.OnlyIfOff:
+                building_mode = true;
+                break;
+
+            case ChangeRequestType.OnlyIfOn:
+                building_mode = false;
+                break;
+
+            default:
+                Debug.Log("Somehow this type is not processing");
+                break;
+        }
+        builder.SwitchPreviewState(building_mode);
+    }
+
+    public Buildings BuildingType
+    {
+        set
+        {
+            builder.SetBuildingType(value);
+        }
     }
 
     private void FixedUpdate()
@@ -52,8 +87,7 @@ public class PlayerControls : MonoBehaviour
 
     private void HandleNumInput()
     {
-        building_type = GetBuilding();
-        builder.MatchPreviewSize(building_type, grid);
+        builder.SetBuildingType(GetBuilding());
     }
 
     private Buildings GetBuilding()
@@ -78,7 +112,7 @@ public class PlayerControls : MonoBehaviour
             return Buildings.building8;
         if (Input.GetKeyDown(KeyCode.Alpha9))
             return Buildings.building9;
-        return building_type;
+        return Buildings.AboutToDie; // :) processing as do not change current state
     }
 
     public Vector3 GetPlayerPosition()

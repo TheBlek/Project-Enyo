@@ -4232,7 +4232,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowGizmos: 0
   grid_origin: {x: -25, y: -25}
-  map_size: {x: 100, y: 100}
+  grid_size: {x: 100, y: 100}
   cell_size: 0.5
 --- !u!114 &519552908
 MonoBehaviour:
@@ -5510,7 +5510,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabs:
   - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
-  - {fileID: 281415849733071475, guid: 40441b86b43f61143b69615fa7ab9252, type: 3}
+  - {fileID: 281415849733071475, guid: 2b5c0b4861721d349a167373bc7c12c6, type: 3}
   - {fileID: 281415849733071475, guid: 2b5c0b4861721d349a167373bc7c12c6, type: 3}
   - {fileID: 281415849733071475, guid: bfd8f133902d3f84fa4b87118e09cd8b, type: 3}
   - {fileID: 281415849733071475, guid: c58128fb135490d479c0965ad7a2e5e9, type: 3}

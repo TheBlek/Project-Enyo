@@ -84,7 +84,7 @@ public class Pathfinder
 
         for (int i = 1; i < cellPath.Count; i++)
         {
-            Vector3 direction = (Vector2)cellPath[i].GetGridPosition() - cellPath[i - 1].GetGridPosition();
+            Vector3 direction = (Vector2)cellPath[i].GridPosition - cellPath[i - 1].GridPosition;
             if (direction != lastDirection)
             {
                 path.Add(mapManager.GetGlobalPosition(cellPath[i-1]));
@@ -98,8 +98,8 @@ public class Pathfinder
 
     private int GetDistance(MapCell start, MapCell end)
     {
-        int distX = Mathf.Abs(start.GetGridPosition().x - end.GetGridPosition().x);
-        int distY = Mathf.Abs(start.GetGridPosition().y - end.GetGridPosition().y);
+        int distX = Mathf.Abs(start.GridPosition.x - end.GridPosition.x);
+        int distY = Mathf.Abs(start.GridPosition.y - end.GridPosition.y);
 
 
         if (distX > distY)

@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MapCell : GridItem, IHeapItem<MapCell>
+public class MapCell : IGridItem, IHeapItem<MapCell>
 {   
+    private Vector2Int grid_position;
+
     public int gCost;
     public int hCost;
     public MapCell parent;
 
     public Building BuildingInCell;
-    private bool walkable;
+    private bool walkable = true;
 
     private int heap_index;
-
-    public MapCell (Vector2Int _grid_position) : base(_grid_position)
-    {
-        walkable = true;
-    }
 
     public bool Buildable()
     {
@@ -42,6 +39,18 @@ public class MapCell : GridItem, IHeapItem<MapCell>
         set
         {
             heap_index = value;
+        }
+    }
+
+    public Vector2Int GridPosition
+    {
+        get
+        {
+            return grid_position;
+        }
+        set
+        {
+            grid_position = value;
         }
     }
 
