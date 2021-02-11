@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Tab : GridManager<TabElement>
 {
@@ -42,7 +41,6 @@ public class Tab : GridManager<TabElement>
         foreach (TabElement element in elements)
         {
             SetCellByGlobalPosition(element.GetComponent<RectTransform>().anchoredPosition, element);
-            Debug.Log(GetGridPositionFromGlobal(element.GetComponent<RectTransform>().anchoredPosition));
             element.GetComponent<RectTransform>().anchoredPosition = GetGlobalPosition(element);
             element.CurrentSprite = idle_sprite;
         }

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 
 
 public class TabElement : MonoBehaviour, IGridItem // tabElement assumes that it on the same object as tabButton
