@@ -31,7 +31,7 @@ public class TabElement : MonoBehaviour, IGridItem // tabElement assumes that it
     public Buildings NewBuilding => new_building;
     public Tab NewTab => new_tab;
 
-    private void Start()
+    private void Awake()
     {
         image = GetComponent<Image>();
         button = GetComponent<TabButton>();

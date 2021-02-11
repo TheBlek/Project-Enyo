@@ -107,6 +107,17 @@ public class GridManager<T> : MonoBehaviour where T : IGridItem
         return neighbours.ToArray();
     }
 
+    public void SetCellByGridPosition(Vector2Int pos, T new_cell)
+    {
+        grid[pos.x, pos.y] = new_cell;
+        new_cell.GridPosition = pos;
+    }
+
+    public void SetCellByGlobalPosition(Vector2 global_pos, T new_cell)
+    {
+        SetCellByGridPosition(GetGridPositionFromGlobal(global_pos), new_cell);
+    }
+
     public bool AbnormalGridPosition(Vector2Int position)
     {
         return position.x < 0 || position.x >= grid_size.x || position.y < 0 || position.y >= grid_size.y;

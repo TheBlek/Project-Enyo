@@ -12,6 +12,13 @@ public class FlatMenu : MonoBehaviour
 
     private void Start()
     {
+        SetUpTabs();
+    }
+
+    private void SetUpTabs()
+    {
+        tabs = GetComponentsInChildren<Tab>();
+
         if (tabs != null)
             current_tab = tabs[0];
 
@@ -26,6 +33,12 @@ public class FlatMenu : MonoBehaviour
 
     private void SwitchTab(Tab new_tab)
     {
+        if (!Array.Exists<Tab>(tabs, element => element == new_tab))
+        {
+            Debug.Log("Menu can not switch to this tab. It is not included in this menu");
+            return;
+        }
+
         current_tab.gameObject.SetActive(false);
         new_tab.gameObject.SetActive(true);
         current_tab = new_tab;

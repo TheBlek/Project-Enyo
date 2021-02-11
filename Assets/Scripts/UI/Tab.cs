@@ -12,8 +12,9 @@ public class Tab : GridManager<TabElement>
 
     private void Awake()
     {
-        Rect rect = GetComponent<RectTransform>().rect;
-        cell_size = Math.Min(rect.width/grid_size.x, rect.height/grid_size.y);
+        SetUpMetrics();
+        InitGrid();
+        ScrapGrid();
     }
 
     private void Start()
@@ -27,9 +28,24 @@ public class Tab : GridManager<TabElement>
         }
     }
 
+    private void SetUpMetrics()
+    {
+        Rect rect = GetComponent<RectTransform>().rect;
+        cell_size = Math.Min(rect.width / grid_size.x, rect.height / grid_size.y);
+        grid_origin = new Vector2(rect.xMin, rect.yMin);
+    }
+
     private void ScrapGrid()
     {
-        
+
+        TabElement[] elements = GetComponentsInChildren<TabElement>();
+        foreach (TabElement element in elements)
+        {
+            SetCellByGlobalPosition(element.GetComponent<RectTransform>().anchoredPosition, element);
+            Debug.Log(GetGridPositionFromGlobal(element.GetComponent<RectTransform>().anchoredPosition));
+            element.GetComponent<RectTransform>().anchoredPosition = GetGlobalPosition(element);
+            element.CurrentSprite = idle_sprite;
+        }
     }
 
     private void Clicked(TabElement element)
