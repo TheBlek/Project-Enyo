@@ -29,7 +29,7 @@ public class TabElement : MonoBehaviour, IGridItem // tabElement assumes that it
     public Vector2 IconShift
     {
         get { return icon.anchoredPosition; }
-        set { icon.anchoredPosition = value * 4; }
+        set { icon.anchoredPosition = value; }
     }
 
     public TabElementFunctions Function => function;
