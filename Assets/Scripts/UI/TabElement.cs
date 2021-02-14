@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 
 public class TabElement : MonoBehaviour, IGridItem // tabElement assumes that it on the same object as tabButton
-{
+{                                                  // And also that this object has a childe for the icon
     private Vector2Int grid_position;
 
     public Action<TabElement> OnButtonClick;
@@ -17,12 +17,19 @@ public class TabElement : MonoBehaviour, IGridItem // tabElement assumes that it
     [SerializeField] private Tab new_tab;
 
     private Image image;
+    private RectTransform icon;
     private TabButton button;
 
     public Sprite CurrentSprite
     {
         get { return image.sprite; }
         set { image.sprite = value; }
+    }
+
+    public Vector2 IconShift
+    {
+        get { return icon.anchoredPosition; }
+        set { icon.anchoredPosition = value * 4; }
     }
 
     public TabElementFunctions Function => function;
@@ -37,6 +44,8 @@ public class TabElement : MonoBehaviour, IGridItem // tabElement assumes that it
         button.OnEnter += Entered;
         button.OnExit += Exited;
         button.OnDown += Pressed;
+
+        icon = transform.GetChild(0).gameObject.GetComponent<RectTransform>();
     }
 
     public Vector2Int GridPosition

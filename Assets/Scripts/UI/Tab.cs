@@ -9,6 +9,8 @@ public class Tab : GridManager<TabElement>
     [SerializeField] private Sprite hover_sprite;
     [SerializeField] private Sprite press_sprite;
 
+    private Vector2 icon_press_shift = new Vector2(1, -1);
+
     private void Awake()
     {
         SetUpMetrics();
@@ -49,22 +51,26 @@ public class Tab : GridManager<TabElement>
     private void Clicked(TabElement element)
     {
         element.CurrentSprite = idle_sprite;
+        element.IconShift = Vector2.zero;
         OnElementClicked(element);
     }
 
     private void Pressed(TabElement element)
     {
         element.CurrentSprite = press_sprite;
+        element.IconShift = icon_press_shift;
     }
 
     private void Exited(TabElement element)
     {
         element.CurrentSprite = idle_sprite;
+        element.IconShift = Vector2.zero;
     }
     
     private void Entered(TabElement element)
     {
         element.CurrentSprite = hover_sprite;
+        element.IconShift = -icon_press_shift;
     }
 
 }
