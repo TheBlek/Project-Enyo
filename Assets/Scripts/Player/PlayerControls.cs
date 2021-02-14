@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public enum ChangeRequestType
 {
@@ -35,10 +36,10 @@ public class PlayerControls : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
             ChangeBuildingStateRequest(ChangeRequestType.Anyway);
 
-        if (building_mode && (Input.GetKey(KeyCode.LeftShift) ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) )
+        if (building_mode && GetMouseInput(Input.GetKey(KeyCode.LeftShift)))
         {
             builder.Build(gameManager);
-        }else if (Input.GetMouseButtonDown(0))
+        }else if (GetMouseInput(false))
             shooter.Shoot();
 
         if (building_mode)
@@ -46,6 +47,9 @@ public class PlayerControls : MonoBehaviour
 
         input_movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
+
+    private bool GetMouseInput(bool _is_multiple_during_press) => 
+        (_is_multiple_during_press ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) && !EventSystem.current.IsPointerOverGameObject();
 
     public void ChangeBuildingStateRequest(ChangeRequestType type)
     {
