@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class MapCell : IGridItem, IHeapItem<MapCell>
 {   
-    private Vector2Int grid_position; // should I use this or I can just use autoproperty?
-
     public int gCost;
     public int hCost;
     public MapCell parent;
@@ -42,17 +40,7 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
         }
     }
 
-    public Vector2Int GridPosition
-    {
-        get
-        {
-            return grid_position;
-        }
-        set
-        {
-            grid_position = value;
-        }
-    }
+    public Vector2Int GridPosition { get; set; }
 
     public int CompareTo(MapCell cellToCompare)
     {

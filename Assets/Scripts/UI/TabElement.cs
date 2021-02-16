@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class TabElement : MonoBehaviour, IGridItem // tabElement assumes that it on the same object as tabButton
 {                                                  // And also that this object has a child for the icon
-    private Vector2Int grid_position; // should I use this or I can just use autoproperty?
 
     public Action<TabElement> OnButtonClick;
     public Action<TabElement> OnButtonEnter;
@@ -48,17 +47,7 @@ public class TabElement : MonoBehaviour, IGridItem // tabElement assumes that it
         icon = transform.GetChild(0).gameObject.GetComponent<RectTransform>();
     }
 
-    public Vector2Int GridPosition
-    {
-        get
-        {
-            return grid_position;
-        }
-        set
-        {
-            grid_position = value;
-        }
-    }
+    public Vector2Int GridPosition { get; set; }
 
     #region Delegates in here
     private void Clicked()

@@ -8,14 +8,14 @@ public class MetalTracker : MonoBehaviour
     private GameManager gameManager;
     private Text counter_field;
 
-    private void Update()
+    private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         counter_field = GetComponent<Text>();
+    }
 
-        if (counter_field.text != gameManager.GetMetalCount().ToString())
-        {
-            counter_field.text = gameManager.GetMetalCount().ToString();
-        }
+    private void Update()
+    {
+        counter_field.text = gameManager.GetMetalCount().ToString();
     }
 }
