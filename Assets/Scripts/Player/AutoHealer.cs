@@ -22,7 +22,7 @@ public class AutoHealer : MonoBehaviour
     {
         time_since_damage += Time.deltaTime;
 
-        if (time_since_damage >= time_delay && subject.GetCurrentHP() < subject.GetMaxHP())
+        if (time_since_damage >= time_delay)
             subject.Heal(recovery_per_second * Time.deltaTime);
     }
 
