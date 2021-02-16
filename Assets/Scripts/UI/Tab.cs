@@ -11,15 +11,11 @@ public class Tab : GridManager<TabElement>
 
     private Vector2 icon_press_shift = new Vector2(1, -1);
 
-    private void Awake()
+    private void Start()
     {
         SetUpMetrics();
         InitGrid();
         ScrapGrid();
-    }
-
-    private void Start()
-    {
         foreach (TabElement element in grid)
         {
             element.OnButtonDown += Pressed;
