@@ -45,13 +45,13 @@ public class Builder : MonoBehaviour
         renderer.color = Color.white * 0.5f;
     }
 
-    public void Preview(Camera player_camera, float grid)
+    public void Preview(Camera player_camera, float cell_size)
     {
         Vector3 shift = CalculateShift();
         Vector3 position = player_camera.ScreenToWorldPoint(Input.mousePosition); // in-game position of mouse
         position.z = 0;
-        position.x -= position.x % grid - grid / 2 * Mathf.Sign(position.x) - shift.x * grid / 2; // stick to the grid
-        position.y -= position.y % grid - grid / 2 * Mathf.Sign(position.y) + shift.y * grid / 2;
+        position.x -= position.x % cell_size - cell_size / 2 * Mathf.Sign(position.x) - shift.x * cell_size / 2; // stick to the grid
+        position.y -= position.y % cell_size - cell_size / 2 * Mathf.Sign(position.y) + shift.y * cell_size / 2;
 
         preview_obj.transform.position = position;
     }

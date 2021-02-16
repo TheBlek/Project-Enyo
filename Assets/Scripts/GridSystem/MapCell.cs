@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MapCell : IGridItem, IHeapItem<MapCell>
 {   
-    private Vector2Int grid_position;
+    private Vector2Int grid_position; // should I use this or I can just use autoproperty?
 
     public int gCost;
     public int hCost;

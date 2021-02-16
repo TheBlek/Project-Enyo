@@ -18,7 +18,7 @@ public class PlayerControls : MonoBehaviour
     [SerializeField] private Shooter shooter;
     [SerializeField] private Walker walker;
 
-    private float grid;
+    private float cell_size;
 
     private bool building_mode = false;
 
@@ -27,28 +27,35 @@ public class PlayerControls : MonoBehaviour
 
     private void Start()
     {
-        grid = gameManager.GetMapManager().GetCellSize();
+        cell_size = gameManager.GetMapManager().GetCellSize();
     }
 
     void Update()
     {
-        HandleNumInput();
-        if (Input.GetKeyDown(KeyCode.E))
-            ChangeBuildingStateRequest(ChangeRequestType.Anyway);
+        //HandleNumInput(); 
 
-        if (building_mode && GetMouseInput(Input.GetKey(KeyCode.LeftShift)))
-        {
-            builder.Build(gameManager);
-        }else if (GetMouseInput(false))
-            shooter.Shoot();
+        HandleMouseInput();
 
         if (building_mode)
-            builder.Preview(player_camera, grid);
+            builder.Preview(player_camera, cell_size);
 
         input_movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
 
-    private bool GetMouseInput(bool _is_multiple_during_press) => 
+    private void HandleMouseInput()
+    {
+        bool lShiftInput = Input.GetKey(KeyCode.LeftShift);
+        if (building_mode && GetMouseInput(lShiftInput))
+        {
+            builder.Build(gameManager);
+            if (!lShiftInput)
+                ChangeBuildingStateRequest(ChangeRequestType.Anyway);
+        }
+        else if (GetMouseInput(false))
+            shooter.Shoot();
+    }
+
+    private bool GetMouseInput(bool _is_multiple_during_press) => // Freaking long and complex line. Should I divide it?
         (_is_multiple_during_press ? Input.GetMouseButton(0) : Input.GetMouseButtonDown(0)) && !EventSystem.current.IsPointerOverGameObject();
 
     public void ChangeBuildingStateRequest(ChangeRequestType type)
