@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     private List<Building> buildings;
     private List<Bounds> buildings_bounds;
-    private GridManager gridManager;
+    private MapManager mapManager;
     private PathRequestManager pathRequestManager;
     private System.Random random;
 
@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
         buildings_bounds = new List<Bounds>();
         buildings = new List<Building>();
 
-        gridManager = GetComponent<GridManager>();
+        mapManager = GetComponent<MapManager>();
         pathRequestManager = GetComponent<PathRequestManager>();
 
         random = new System.Random();
@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
         metals -= building.GetCost();
 
         buildings.Add(building);
-        gridManager.AdjustCellsForBuilding(building);
+        mapManager.AdjustCellsForBuilding(building);
 
         buildings_bounds.Add(building.GetComponent<BoxCollider2D>().bounds);
 
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
     }
 
     #region Some Get Methods
-    public GridManager GetGridManager() => gridManager;
+    public MapManager GetMapManager() => mapManager;
 
     public PathRequestManager GetPathRequestManager() => pathRequestManager;
 
@@ -88,5 +88,7 @@ public class GameManager : MonoBehaviour
     }
 
     public bool IsThereAnyBuilding() => buildings.Count > 0;
+
+    public float GetMetalCount() => metals;
     #endregion
 }

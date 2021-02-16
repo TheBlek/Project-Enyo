@@ -101,7 +101,6 @@ public class BlockHead : Enemy
         {
             pathRequested = false;
             IsTargetEleminated = true;
-            //Debug.Log("Path is not found");
         }
     }
 

@@ -5,27 +5,27 @@ using UnityEngine;
 
 public class Pathfinder
 {
-    private GridManager gridManager;
+    private MapManager mapManager;
 
     private Action<Vector3[], bool> OnPathProcessingEnd;
-    public Pathfinder (GridManager _gridManager, Action<Vector3[], bool> _OnPathProccessingEnd)
+    public Pathfinder (MapManager _gridManager, Action<Vector3[], bool> _OnPathProccessingEnd)
     {
-        gridManager = _gridManager;
+        mapManager = _gridManager;
         OnPathProcessingEnd = _OnPathProccessingEnd;
     }
 
     public IEnumerator FindPath(Vector3 start_pos, Vector3 target_pos) // A* Algorithm
     { 
-        Cell start = gridManager.GetCellFromGlobalPosition(start_pos);
-        Cell target = gridManager.GetCellFromGlobalPosition(target_pos);
+        MapCell start = mapManager.GetCellFromGlobalPosition(start_pos);
+        MapCell target = mapManager.GetCellFromGlobalPosition(target_pos);
 
-        Heap<Cell> openSet = new Heap<Cell>(gridManager.GetMapArea());
-        HashSet<Cell> closedSet = new HashSet<Cell>();
+        Heap<MapCell> openSet = new Heap<MapCell>(mapManager.GetMapArea());
+        HashSet<MapCell> closedSet = new HashSet<MapCell>();
         openSet.Add(start);
 
         while (openSet.Count > 0)
         {
-            Cell current = openSet.RemoveFirst();
+            MapCell current = openSet.RemoveFirst();
 
             closedSet.Add(current);
             
@@ -36,7 +36,7 @@ public class Pathfinder
                 yield break;
             }
 
-            foreach (Cell neighbour in gridManager.GetNeighbours(current))
+            foreach (MapCell neighbour in mapManager.GetNeighbours(current))
             {
                 if ((!neighbour.IsWalkable() && neighbour != target) || closedSet.Contains(neighbour))
                 {
@@ -59,11 +59,11 @@ public class Pathfinder
         OnPathProcessingEnd(null, false);
     }
 
-    private Vector3[] RetracePath(Cell start, Cell end)
+    private Vector3[] RetracePath(MapCell start, MapCell end)
     {
-        List<Cell> cellPath = new List<Cell>();
+        List<MapCell> cellPath = new List<MapCell>();
 
-        Cell current = end;
+        MapCell current = end;
 
         while (current != start)
         {
@@ -77,29 +77,29 @@ public class Pathfinder
         return SimplifyPath(cellPath);
     }
 
-    private Vector3[] SimplifyPath(List<Cell> cellPath)
+    private Vector3[] SimplifyPath(List<MapCell> cellPath)
     {
         Vector3 lastDirection = Vector3.zero;
         List<Vector3> path = new List<Vector3>();
 
         for (int i = 1; i < cellPath.Count; i++)
         {
-            Vector3 direction = (Vector2)cellPath[i].GetGridPosition() - cellPath[i - 1].GetGridPosition();
+            Vector3 direction = (Vector2)cellPath[i].GridPosition - cellPath[i - 1].GridPosition;
             if (direction != lastDirection)
             {
-                path.Add(gridManager.GetGlobalPosition(cellPath[i-1]));
+                path.Add(mapManager.GetGlobalPosition(cellPath[i-1]));
                 lastDirection = direction;
             }
         }
-        path.Add(gridManager.GetGlobalPosition(cellPath[cellPath.Count - 1]));
+        path.Add(mapManager.GetGlobalPosition(cellPath[cellPath.Count - 1]));
 
         return path.ToArray();
     }
 
-    private int GetDistance(Cell start, Cell end)
+    private int GetDistance(MapCell start, MapCell end)
     {
-        int distX = Mathf.Abs(start.GetGridPosition().x - end.GetGridPosition().x);
-        int distY = Mathf.Abs(start.GetGridPosition().y - end.GetGridPosition().y);
+        int distX = Mathf.Abs(start.GridPosition.x - end.GridPosition.x);
+        int distY = Mathf.Abs(start.GridPosition.y - end.GridPosition.y);
 
 
         if (distX > distY)

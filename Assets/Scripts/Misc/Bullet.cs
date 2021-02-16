@@ -33,18 +33,14 @@ public class Bullet : MonoBehaviour
     {
         if (is_in_animation)
             return;
-        try
+
+        if (collider.TryGetComponent(out Damagable component))
         {
-            if (collider.GetComponent<Damagable>().is_enemy != is_enemy)
-            {
-                collider.GetComponent<Damagable>().TakeDamage(damage);
-                HandleBlowAnimation();
-                Destroy(gameObject, .5f);
-            }
-            else
-                Destroy(gameObject);
+            if (component.is_enemy != is_enemy)
+                component.TakeDamage(damage);
+            HandleBlowAnimation();
+            Destroy(gameObject, .5f);
         }
-        catch { };
     }
 
     private void HandleBlowAnimation()
