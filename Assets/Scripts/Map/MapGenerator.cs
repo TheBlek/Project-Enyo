@@ -47,7 +47,7 @@ public static class MapGenerator
             }
         }
 
-        Debug.Log("min value in sample " + min_value/amplitude + " max value in sample " + max_value/amplitude);
+        //Debug.Log("min value in sample " + min_value/amplitude + " max value in sample " + max_value/amplitude);
 
         return map;
     }
@@ -95,12 +95,17 @@ public static class MapGenerator
         int tile_count = Enum.GetNames(typeof(MapTiles)).Length;
 
         value /= amplitude; // mapping value to range 0 to 1;
-        if (value < 0)
-            value = 0;
+        if (value < 0f)
+            value = 0f; 
+        if (value > 1f) 
+            value = 1f;
 
         value *= tile_count;
 
         float round_value = Mathf.Round(value - 0.5f);
+
+        if (round_value == 3)
+            Debug.Log("This value was processed in 3: " + value);
 
         //Debug.Log(value + " resulted in " + (MapTiles)round_value);
 

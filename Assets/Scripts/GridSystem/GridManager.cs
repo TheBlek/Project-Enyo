@@ -78,17 +78,17 @@ public class GridManager<T> : MonoBehaviour where T : IGridItem
 
     public T[] GetStraightNeighbours(Vector2Int grid_position) // This returns neighbours without corners 
     {
-        List<T> neighbours = new List<T>();
+        T[] neighbours = new T[4];
 
         if (grid_position.y + 1 < grid_size.y)
-            neighbours.Add(grid[grid_position.x, grid_position.y + 1]);
+            neighbours[0] = grid[grid_position.x, grid_position.y + 1];
         if (grid_position.x + 1 < grid_size.x)
-            neighbours.Add(grid[grid_position.x + 1, grid_position.y]);
+            neighbours[1] = grid[grid_position.x + 1, grid_position.y];
         if (grid_position.y - 1 >= 0)
-            neighbours.Add(grid[grid_position.x, grid_position.y - 1]);
+            neighbours[2] = grid[grid_position.x, grid_position.y - 1];
         if (grid_position.x - 1 >= 0)
-            neighbours.Add(grid[grid_position.x - 1, grid_position.y]);
-        return neighbours.ToArray();
+            neighbours[3] = grid[grid_position.x - 1, grid_position.y];
+        return neighbours;
     }
 
     public T[] GetNeighbours(T cell) // This returns neighbours with corners

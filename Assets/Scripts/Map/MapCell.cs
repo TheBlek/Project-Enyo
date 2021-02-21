@@ -39,4 +39,13 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
             compare = hCost.CompareTo(cellToCompare.hCost);
         return -compare;
     }
+
+    public override bool Equals(object obj)
+    {
+        var subj = obj as MapCell;
+
+        if (subj == null)
+            return false;
+        return this.Tile.Equals(subj.Tile);
+    }
 }
