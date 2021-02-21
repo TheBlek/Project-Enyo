@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
 public class MapCell : IGridItem, IHeapItem<MapCell>
 {   
@@ -42,10 +41,8 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
 
     public override bool Equals(object obj)
     {
-        var subj = obj as MapCell;
-
-        if (subj == null)
+        if (!(obj is MapCell subj))
             return false;
-        return this.Tile.Equals(subj.Tile);
+        return Tile <= subj.Tile;
     }
 }
