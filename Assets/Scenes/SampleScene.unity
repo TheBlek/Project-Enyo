@@ -4416,7 +4416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 1095661051140562365, guid: 07a83ec06d5a715449f63f8f6f68ae1c,
     type: 3}
-  number_of_enemies: 1
+  number_of_enemies: 0
   spawn_point_offset: 4.18
   spawn_point: {x: 0, y: 0}
 --- !u!114 &519552907
@@ -4436,7 +4436,7 @@ MonoBehaviour:
   grid_size: {x: 100, y: 100}
   cell_size: 0.5
   tilemap: {fileID: 246655618}
-  keys: 000000000100000002000000
+  keys: 010000000200000000000000
   values:
   - {fileID: 11400000, guid: deeebd04350fd944bbb3b46a673543f9, type: 2}
   - {fileID: 11400000, guid: a8982f445516b1041a718da37d2044d1, type: 2}
