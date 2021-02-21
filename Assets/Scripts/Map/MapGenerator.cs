@@ -26,12 +26,15 @@ public static class MapGenerator
     {
         float[,] sample = new float[map_size.x, map_size.y];
 
+        float offsetX = UnityEngine.Random.Range(0, 999999f);
+        float offsetY = UnityEngine.Random.Range(0, 999999f);
+
         for (int x = 0; x < map_size.x; x++)
         {
             for (int y = 0; y < map_size.y; y++)
             {
-                float sampleX = (float)x / map_size.x * scale;
-                float sampleY = (float)y / map_size.y * scale;
+                float sampleX = (float)x / map_size.x * scale + offsetX;
+                float sampleY = (float)y / map_size.y * scale + offsetY;
                 sample[x, y] = Mathf.PerlinNoise(sampleX, sampleY);
                 //Debug.Log(sampleX + " " + sampleY + " gave " + sample[x, y]);
             }
@@ -48,7 +51,7 @@ public static class MapGenerator
 
         float round_value = Mathf.Round(value) - 0.5f;
 
-        //Debug.Log(value + " resulted in " + (MapTiles)round_value);
+        Debug.Log(value + " resulted in " + (MapTiles)round_value);
 
         return (MapTiles) round_value;
     }
