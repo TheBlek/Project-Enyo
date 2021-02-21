@@ -5,9 +5,9 @@ using System.Collections.Generic;
 public static class MapGenerator
 {
 
-    public static MapTiles[,] GenerateMap(Vector2Int map_size, int octaves_count, float lacunarity, float persistance)
+    public static MapTiles[,] GenerateMap(Vector2Int map_size, int octaves_count, float start_frequency, float lacunarity, float persistance)
     {
-        var sample = GenerateMultiLayerSample(map_size, octaves_count, lacunarity, persistance);
+        var sample = GenerateMultiLayerSample(map_size, octaves_count, start_frequency, lacunarity, persistance);
 
         var amplitude = (Mathf.Pow(persistance, octaves_count) - 1) / (persistance - 1);
 
@@ -16,12 +16,12 @@ public static class MapGenerator
         return map;
     }
 
-    private static float[,] GenerateMultiLayerSample(Vector2Int map_size, int octaves_count, float lacunarity, float persistance)
+    private static float[,] GenerateMultiLayerSample(Vector2Int map_size, int octaves_count, float start_frequency, float lacunarity, float persistance)
     {
         List<float[,]> samples = new List<float[,]>();
         for (int i = 0; i < octaves_count; i++)
         {
-            samples.Add(GenerateSample(map_size, Mathf.Pow(lacunarity, i), Mathf.Pow(persistance, i)));
+            samples.Add(GenerateSample(map_size, start_frequency * Mathf.Pow(lacunarity, i), Mathf.Pow(persistance, i)));
         }
 
         var sample = CollapseLayersToOne(samples, map_size);
@@ -47,7 +47,7 @@ public static class MapGenerator
             }
         }
 
-        Debug.Log("min value in sample " + min_value + " max value in sample " + max_value);
+        Debug.Log("min value in sample " + min_value/amplitude + " max value in sample " + max_value/amplitude);
 
         return map;
     }
@@ -95,10 +95,12 @@ public static class MapGenerator
         int tile_count = Enum.GetNames(typeof(MapTiles)).Length;
 
         value /= amplitude; // mapping value to range 0 to 1;
+        if (value < 0)
+            value = 0;
 
         value *= tile_count;
 
-        float round_value = Mathf.Round(value) - 0.5f;
+        float round_value = Mathf.Round(value - 0.5f);
 
         //Debug.Log(value + " resulted in " + (MapTiles)round_value);
 

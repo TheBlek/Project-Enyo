@@ -8,6 +8,7 @@ public class MapManager : GridManager<MapCell>
     [SerializeField] private MapTiles[] keys;
     [SerializeField] private Tile[] values;
 
+    [SerializeField] private float start_freqency;
     [SerializeField] private float lacunarity;
     [Range(0, 1)]
     [SerializeField] private float persistance;
@@ -48,7 +49,7 @@ public class MapManager : GridManager<MapCell>
 
     private void GenerateMap()
     {
-        MapTiles[,] map = MapGenerator.GenerateMap(grid_size, octaves_count, lacunarity, persistance);
+        MapTiles[,] map = MapGenerator.GenerateMap(grid_size, octaves_count, start_freqency, lacunarity, persistance);
 
         for (int x = 0; x < grid_size.x; x++)
         {
