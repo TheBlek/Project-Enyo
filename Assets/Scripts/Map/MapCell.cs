@@ -8,17 +8,13 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
     public int hCost;
     public MapCell parent;
 
-    public Building BuildingInCell;
-    private bool walkable = true;
-
-    private int heap_index;
 
     public bool Buildable()
     {
         return BuildingInCell == null;
     }
 
-    public bool IsWalkable() => walkable && BuildingInCell == null;
+    public bool IsWalkable() => BuildingInCell == null;
 
     public int fCost
     {
@@ -28,17 +24,11 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
         }
     }
 
-    public int HeapIndex
-    {
-        get
-        {
-            return heap_index;
-        }
-        set
-        {
-            heap_index = value;
-        }
-    }
+    public Building BuildingInCell { get; set; }
+
+    public MapTiles Tile { get; set; }
+
+    public int HeapIndex { get; set; }
 
     public Vector2Int GridPosition { get; set; }
 

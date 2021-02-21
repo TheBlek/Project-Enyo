@@ -23,7 +23,7 @@ public class GridManager<T> : MonoBehaviour where T : IGridItem
         InitGrid();
     }
 
-    public void InitGrid()
+    protected virtual void InitGrid()
     { 
         grid = new T[grid_size.x, grid_size.y];
         grid_origin = -Vector2.one * cell_size * grid_size / 2;
