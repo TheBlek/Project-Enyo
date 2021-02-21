@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class NeighbourAdjuster<T, K>
+public class NeighbourAdjuster<T, K> where K : ISimilarity<K>
 {
     private T[] _pattern_results;
     private int pattern;
@@ -23,7 +23,7 @@ public class NeighbourAdjuster<T, K>
             return;
         for (int i = 0; i < 4; i++)
         {
-            if (neighbours[i] != null && neighbours[i].Equals(subject))
+            if (neighbours[i] != null && neighbours[i].IsSimilar(subject))
                 pattern += (int)Mathf.Pow(2f, i);
         }
     }

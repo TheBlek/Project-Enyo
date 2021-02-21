@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 using System;
 
-public class MapCell : IGridItem, IHeapItem<MapCell>
+public interface ISimilarity<T>
+{
+    bool IsSimilar(T subj);
+}
+
+public class MapCell : IGridItem, IHeapItem<MapCell>, ISimilarity<MapCell>
 {   
     public int gCost;
     public int hCost;
@@ -39,9 +44,9 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
         return -compare;
     }
 
-    public override bool Equals(object obj)
+    public bool IsSimilar(MapCell subj)
     {
-        if (!(obj is MapCell subj))
+        if (subj == null)
             return false;
         return Tile <= subj.Tile;
     }
