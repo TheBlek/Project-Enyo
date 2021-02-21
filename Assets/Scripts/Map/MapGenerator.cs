@@ -47,7 +47,7 @@ public static class MapGenerator
             }
         }
 
-        Debug.Log(min_value + " " + max_value);
+        Debug.Log("min value in sample " + min_value + " max value in sample " + max_value);
 
         return map;
     }
