@@ -2,5 +2,6 @@
 {
     Grass, //from low to high
     Ground,
-    Rocks
+    Rocks,
+    Minerals
 }

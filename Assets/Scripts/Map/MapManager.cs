@@ -5,34 +5,16 @@ using UnityEngine.Tilemaps;
 public class MapManager : GridManager<MapCell>
 {
     [SerializeField] private Tilemap tilemap;
-    [SerializeField] private MapTiles[] keys;
-    [SerializeField] private RuleTile[] values;
+    [SerializeField] private MapGenerator _map_generator;
 
-    [SerializeField] private float start_freqency;
-    [SerializeField] private float lacunarity;
-    [Range(0, 1)]
-    [SerializeField] private float persistance;
-    [SerializeField] private int octaves_count;
-
-    private Dictionary<MapTiles, RuleTile> tiles_by_name;
+    public Dictionary<MapTiles, RuleTile> tiles_by_name;
 
     
     public override void InitGrid()
     {
         base.InitGrid();
         GenerateMap();
-        ConvertArrayToDict();
         SetUpLayout();
-    }
-    
-    private void ConvertArrayToDict()
-    {
-        tiles_by_name = new Dictionary<MapTiles, RuleTile>();
-
-        for (int i = 0; i < keys.Length; i++)
-        {
-            tiles_by_name[keys[i]] = values[i];
-        }
     }
 
     private void SetUpLayout()
@@ -49,7 +31,7 @@ public class MapManager : GridManager<MapCell>
 
     private void GenerateMap()
     {
-        MapTiles[,] map = MapGenerator.GenerateMap(grid_size, octaves_count, start_freqency, lacunarity, persistance);
+        MapTiles[,] map = _map_generator.GenerateMap(grid_size);
 
         for (int x = 0; x < grid_size.x; x++)
         {

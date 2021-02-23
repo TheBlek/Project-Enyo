@@ -2,12 +2,22 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public static class MapGenerator
+[CreateAssetMenu(menuName = "ScriptableObjects/MapGenerator")]
+public class MapGenerator : ScriptableObject
 {
 
-    public static MapTiles[,] GenerateMap(Vector2Int map_size, int octaves_count, float start_frequency, float lacunarity, float persistance)
+    [Header("Map generating settings")]
+    [SerializeField] private float start_frequency;
+    [Range(1, 10)]
+    [SerializeField] private float lacunarity;
+    [Range(0, 1)]
+    [SerializeField] private float persistance;
+    [SerializeField] private int octaves_count;
+    [HideInInspector] public float[] _thresholds;
+
+    public MapTiles[,] GenerateMap(Vector2Int map_size)
     {
-        var sample = GenerateMultiLayerSample(map_size, octaves_count, start_frequency, lacunarity, persistance);
+        var sample = GenerateMultiLayerSample(map_size);
 
         var amplitude = (Mathf.Pow(persistance, octaves_count) - 1) / (persistance - 1);
 
@@ -16,7 +26,7 @@ public static class MapGenerator
         return map;
     }
 
-    private static float[,] GenerateMultiLayerSample(Vector2Int map_size, int octaves_count, float start_frequency, float lacunarity, float persistance)
+    private float[,] GenerateMultiLayerSample(Vector2Int map_size)
     {
         List<float[,]> samples = new List<float[,]>();
         for (int i = 0; i < octaves_count; i++)
@@ -29,7 +39,7 @@ public static class MapGenerator
         return sample;
     }
 
-    private static MapTiles[,] ConvertSampleToMap(float [,] sample, float amplitude)
+    private MapTiles[,] ConvertSampleToMap(float [,] sample, float amplitude)
     {
 
         MapTiles[,] map = new MapTiles[sample.GetLength(0), sample.GetLength(1)];
@@ -52,7 +62,7 @@ public static class MapGenerator
         return map;
     }
 
-    private static float[,] CollapseLayersToOne(List<float[,]> samples, Vector2Int map_size)
+    private float[,] CollapseLayersToOne(List<float[,]> samples, Vector2Int map_size)
     {
         float[,] final_sample = new float[map_size.x, map_size.y];
 
@@ -69,7 +79,7 @@ public static class MapGenerator
         return final_sample;
     }
 
-    private static float[,] GenerateSample(Vector2Int map_size, float frequency, float amplitude)
+    private float[,] GenerateSample(Vector2Int map_size, float frequency, float amplitude)
     {
         float[,] sample = new float[map_size.x, map_size.y];
 
@@ -90,7 +100,7 @@ public static class MapGenerator
         return sample;
     }
 
-    private static MapTiles ActivationFuction(float value, float amplitude)
+    private MapTiles ActivationFuction(float value, float amplitude)
     {
         int tile_count = Enum.GetNames(typeof(MapTiles)).Length;
 
@@ -99,17 +109,19 @@ public static class MapGenerator
             value = 0f; 
         if (value > 1f) 
             value = 1f;
+        
+        for (int i = tile_count - 1; i >= 0; i--)
+        {
+            if (value > _thresholds[i])
+                return (MapTiles)(i);
+        }
+        Debug.LogWarning("Activation Function returned defaul value");
+        return (MapTiles) value;
+    }
 
-        value *= tile_count;
-
-        float round_value = Mathf.Round(value - 0.5f);
-
-        if (round_value == 3)
-            Debug.Log("This value was processed in 3: " + value);
-
-        //Debug.Log(value + " resulted in " + (MapTiles)round_value);
-
-        return (MapTiles) round_value;
+    public void ApplyThresholds(float[] thresholds)
+    {
+        _thresholds = thresholds;
     }
 
 }
