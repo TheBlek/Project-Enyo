@@ -1,7 +1,6 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using System;
-using System.Collections.Generic;
 
 [CustomEditor (typeof(MapManager))]
 public class MapManagerEditor : Editor
@@ -11,8 +10,11 @@ public class MapManagerEditor : Editor
         base.OnInspectorGUI();
 
         var mapMan = (MapManager)target;
-        if (mapMan.tiles_by_name == null)
-            mapMan.tiles_by_name = new Dictionary<MapTiles, RuleTile>();
+
+        int length = Enum.GetNames(typeof(MapTiles)).Length;
+        if (mapMan.tiles_by_name == null || mapMan.tiles_by_name.Length != length)
+            mapMan.tiles_by_name = new RuleTile[Enum.GetNames(typeof(MapTiles)).Length];
+
         mapMan.tiles_by_name = GrabRuleTiles(mapMan.tiles_by_name);
 
         if (GUILayout.Button("Generate Map"))
@@ -21,14 +23,13 @@ public class MapManagerEditor : Editor
         }
     }
 
-    private Dictionary<MapTiles, RuleTile> GrabRuleTiles(Dictionary<MapTiles, RuleTile> dict)
+    private RuleTile[] GrabRuleTiles(RuleTile[] dict)
     {
         int length = Enum.GetNames(typeof(MapTiles)).Length;
         for (int i = 0; i < length; i++)
         {
             GUILayout.Label(((MapTiles)i).ToString());
-            _ = dict.TryGetValue((MapTiles)i, out var tmp);
-            dict[(MapTiles)i] = EditorGUILayout.ObjectField(tmp, typeof(RuleTile), true) as RuleTile;
+            dict[i] = EditorGUILayout.ObjectField(dict[i], typeof(RuleTile), true) as RuleTile;
         }
         return dict;
     }

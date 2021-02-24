@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[Serializable]
 [CreateAssetMenu(menuName = "ScriptableObjects/MapGenerator")]
 public class MapGenerator : ScriptableObject
 {
@@ -14,9 +15,11 @@ public class MapGenerator : ScriptableObject
     [SerializeField] private float persistance;
     [SerializeField] private int octaves_count;
     [HideInInspector] public float[] _thresholds;
+    //public float[] test_thresholds;
 
     public MapTiles[,] GenerateMap(Vector2Int map_size)
     {
+
         var sample = GenerateMultiLayerSample(map_size);
 
         var amplitude = (Mathf.Pow(persistance, octaves_count) - 1) / (persistance - 1);

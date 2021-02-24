@@ -7,7 +7,7 @@ public class MapManager : GridManager<MapCell>
     [SerializeField] private Tilemap tilemap;
     [SerializeField] private MapGenerator _map_generator;
 
-    public Dictionary<MapTiles, RuleTile> tiles_by_name;
+    [HideInInspector] public RuleTile[] tiles_by_name;
 
     
     public override void InitGrid()
@@ -24,7 +24,7 @@ public class MapManager : GridManager<MapCell>
         {
             for (int y = 0; y < grid_size.y; y++)
             {
-                tilemap.SetTile(new Vector3Int(x - grid_size.x/2, y - grid_size.y / 2, 0), tiles_by_name[grid[x, y].Tile]);
+                tilemap.SetTile(new Vector3Int(x - grid_size.x/2, y - grid_size.y / 2, 0), tiles_by_name[(int)grid[x, y].Tile]);
             }
         }
     }
