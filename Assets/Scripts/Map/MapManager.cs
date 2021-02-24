@@ -4,10 +4,11 @@ using UnityEngine.Tilemaps;
 
 public class MapManager : GridManager<MapCell>
 {
-    [SerializeField] private Tilemap tilemap;
+    [SerializeField] private Tilemap _tilemap;
     [SerializeField] private MapGenerator _map_generator;
 
     [HideInInspector] public RuleTile[] tiles_by_name;
+    [HideInInspector] public bool[] collidable_tiles;
 
     
     public override void InitGrid()
@@ -19,12 +20,14 @@ public class MapManager : GridManager<MapCell>
 
     private void SetUpLayout()
     {
-        tilemap.ClearAllTiles();
+        _tilemap.ClearAllTiles();
         for (int x = 0; x < grid_size.x; x++)
         {
             for (int y = 0; y < grid_size.y; y++)
             {
-                tilemap.SetTile(new Vector3Int(x - grid_size.x/2, y - grid_size.y / 2, 0), tiles_by_name[(int)grid[x, y].Tile]);
+                _tilemap.SetTile(new Vector3Int(x - grid_size.x/2, y - grid_size.y / 2, 0), tiles_by_name[(int)grid[x, y].Tile]);
+
+                grid[x, y].SetTileWalkable(!collidable_tiles[(int)grid[x, y].Tile]);
             }
         }
     }

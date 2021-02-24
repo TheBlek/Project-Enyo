@@ -1,24 +1,25 @@
 ﻿using UnityEngine;
 using System;
 
-public interface ISimilarity<T>
-{
-    bool IsSimilar(T subj);
-}
-
-public class MapCell : IGridItem, IHeapItem<MapCell>, ISimilarity<MapCell>
+public class MapCell : IGridItem, IHeapItem<MapCell>
 {   
     public int gCost;
     public int hCost;
     public MapCell parent;
 
+    private bool _walkable_tile;
+
+    public void SetTileWalkable(bool walkable_tile)
+    {
+        _walkable_tile = walkable_tile;
+    }
 
     public bool Buildable()
     {
         return BuildingInCell == null;
     }
 
-    public bool IsWalkable() => BuildingInCell == null;
+    public bool IsWalkable() => BuildingInCell == null && _walkable_tile;
 
     public int fCost
     {
@@ -42,12 +43,5 @@ public class MapCell : IGridItem, IHeapItem<MapCell>, ISimilarity<MapCell>
         if (compare == 0)
             compare = hCost.CompareTo(cellToCompare.hCost);
         return -compare;
-    }
-
-    public bool IsSimilar(MapCell subj)
-    {
-        if (subj == null)
-            return false;
-        return Tile <= subj.Tile;
     }
 }

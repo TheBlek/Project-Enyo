@@ -15,7 +15,6 @@ public class MapGenerator : ScriptableObject
     [SerializeField] private float persistance;
     [SerializeField] private int octaves_count;
     [HideInInspector] public float[] _thresholds;
-    //public float[] test_thresholds;
 
     public MapTiles[,] GenerateMap(Vector2Int map_size)
     {
