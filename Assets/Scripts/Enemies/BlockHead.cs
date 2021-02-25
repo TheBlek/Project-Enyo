@@ -19,11 +19,7 @@ public class BlockHead : Enemy
 
     private void Awake()
     {
-        try
-        {
-            animator = GetComponent<Animator>();
-        }
-        finally { }
+        animator = GetComponent<Animator>();
 
         RandomizeTarget();
         IsTargetEleminated = false;
@@ -45,7 +41,7 @@ public class BlockHead : Enemy
     public override void SelfUpdate()
     {
 
-        if (stunned || pathRequested)
+        if (stunned || pathRequested || waypoints == null)
             return;
 
         if (current_waypoint >= waypoints.Length || target_pos != waypoints[waypoints.Length - 1])

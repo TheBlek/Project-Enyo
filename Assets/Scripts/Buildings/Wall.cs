@@ -53,8 +53,7 @@ public class Wall : Building
         };
         var d = transform.GetComponent<Damagable>();
         d.death_offset = .25f;
-        d.onKill += PlayBlowAnimation;
-        gameObject.GetComponent<Damagable>().onKill += OnDeath;
+        d.onKill += OnDeath;
 
         gameManager = FindObjectOfType<GameManager>();
     }
@@ -112,6 +111,7 @@ public class Wall : Building
 
     private void OnDeath()
     {
+        PlayBlowAnimation();
         type = Buildings.AboutToDie;
         RecallNeighbours();
     }
