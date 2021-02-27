@@ -23,6 +23,11 @@ public class Building : MonoBehaviour
 
     }
 
+    public virtual bool IsPositionAcceptable(GameManager gameManager, Vector2 position=default)
+    {
+        return true;
+    }
+
     public Vector2 GetSize() => size;
 
     public Buildings GetBuildingType() => type;

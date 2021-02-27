@@ -9,7 +9,7 @@ public class Mine : Building
     private float time_since_last_addition = 0;
     [SerializeField] private int money_per_mineral_tile;
     private int MpS = 0;
-    private GameManager gameManager;
+    private GameManager _gameManager;
 
     private void Awake()
     {
@@ -17,7 +17,7 @@ public class Mine : Building
         d.death_offset = .5f;
         d.onKill += PlayBlowAnimation;
 
-        gameManager = FindObjectOfType<GameManager>();
+        _gameManager = FindObjectOfType<GameManager>();
     }
 
     public override void SelfUpdate()
@@ -26,7 +26,7 @@ public class Mine : Building
         if (time_since_last_addition >= 1)
         {
             time_since_last_addition -= 1;
-            gameManager.AddMetals(MpS);
+            _gameManager.AddMetals(MpS);
         }
     }
 
@@ -34,7 +34,7 @@ public class Mine : Building
     {
         base.SetUp();
 
-        IsMineCanBeBuildInRect();
+        CountMinerals(transform.position, _gameManager);
     }
 
     private void PlayBlowAnimation()
@@ -42,23 +42,19 @@ public class Mine : Building
         transform.GetComponent<Animator>().Play("Blow");
     }
 
-    public bool IsMineCanBeBuildInRect(Vector2 position=default)
+    public override bool IsPositionAcceptable(GameManager gameManager, Vector2 position = default)
     {
         if (position == default)
             position = transform.position;
 
-        if (gameManager == null)
-            gameManager = FindObjectOfType<GameManager>();
-
-        MapCell[] cells = gameManager.GetMapManager().GetCellsInRect(position, GetSize());
-
-        CountMinerals(cells);
+        CountMinerals(position, gameManager);
 
         return MpS != 0;
     }
 
-    private void CountMinerals(MapCell[] cells)
+    private void CountMinerals(Vector2 position, GameManager gameManager)
     {
+        MapCell[] cells = gameManager.GetMapManager().GetCellsInRect(position, GetSize());
         MpS = 0;
         foreach (MapCell cell in cells)
         {

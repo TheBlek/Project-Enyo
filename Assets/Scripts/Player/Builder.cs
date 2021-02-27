@@ -73,18 +73,19 @@ public class Builder : MonoBehaviour
 
     public void Build(GameManager gameManager)
     {
-        if (!gameManager.IsAffordable(buildings_prefab[(int)building_type]))
+        Building current_building = buildings_prefab[(int)building_type];
+
+        if (!gameManager.IsAffordable(current_building))
             return;
 
         Vector3 position = preview_obj.transform.position;
-        if (!gameManager.GetMapManager().IsRectBuildable(position, buildings_prefab[(int)building_type].GetSize()))
+        if (!gameManager.GetMapManager().IsRectBuildable(position, current_building.GetSize()))
             return;
 
-        if (buildings_prefab[(int)building_type] is Mine v)
-            if (!v.IsMineCanBeBuildInRect(position))
-                return;
+        if (!current_building.IsPositionAcceptable(gameManager, position))
+            return;
         
-        GameObject building = GameObject.Instantiate(prefabs[(int)building_type], position, Quaternion.identity);
+        GameObject building = Instantiate(prefabs[(int)building_type], position, Quaternion.identity);
 
         onBuild(building.GetComponent<Building>());
     }
