@@ -5,6 +5,7 @@ using System;
 [CustomEditor (typeof(MapManager))]
 public class MapManagerEditor : Editor
 {
+    private float spacing = 50f;
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -34,13 +35,16 @@ public class MapManagerEditor : Editor
 
     private bool[] GrabCollidableTiles(bool[] data)
     {
+        EditorGUILayout.Separator();
+        GUILayout.Label("Select Collidable Tiles");
 
         int length = Enum.GetNames(typeof(MapTiles)).Length;
+
         for (int i = 0; i < length; i++)
         {
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label(((MapTiles)i).ToString());
-            data[i] = EditorGUILayout.Toggle(data[i]);
+            data[i] = EditorGUILayout.Toggle(data[i], GUILayout.ExpandWidth(false));
             EditorGUILayout.EndHorizontal();
         }
         return data;
@@ -48,13 +52,14 @@ public class MapManagerEditor : Editor
 
     private RuleTile[] GrabRuleTiles(RuleTile[] dict)
     {
+        EditorGUILayout.Separator();
         int length = Enum.GetNames(typeof(MapTiles)).Length;
         for (int i = 0; i < length; i++)
         {
-            
+            GUILayout.BeginHorizontal();
             GUILayout.Label(((MapTiles)i).ToString());
-            dict[i] = EditorGUILayout.ObjectField(dict[i], typeof(RuleTile), true) as RuleTile;
-            
+            dict[i] = EditorGUILayout.ObjectField(dict[i], typeof(RuleTile), true, GUILayout.ExpandWidth(false)) as RuleTile;
+            GUILayout.EndHorizontal();
         }
         return dict;
     }

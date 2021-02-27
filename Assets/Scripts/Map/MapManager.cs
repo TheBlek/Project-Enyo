@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System;
 
+[Serializable]
 public class MapManager : GridManager<MapCell>
 {
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private MapGenerator _map_generator;
+    [SerializeField] private bool _generate_map_on_start;
 
     [HideInInspector] public RuleTile[] tiles_by_name;
     [HideInInspector] public bool[] collidable_tiles;
@@ -13,9 +16,12 @@ public class MapManager : GridManager<MapCell>
     
     public override void InitGrid()
     {
-        base.InitGrid();
-        GenerateMap();
-        SetUpLayout();
+        if (_generate_map_on_start)
+        {
+            base.InitGrid();
+            GenerateMap();
+            SetUpLayout();
+        }
     }
 
     private void SetUpLayout()
@@ -70,10 +76,10 @@ public class MapManager : GridManager<MapCell>
         return grid[grid_position.x, grid_position.y].Buildable();
     }
 
-    public Building GetBuildingInCell(Vector2Int cell)
+    public Building GetBuildingInCell(Vector2Int grid_position)
     {
-        if (AbnormalGridPosition(cell))
+        if (AbnormalGridPosition(grid_position))
             return null;
-        return grid[cell.x, cell.y].BuildingInCell;
+        return grid[grid_position.x, grid_position.y].BuildingInCell;
     }
 }

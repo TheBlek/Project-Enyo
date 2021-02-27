@@ -26,10 +26,11 @@ MonoBehaviour:
     - {fileID: -912226708761013127, guid: 89c486f599e5c2a4782aa0e72be45265, type: 3}
     - {fileID: 64046951760991985, guid: 89c486f599e5c2a4782aa0e72be45265, type: 3}
     - {fileID: -6157781805458569218, guid: 89c486f599e5c2a4782aa0e72be45265, type: 3}
+    - {fileID: -1385786070971223102, guid: 89c486f599e5c2a4782aa0e72be45265, type: 3}
     m_GameObject: {fileID: 0}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
-    m_PerlinScale: 0.25
+    m_PerlinScale: 0.48
     m_Output: 1
     m_ColliderType: 0
     m_RandomTransform: 2

@@ -17,7 +17,7 @@ public class GridManager<T> : MonoBehaviour where T : IGridItem
     [SerializeField] protected Vector2Int grid_size;
     [SerializeField] protected float cell_size = 0.5f;
 
-    protected T[,] grid;
+    [SerializeField] protected T[,] grid;
     private void Awake()
     {
         InitGrid();

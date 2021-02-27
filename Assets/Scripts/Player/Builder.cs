@@ -47,13 +47,19 @@ public class Builder : MonoBehaviour
 
     public void Preview(Camera player_camera, float cell_size)
     {
-        Vector3 shift = CalculateShift();
         Vector3 position = player_camera.ScreenToWorldPoint(Input.mousePosition); // in-game position of mouse
         position.z = 0;
-        position.x -= position.x % cell_size - cell_size / 2 * Mathf.Sign(position.x) - shift.x * cell_size / 2; // stick to the grid
-        position.y -= position.y % cell_size - cell_size / 2 * Mathf.Sign(position.y) + shift.y * cell_size / 2;
+        position = StickPositionToGrid(position, cell_size);
 
         preview_obj.transform.position = position;
+    }
+
+    private Vector3 StickPositionToGrid(Vector3 pos, float cell_size)
+    {
+        Vector3 shift = CalculateShift();
+        pos.x -= pos.x % cell_size - cell_size / 2 * Mathf.Sign(pos.x) - shift.x * cell_size / 2; // stick to the grid
+        pos.y -= pos.y % cell_size - cell_size / 2 * Mathf.Sign(pos.y) + shift.y * cell_size / 2;
+        return pos;
     }
 
     public void SetBuildingType(Buildings _building_type)
@@ -73,6 +79,10 @@ public class Builder : MonoBehaviour
         Vector3 position = preview_obj.transform.position;
         if (!gameManager.GetMapManager().IsRectBuildable(position, buildings_prefab[(int)building_type].GetSize()))
             return;
+
+        if (buildings_prefab[(int)building_type] is Mine v)
+            if (!v.IsMineCanBeBuildInRect(position))
+                return;
         
         GameObject building = GameObject.Instantiate(prefabs[(int)building_type], position, Quaternion.identity);
 
