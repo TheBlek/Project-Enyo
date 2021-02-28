@@ -5,7 +5,7 @@
     Mine,
     Wall,
     Gate,
-    building5,
+    Cannon,
     building6,
     building7,
     building8,

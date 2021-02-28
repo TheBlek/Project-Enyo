@@ -114,7 +114,7 @@ public class PlayerControls : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha4))
             return Buildings.Gate;
         if (Input.GetKeyDown(KeyCode.Alpha5))
-            return Buildings.building5;
+            return Buildings.Cannon;
         if (Input.GetKeyDown(KeyCode.Alpha6))
             return Buildings.building6;
         if (Input.GetKeyDown(KeyCode.Alpha7))
