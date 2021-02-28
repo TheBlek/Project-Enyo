@@ -1,31 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private int metals = 0;
-    [SerializeField] private Builder builder;
     [SerializeField] private PlayerControls player;
     [SerializeField] private Superviser superviser;
 
     private List<Building> buildings;
-    private List<Bounds> buildings_bounds;
     private MapManager mapManager;
     private PathRequestManager pathRequestManager;
-    private System.Random random;
+    private System.Random _random;
 
     void Awake()
     {
-        builder.onBuild += BuildingInsertion;
-        buildings_bounds = new List<Bounds>();
+        player.GetBuilder().onBuild += BuildingInsertion;
         buildings = new List<Building>();
 
         mapManager = GetComponent<MapManager>();
         pathRequestManager = GetComponent<PathRequestManager>();
 
-        random = new System.Random();
+        _random = new System.Random();
     }
 
     public void BuildingInsertion(Building building)
@@ -35,23 +30,18 @@ public class GameManager : MonoBehaviour
         buildings.Add(building);
         mapManager.AdjustCellsForBuilding(building);
 
-        buildings_bounds.Add(building.GetComponent<BoxCollider2D>().bounds);
-
         building.SetUp();
     }
     
 
     private void Update()
     {
-        for (int i = 0; i < buildings.Count; i++)
+        foreach (Building building in buildings)
         {
-            if (buildings[i] == null)
-            {
-                buildings.Remove(buildings[i]);
-                buildings_bounds.Remove(buildings_bounds[i]);
-            }
+            if (building == null)
+                buildings.Remove(building);
             else
-                buildings[i].SelfUpdate();
+                building.SelfUpdate();
         }
     }
 
@@ -84,7 +74,7 @@ public class GameManager : MonoBehaviour
     {
         if (buildings.Count == 0)
             return null;
-        return buildings[random.Next(buildings.Count)];
+        return buildings[_random.Next(buildings.Count)];
     }
 
     public bool IsThereAnyBuilding() => buildings.Count > 0;

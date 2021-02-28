@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-using Utilities;
+﻿using UnityEngine;
 
 public class Mine : Building
 {
-    private float time_since_last_addition = 0;
     [SerializeField] private int money_per_mineral_tile;
+
+    private float time_since_last_addition = 0;
     private int MpS = 0;
     private GameManager _gameManager;
 

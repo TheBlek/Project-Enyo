@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System;
 
 public class MapCell : IGridItem, IHeapItem<MapCell>
 {   
@@ -16,7 +15,7 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
 
     public bool Buildable()
     {
-        return BuildingInCell == null;
+        return BuildingInCell == null && _walkable_tile;
     }
 
     public bool IsWalkable() => BuildingInCell == null && _walkable_tile;

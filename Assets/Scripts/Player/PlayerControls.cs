@@ -130,4 +130,6 @@ public class PlayerControls : MonoBehaviour
     {
         return transform.position;
     }
+
+    public Builder GetBuilder() => builder;
 }

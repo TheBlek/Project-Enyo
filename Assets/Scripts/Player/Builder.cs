@@ -17,7 +17,7 @@ public class Builder : MonoBehaviour
 
     private void Start()
     {
-        preview_obj = GameObject.Instantiate(preview_prefab);
+        preview_obj = Instantiate(preview_prefab);
         preview_obj.SetActive(false);
         CorrectPreviewSprite();
 

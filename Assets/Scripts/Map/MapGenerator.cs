@@ -23,9 +23,7 @@ public class MapGenerator : ScriptableObject
 
         var amplitude = (Mathf.Pow(persistance, octaves_count) - 1) / (persistance - 1);
 
-        var map = ConvertSampleToMap(sample, amplitude);
-
-        return map;
+        return ConvertSampleToMap(sample, amplitude);
     }
 
     private float[,] GenerateMultiLayerSample(Vector2Int map_size)
@@ -36,9 +34,7 @@ public class MapGenerator : ScriptableObject
             samples.Add(GenerateSample(map_size, start_frequency * Mathf.Pow(lacunarity, i), Mathf.Pow(persistance, i)));
         }
 
-        var sample = CollapseLayersToOne(samples, map_size);
-
-        return sample;
+        return CollapseLayersToOne(samples, map_size);
     }
 
     private MapTiles[,] ConvertSampleToMap(float [,] sample, float amplitude)
@@ -46,20 +42,13 @@ public class MapGenerator : ScriptableObject
 
         MapTiles[,] map = new MapTiles[sample.GetLength(0), sample.GetLength(1)];
 
-        float min_value = amplitude;
-        float max_value = 0;
-
         for (int x = 0; x < sample.GetLength(0); x++)
         {
             for (int y = 0; y < sample.GetLength(1); y++)
             {
-                max_value = Mathf.Max(max_value, sample[x, y]);
-                min_value = Mathf.Min(min_value, sample[x, y]);
                 map[x, y] = ActivationFuction(sample[x, y], amplitude);
             }
         }
-
-        //Debug.Log("min value in sample " + min_value/amplitude + " max value in sample " + max_value/amplitude);
 
         return map;
     }
@@ -95,7 +84,6 @@ public class MapGenerator : ScriptableObject
                 float sampleX = (float)x / map_size.x * frequency + offsetX;
                 float sampleY = (float)y / map_size.y * frequency + offsetY;
                 sample[x, y] = amplitude * Mathf.PerlinNoise(sampleX, sampleY);
-                //Debug.Log(sampleX + " " + sampleY + " gave " + sample[x, y]);
             }
         }
 
@@ -117,13 +105,7 @@ public class MapGenerator : ScriptableObject
             if (value > _thresholds[i])
                 return (MapTiles)(i);
         }
-        Debug.LogWarning("Activation Function returned defaul value");
-        return (MapTiles) value;
+        Debug.LogWarning("Activation Function returned default value");
+        return 0;
     }
-
-    public void ApplyThresholds(float[] thresholds)
-    {
-        _thresholds = thresholds;
-    }
-
 }
