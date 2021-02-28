@@ -8,7 +8,6 @@ public class MapManager : GridManager<MapCell>
 {
     [SerializeField] private Tilemap _tilemap;
     [SerializeField] private MapGenerator _map_generator;
-    [SerializeField] private bool _generate_map_on_start;
 
     [HideInInspector] public RuleTile[] tiles_by_name;
     [HideInInspector] public bool[] collidable_tiles;
@@ -16,12 +15,9 @@ public class MapManager : GridManager<MapCell>
     
     public override void InitGrid()
     {
-        if (_generate_map_on_start)
-        {
-            base.InitGrid();
-            GenerateMap();
-            SetUpLayout();
-        }
+        base.InitGrid();
+        GenerateMap();
+        SetUpLayout();
     }
 
     private void SetUpLayout()
