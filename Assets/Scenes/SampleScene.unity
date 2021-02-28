@@ -25802,7 +25802,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d0b180f81043764f921a6bf57ff9d2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shoot_pos: {fileID: 1645050438}
+  _shoot_point: {fileID: 0}
   bullet_prefab: {fileID: 4085345854065207460, guid: 83c7a0032a0b7dd4fb26dd76432f99d0,
     type: 3}
   muzzleflash_prefab: {fileID: 40827626099787679, guid: a1f0cd6def38fe147847868f5fb22463,

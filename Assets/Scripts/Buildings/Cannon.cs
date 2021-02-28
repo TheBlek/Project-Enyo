@@ -34,17 +34,9 @@ public class Cannon : Building
 
     private void TryToShoot()
     {
-        if (!_ready_to_shoot)
+        if (!_ready_to_shoot || _target == null || _shooter.IsThereObstacleBeforeTarget(_target.transform.position))
             return;
-
-        var data = Physics2D.RaycastAll(transform.position, -_barrel_transform.right, _fire_radius);
-
-        if ( _target == null)
-            return;
-        if (data.Length >= 2)
-            return;
-
-        Debug.Log(data.Length);
+        
         _shooter.Shoot();
     }
 
