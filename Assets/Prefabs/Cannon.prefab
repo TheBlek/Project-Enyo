@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6234104187904674007}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: -0.355, y: 0, z: 0}
+  m_LocalPosition: {x: -0.429, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9013666061330558610}
@@ -234,9 +234,11 @@ MonoBehaviour:
   type: 5
   size: {x: 1, y: 1}
   cost: 100
-  _fire_radius: 2
-  _barrel: {fileID: 9013666061330558611}
+  _max_fire_radius: 2
+  _min_fire_radius: 0
   _turn_speed: 90
+  _barrel: {fileID: 9013666061330558611}
+  _check_for_obstacles: 1
 --- !u!114 &5878581283040313178
 MonoBehaviour:
   m_ObjectHideFlags: 0
