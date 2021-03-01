@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System;
 
 public class Shooter : MonoBehaviour
 {
-    [SerializeField] private Transform shoot_pos;
+    [SerializeField] private Transform _shoot_point;
     [SerializeField] private GameObject bullet_prefab;
     [SerializeField] private GameObject muzzleflash_prefab;
     [SerializeField] private float fires_per_sec = 9;
@@ -12,9 +11,13 @@ public class Shooter : MonoBehaviour
     private float delay;
     private float time_since_last_shot;
 
+    public Action OnShoot;
+
     private void Start()
     {
         delay = 1/fires_per_sec;
+        if (muzzleflash_prefab != null)
+            OnShoot += HandleMuzzleflash;
     }
 
     private void Update()
@@ -27,13 +30,25 @@ public class Shooter : MonoBehaviour
         if (time_since_last_shot < delay)
             return;
 
-        Instantiate(bullet_prefab, shoot_pos.position, shoot_pos.rotation);
+        Instantiate(bullet_prefab, _shoot_point.position, _shoot_point.rotation);
+        OnShoot();
 
-        var muzzleflash = Instantiate(muzzleflash_prefab, shoot_pos.position, Quaternion.Euler(shoot_pos.rotation.eulerAngles));
+        time_since_last_shot = 0;
+    }
+
+    public bool IsThereObstacleBeforeTarget(Vector2 target)
+    {
+        var hit = Physics2D.Linecast(_shoot_point.position, target);
+
+        if (hit.transform == null || (Vector2)hit.transform.position == target)
+            return false;
+
+        return true;
+    }
+
+    private void HandleMuzzleflash()
+    {
+        var muzzleflash = Instantiate(muzzleflash_prefab, _shoot_point.position, Quaternion.Euler(_shoot_point.rotation.eulerAngles));
         Destroy(muzzleflash, 0.5f);
-
-        time_since_last_shot -= delay;
-        if (time_since_last_shot < 0)
-            time_since_last_shot = 0;
     }
 }

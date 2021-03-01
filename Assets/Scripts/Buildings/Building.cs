@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Building : MonoBehaviour
+public abstract class Building : MonoBehaviour
 {
     [SerializeField] protected Buildings type;
     [SerializeField] protected Vector2 size;

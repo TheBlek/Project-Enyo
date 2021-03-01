@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 public enum ChangeRequestType
@@ -32,8 +30,6 @@ public class PlayerControls : MonoBehaviour
 
     void Update()
     {
-        //HandleNumInput(); 
-
         HandleMouseInput();
 
         if (building_mode)
@@ -94,36 +90,6 @@ public class PlayerControls : MonoBehaviour
     {
         walker.LookAtMouse(player_camera);
         walker.Walk(input_movement);
-    }
-
-    private void HandleNumInput()
-    {
-        builder.SetBuildingType(GetBuilding());
-    }
-
-    private Buildings GetBuilding()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha0))
-            return Buildings.AboutToDie;
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            return Buildings.building1;
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-            return Buildings.Mine;
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            return Buildings.Wall;
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-            return Buildings.Gate;
-        if (Input.GetKeyDown(KeyCode.Alpha5))
-            return Buildings.building5;
-        if (Input.GetKeyDown(KeyCode.Alpha6))
-            return Buildings.building6;
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-            return Buildings.building7;
-        if (Input.GetKeyDown(KeyCode.Alpha8))
-            return Buildings.building8;
-        if (Input.GetKeyDown(KeyCode.Alpha9))
-            return Buildings.building9;
-        return Buildings.AboutToDie; // :) processing as do not change current state
     }
 
     public Vector3 GetPlayerPosition()

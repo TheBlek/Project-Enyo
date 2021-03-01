@@ -36,12 +36,17 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        List<Building> buildings_to_remove = new List<Building>();
         foreach (Building building in buildings)
         {
             if (building == null)
-                buildings.Remove(building);
+                buildings_to_remove.Add(building);
             else
                 building.SelfUpdate();
+        }
+        foreach (Building building in buildings_to_remove)
+        {
+            buildings.Remove(building);
         }
     }
 
