@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 9197074963838380924}
   - component: {fileID: 7269909133377943173}
-  - component: {fileID: 3607724044315753135}
   - component: {fileID: 6257030953788947036}
   m_Layer: 0
   m_Name: PreviewBuilding
@@ -83,18 +82,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3607724044315753135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7578841793296246740}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: acbe4cd67eec5654c89d6d13157a7a3d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &6257030953788947036
 BoxCollider2D:
   m_ObjectHideFlags: 0

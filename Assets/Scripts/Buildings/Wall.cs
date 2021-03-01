@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class Wall : Building
@@ -8,7 +7,7 @@ public class Wall : Building
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private Animator blow_animator;
     private int pattern;
-    private Building[] neighbourBuildings;
+    private Building[] _neighbourBuildings;
     protected GameManager gameManager;
 
     public class RendererSetUp
@@ -80,7 +79,7 @@ public class Wall : Building
         int pattern = 0;
         for (int i = 0; i < 4; i++)
         {
-            if (neighbourBuildings[i] != null && CheckName(neighbourBuildings[i].GetBuildingType()))
+            if (_neighbourBuildings[i] != null && CheckName(_neighbourBuildings[i].GetBuildingType()))
                 pattern += (int)Mathf.Pow(2f, i);
         }
         return pattern;
@@ -90,15 +89,22 @@ public class Wall : Building
     {
         var grid = gameManager.GetMapManager();
         MapCell[] neighbourCells = grid.GetStraightNeighbours(grid.GetGridPositionFromGlobal(transform.position));
-        neighbourBuildings = new Building[neighbourCells.Length];
+        _neighbourBuildings = new Building[neighbourCells.Length];
 
-        for (int i = 0; i < neighbourBuildings.Length; i++)
-            neighbourBuildings[i] = neighbourCells[i].BuildingInCell;
+        for (int i = 0; i < _neighbourBuildings.Length; i++)
+        {
+            if (neighbourCells[i] == null)
+            {
+                _neighbourBuildings[i] = null;
+                continue;
+            }
+            _neighbourBuildings[i] = neighbourCells[i].BuildingInCell;
+        }
     }
 
     private void RecallNeighbours()
     {
-        foreach (Building building in neighbourBuildings)
+        foreach (Building building in _neighbourBuildings)
         {
             try
             {

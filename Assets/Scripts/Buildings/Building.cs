@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Building : MonoBehaviour
 {
@@ -21,6 +19,11 @@ public class Building : MonoBehaviour
     public virtual void AdjustTexture()
     {
 
+    }
+
+    public virtual bool IsPositionAcceptable(GameManager gameManager, Vector2 position=default)
+    {
+        return true;
     }
 
     public Vector2 GetSize() => size;

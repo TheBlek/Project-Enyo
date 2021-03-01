@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System;
 
+[Serializable]
 public class MapManager : GridManager<MapCell>
 {
     [SerializeField] private Tilemap _tilemap;
@@ -70,10 +72,10 @@ public class MapManager : GridManager<MapCell>
         return grid[grid_position.x, grid_position.y].Buildable();
     }
 
-    public Building GetBuildingInCell(Vector2Int cell)
+    public Building GetBuildingInCell(Vector2Int grid_position)
     {
-        if (AbnormalGridPosition(cell))
+        if (AbnormalGridPosition(grid_position))
             return null;
-        return grid[cell.x, cell.y].BuildingInCell;
+        return grid[grid_position.x, grid_position.y].BuildingInCell;
     }
 }

@@ -50,6 +50,7 @@ MonoBehaviour:
   type: 2
   size: {x: 2, y: 2}
   cost: 300
+  money_per_mineral_tile: 3
 --- !u!114 &-1012311748323705905
 MonoBehaviour:
   m_ObjectHideFlags: 0
