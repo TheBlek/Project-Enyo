@@ -51,6 +51,7 @@ MonoBehaviour:
   speed: 400
   damage: 100
   life_time: 1
+  is_enemy: 0
 --- !u!212 &1939749243
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -148,7 +149,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &7954290277072298993
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,7 +6,7 @@
     Wall,
     Gate,
     Cannon,
-    building6,
+    Sniper,
     building7,
     building8,
     building9
