@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &177649836884091579
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 40827626099787664, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.089
+      objectReference: {fileID: 0}
+    - target: {fileID: 40827626099787664, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.001
+      objectReference: {fileID: 0}
+    - target: {fileID: 40827626099787664, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.98
+      objectReference: {fileID: 0}
+    - target: {fileID: 40827626099787664, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 40827626099787664, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 40827626099787664, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 40827626099787664, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 40827626099787664, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 40827626099787664, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 40827626099787664, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 40827626099787664, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 40827626099787665, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 40827626099787665, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -4597660365852756358, guid: aded9ba7305e835468671622ad6f7d9b,
+        type: 3}
+    - target: {fileID: 40827626099787678, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 0f1e5861dd76b7e4d90a04db46d2fdec, type: 2}
+    - target: {fileID: 40827626099787679, guid: a1f0cd6def38fe147847868f5fb22463,
+        type: 3}
+      propertyPath: m_Name
+      value: Sniper Muzzleflash
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a1f0cd6def38fe147847868f5fb22463, type: 3}
