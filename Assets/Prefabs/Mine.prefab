@@ -50,6 +50,8 @@ MonoBehaviour:
   type: 2
   size: {x: 2, y: 2}
   cost: 300
+  _explosion_prefab: {fileID: 5046511379225573602, guid: 8ed8729fad97c004687933f8fa01ba20,
+    type: 3}
   money_per_mineral_tile: 3
 --- !u!114 &-1012311748323705905
 MonoBehaviour:

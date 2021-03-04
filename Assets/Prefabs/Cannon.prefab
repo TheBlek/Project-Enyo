@@ -102,12 +102,14 @@ MonoBehaviour:
   type: 5
   size: {x: 1, y: 1}
   cost: 100
+  _explosion_prefab: {fileID: 5046511379225573602, guid: 8ed8729fad97c004687933f8fa01ba20,
+    type: 3}
   _max_fire_radius: 2
   _min_fire_radius: 0
   _turn_speed: 135
   _barrel: {fileID: 4890856201541899677}
+  _barrel_angle_offset: 180
   _check_for_obstacles: 1
-  _blow_animator: {fileID: 8881445116266926922}
 --- !u!114 &8024812880699409492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,7 +127,7 @@ MonoBehaviour:
     type: 3}
   muzzleflash_prefab: {fileID: 40827626099787679, guid: a1f0cd6def38fe147847868f5fb22463,
     type: 3}
-  fires_per_sec: 1
+  fires_per_sec: 2
 --- !u!61 &7785226698098684463
 BoxCollider2D:
   m_ObjectHideFlags: 0
