@@ -1,4 +1,5 @@
-﻿public enum MapTiles
+﻿[System.Serializable]
+public enum MapTiles
 {
     Abyss,
     Grass, //from low to high

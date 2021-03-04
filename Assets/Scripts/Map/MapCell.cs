@@ -8,6 +8,7 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
     public MapCell parent;
 
     public bool _walkable_tile = true;
+    [SerializeField] MapTiles _tile;
 
     public void SetTileWalkable(bool walkable_tile)
     {
@@ -31,7 +32,7 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
 
     public Building BuildingInCell { get; set; }
 
-    public MapTiles Tile { get; set; }
+    public MapTiles Tile { get => _tile; set { _tile = value; } }
 
     public int HeapIndex { get; set; }
 

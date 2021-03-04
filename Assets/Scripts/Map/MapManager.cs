@@ -18,6 +18,7 @@ public class MapManager : GridManager<MapCell>
         base.InitGrid();
         if (grid == null || _generate_map_on_start)
             HandleMapGeneration();
+        ReadjustWalkability();
     }
 
     public void HandleMapGeneration()
@@ -40,6 +41,17 @@ public class MapManager : GridManager<MapCell>
                 grid[x, y].SetTileWalkable(!collidable_tiles[(int)grid[x, y].Tile]);
             }
         }
+    }
+
+    private void ReadjustWalkability()
+    {
+        for (int x = 0; x < grid_size.x; x++)
+        {
+            for (int y = 0; y < grid_size.y; y++)
+            {
+                grid[x, y].SetTileWalkable(!collidable_tiles[Array.IndexOf(tiles_by_name, _tilemap.GetTile(new Vector3Int(x - grid_size.x / 2, y - grid_size.y / 2, 0)))]);
+            }
+        } 
     }
 
     private void GenerateMap()
