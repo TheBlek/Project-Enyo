@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[System.Serializable]
 public class MapCell : IGridItem, IHeapItem<MapCell>
 {   
     public int gCost;

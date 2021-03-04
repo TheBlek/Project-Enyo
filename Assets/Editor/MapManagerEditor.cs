@@ -5,7 +5,6 @@ using System;
 [CustomEditor (typeof(MapManager))]
 public class MapManagerEditor : Editor
 {
-    private float spacing = 50f;
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -20,7 +19,7 @@ public class MapManagerEditor : Editor
 
         if (GUILayout.Button("Generate Map"))
         {
-            mapMan.InitGrid();
+            mapMan.HandleMapGeneration();
         }
     }
 
@@ -56,10 +55,8 @@ public class MapManagerEditor : Editor
         int length = Enum.GetNames(typeof(MapTiles)).Length;
         for (int i = 0; i < length; i++)
         {
-            GUILayout.BeginHorizontal();
             GUILayout.Label(((MapTiles)i).ToString());
             dict[i] = EditorGUILayout.ObjectField(dict[i], typeof(RuleTile), true, GUILayout.ExpandWidth(false)) as RuleTile;
-            GUILayout.EndHorizontal();
         }
         return dict;
     }
