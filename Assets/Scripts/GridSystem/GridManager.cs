@@ -9,6 +9,7 @@ public interface IGridItem
 
 }
 
+[Serializable]
 public class GridManager<T> : MonoBehaviour where T : IGridItem
 {
     public bool ShowGizmos;

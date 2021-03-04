@@ -80,7 +80,10 @@ public class Builder : MonoBehaviour
 
         Vector3 position = preview_obj.transform.position;
         if (!gameManager.GetMapManager().IsRectBuildable(position, current_building.GetSize()))
+        {
+            Debug.Log("Rect is not buildable");
             return;
+        }
 
         if (!current_building.IsPositionAcceptable(gameManager, position))
             return;

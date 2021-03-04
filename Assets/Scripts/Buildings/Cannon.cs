@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
+[RequireComponent(typeof(Animator))]
 public class Cannon : AttackBuilding
 {
     [SerializeField] private Animator _blow_animator;

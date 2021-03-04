@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
 
@@ -24,10 +23,7 @@ public class MapManager : GridManager<MapCell>
     public void HandleMapGeneration()
     {
         if (grid == null)
-        {
             InitGrid();
-        }
-        //InitGrid();
         GenerateMap();
         SetUpLayout();
     }

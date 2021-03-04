@@ -7,7 +7,7 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
     public int hCost;
     public MapCell parent;
 
-    private bool _walkable_tile;
+    public bool _walkable_tile = true;
 
     public void SetTileWalkable(bool walkable_tile)
     {

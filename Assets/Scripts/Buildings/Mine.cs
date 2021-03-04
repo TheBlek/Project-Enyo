@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class Mine : Building
 {
     [SerializeField] private int money_per_mineral_tile;

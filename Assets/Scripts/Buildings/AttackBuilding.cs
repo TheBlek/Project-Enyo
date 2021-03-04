@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+[RequireComponent(typeof(Shooter))]
 public abstract class AttackBuilding : Building
 {
     [SerializeField] protected float _max_fire_radius;
