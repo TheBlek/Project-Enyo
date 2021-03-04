@@ -5,6 +5,15 @@ public abstract class Building : MonoBehaviour
     [SerializeField] protected Buildings type;
     [SerializeField] protected Vector2 size;
     [SerializeField] protected int cost;
+    [SerializeField] protected GameObject _explosion_prefab;
+
+    protected void Start()
+    {
+        var exp = Instantiate(_explosion_prefab, transform.position, Quaternion.identity);
+        exp.TryGetComponent(out Explosion explosion);
+        explosion.SetRadius(size.x);
+        explosion.SetTarget(GetComponent<Damagable>());
+    }
 
     public virtual void SelfUpdate()
     {

@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField] private float speed = 400;
-    [SerializeField] private float damage = 50;
-    [SerializeField] private float life_time = 1;
+    [SerializeField] protected float _speed = 400;
+    [SerializeField] protected float damage = 50;
+    [SerializeField] protected float life_time = 1;
 
-    private Animator animator;
+    public Transform _target;
+
+    protected Animator _animator;
     private bool is_in_animation;
 
     public bool is_enemy;
@@ -16,8 +18,8 @@ public class Bullet : MonoBehaviour
     private void Start()
     {
         Destroy(gameObject, life_time);
-        transform.GetComponent<Rigidbody2D>().AddForce(transform.right * speed);
-        animator = transform.GetComponent<Animator>();
+        transform.GetComponent<Rigidbody2D>().AddForce(transform.right * _speed);
+        _animator = transform.GetComponent<Animator>();
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -43,7 +45,7 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    private void HandleBlowAnimation()
+    protected void HandleBlowAnimation()
     {
         var rb = transform.GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezePosition;
@@ -52,6 +54,11 @@ public class Bullet : MonoBehaviour
         
         is_in_animation = true;
         
-        animator.Play("Blow");
+        _animator.Play("Blow");
+    }
+
+    public void SetSpeed(float speed)
+    {
+        _speed = speed;
     }
 }
