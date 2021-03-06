@@ -49,6 +49,8 @@ MonoBehaviour:
   type: 4
   size: {x: 1, y: 1}
   cost: 100
+  _explosion_prefab: {fileID: 5046511379225573602, guid: 8ed8729fad97c004687933f8fa01ba20,
+    type: 3}
   sprites:
   - {fileID: -8922096173560175869, guid: e7a8b5a05fa91cf43a9ccfc645aa0f62, type: 3}
   - {fileID: -6647666849061705566, guid: e7a8b5a05fa91cf43a9ccfc645aa0f62, type: 3}
@@ -59,7 +61,6 @@ MonoBehaviour:
   - {fileID: -2804168211388649119, guid: e7a8b5a05fa91cf43a9ccfc645aa0f62, type: 3}
   - {fileID: -2861187128415103460, guid: e7a8b5a05fa91cf43a9ccfc645aa0f62, type: 3}
   - {fileID: 530825529007904153, guid: e7a8b5a05fa91cf43a9ccfc645aa0f62, type: 3}
-  blow_animator: {fileID: 0}
   player_mask:
     serializedVersion: 2
     m_Bits: 256

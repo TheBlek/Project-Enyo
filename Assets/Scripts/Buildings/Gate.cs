@@ -9,8 +9,9 @@ public class Gate : Wall
 
     private BoxCollider2D box_collider;
 
-    private void Start()
+    private new void Start()
     {
+        base.Start();
         box_collider = transform.GetComponent<BoxCollider2D>();
     }
 

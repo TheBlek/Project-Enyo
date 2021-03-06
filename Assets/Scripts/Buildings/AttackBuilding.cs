@@ -8,6 +8,7 @@ public abstract class AttackBuilding : Building
     [SerializeField] protected float _min_fire_radius;
     [SerializeField] protected float _turn_speed;
     [SerializeField] protected GameObject _barrel;
+    [SerializeField] protected float _barrel_angle_offset;
     [SerializeField] protected bool _check_for_obstacles;
 
     protected Enemy _target;
@@ -16,8 +17,9 @@ public abstract class AttackBuilding : Building
     protected Shooter _shooter;
     protected Transform _barrel_transform;
 
-    protected void Start()
+    protected new void Start()
     {
+        base.Start();
         _barrel_transform = _barrel.transform;
         _shooter = GetComponent<Shooter>();
     }
@@ -70,7 +72,7 @@ public abstract class AttackBuilding : Building
         if (!_ready_to_shoot || _target == null || (_shooter.IsThereObstacleBeforeTarget(_target.transform.position) && _check_for_obstacles))
             return;
 
-        _shooter.Shoot();
+        _shooter.Shoot(_target.transform);
     }
 
     protected void LookAtTarget()
@@ -82,7 +84,7 @@ public abstract class AttackBuilding : Building
         }
 
         Vector2 relative_pos = _target.transform.position - transform.position;
-        float target_angle = Mathf.Atan2(relative_pos.y, relative_pos.x) * Mathf.Rad2Deg + 180;
+        float target_angle = Mathf.Atan2(relative_pos.y, relative_pos.x) * Mathf.Rad2Deg + _barrel_angle_offset;
 
         float angle_diff = target_angle - _barrel_transform.eulerAngles.z;
 

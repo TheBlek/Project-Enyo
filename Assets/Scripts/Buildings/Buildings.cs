@@ -7,7 +7,7 @@
     Gate,
     Cannon,
     Sniper,
-    building7,
+    Artillery,
     building8,
     building9
 }
