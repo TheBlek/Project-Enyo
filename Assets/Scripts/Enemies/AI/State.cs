@@ -20,7 +20,7 @@ public class State
 
     public Action OnStateChange;
 
-    private MapCell[] _last_minerals;
+    private MapCell[,] _distance_source;
 
     public State(MapManager mapManager)
     {
@@ -71,7 +71,6 @@ public class State
             {
                 map[neighbour.GridPosition.x, neighbour.GridPosition.y] = 1f;
             }
-
         }
 
         return map;
@@ -79,21 +78,23 @@ public class State
 
     private float[,] GetMineralMap()
     {
+        if (_distance_source == null)
+            _distance_source = new MapCell[_map_size.x, _map_size.y];
 
-        //if (_maps.TryGetValue(MapTypes.Mineral, out float[,] map)/* && minerals == _last_minerals*/)
-        //        return map;
+        if (!_maps.TryGetValue(MapTypes.Mineral, out float[,] map))
+            map = new float[_map_size.x, _map_size.y];
 
-        float [,] map = new float[_map_size.x, _map_size.y];
         MapCell[] minerals = GetAllTargetCells((x) => x.Tile == MapTiles.Minerals && x.BuildingInCell == null);
 
         for (int x = 0; x < _map_size.x; x++)
         {
             for (int y = 0; y < _map_size.y; y++)
             {
+                if (_distance_source[x, y] != null && Array.Exists(minerals, (element) => element.GridPosition == _distance_source[x, y].GridPosition))
+                    continue;
                 map[x, y] = EvaluateCellByDistanceToTarget(new Vector2Int(x, y), minerals);
             }
         }
-        _last_minerals = minerals;
 
         return map;
     }
@@ -119,7 +120,12 @@ public class State
         float distance = Mathf.Infinity;
         foreach (MapCell mineral in target_cells)
         {
-            distance = Mathf.Min(distance, Vector2.Distance(cell_pos, mineral.GridPosition));
+            float dist = Vector2.Distance(cell_pos, mineral.GridPosition);
+            if (dist < distance)
+            {
+                distance = dist;
+                _distance_source[cell_pos.x, cell_pos.y] = mineral;
+            }
         }
         return EvaluateByDistance(distance);
     }

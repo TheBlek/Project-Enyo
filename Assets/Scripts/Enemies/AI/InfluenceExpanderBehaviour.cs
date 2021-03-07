@@ -16,7 +16,7 @@ public class InfluenceExpanderBehaviour : Behaviour
         {
             for (int y = 0; y < map_size.y; y++)
             {
-                bool better_option = (result == default || mineral_map[result.x, result.y] > mineral_map[x, y]) && mineral_map[x, y] > 0;
+                bool better_option = (result == default || mineral_map[result.x, result.y] > mineral_map[x, y]);
                 if (influence_map[x, y] == 1f && buildability_map[x, y] == 1f && better_option)
                     result = new Vector2Int(x, y);
             }
