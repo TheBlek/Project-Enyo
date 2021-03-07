@@ -6,7 +6,7 @@ public enum MapTypes
 {
     Mineral,
     Influence,
-    PlayerBuildings
+    Buildability
 }
 
 public class State
@@ -19,6 +19,8 @@ public class State
     private Dictionary<MapTypes, float[,]> _maps;
 
     public Action OnStateChange;
+
+    private MapCell[] _last_minerals;
 
     public State(MapManager mapManager)
     {
@@ -37,18 +39,18 @@ public class State
             {
                 case MapTypes.Mineral: _maps[type] = GetMineralMap(); break;
                 case MapTypes.Influence: _maps[type] = GetInfluenceMap(); break;
-                case MapTypes.PlayerBuildings: _maps[type] = GetPlayerBuildings(); break;
+                case MapTypes.Buildability: _maps[type] = GetBuildabilityMap(); break;
                 default: break;
             }
         }
         OnStateChange?.Invoke();
     }
 
-    private float[,] GetPlayerBuildings()
+    private float[,] GetBuildabilityMap()
     {
         float[,] map = new float[_map_size.x, _map_size.y];
 
-        MapCell[] buildings = GetAllTargetCells((x) => x.BuildingInCell != null);
+        MapCell[] buildings = GetAllTargetCells((x) => x.Buildable());
 
         foreach (MapCell building in buildings)
         {
@@ -78,20 +80,20 @@ public class State
     private float[,] GetMineralMap()
     {
 
-        if (_maps.TryGetValue(MapTypes.Mineral, out float[,] map)) 
-            return map;
+        //if (_maps.TryGetValue(MapTypes.Mineral, out float[,] map)/* && minerals == _last_minerals*/)
+        //        return map;
 
-        map = new float[_map_size.x, _map_size.y];
-
-        MapCell[] minerals = GetAllTargetCells((x) => x.Tile == MapTiles.Minerals);
+        float [,] map = new float[_map_size.x, _map_size.y];
+        MapCell[] minerals = GetAllTargetCells((x) => x.Tile == MapTiles.Minerals && x.BuildingInCell == null);
 
         for (int x = 0; x < _map_size.x; x++)
         {
             for (int y = 0; y < _map_size.y; y++)
             {
-                map[x, y] = EvaluateCellByDistanceToTarget(_mapManager.GetCellFromGridPosition(new Vector2Int(x, y)), minerals);
+                map[x, y] = EvaluateCellByDistanceToTarget(new Vector2Int(x, y), minerals);
             }
         }
+        _last_minerals = minerals;
 
         return map;
     }
@@ -112,12 +114,12 @@ public class State
         return cells.ToArray();
     }
 
-    private float EvaluateCellByDistanceToTarget(MapCell cell, MapCell[] target_cells)
+    private float EvaluateCellByDistanceToTarget(Vector2Int cell_pos, MapCell[] target_cells)
     {
         float distance = Mathf.Infinity;
         foreach (MapCell mineral in target_cells)
         {
-            distance = Mathf.Min(distance, _mapManager.GetDistance(cell, mineral));
+            distance = Mathf.Min(distance, Vector2.Distance(cell_pos, mineral.GridPosition));
         }
         return EvaluateByDistance(distance);
     }
@@ -135,7 +137,7 @@ public class State
 
     public bool IsRectBuildable(Vector2Int upper_left_corner, Vector2Int size)
     {
-        return !RectCheck(upper_left_corner, size, MapTypes.PlayerBuildings, (x) => x == 1f);
+        return !RectCheck(upper_left_corner, size, MapTypes.Buildability, (x) => x != 1f);
     }
 
     public bool IsMineralsInRect(Vector2Int upper_left_corner, Vector2Int size)
@@ -163,6 +165,11 @@ public class State
     private bool AbnormalGridPosition(Vector2Int pos)
     {
         return pos.x < 0 || pos.x >= _map_size.x || pos.y < 0 || pos.y >= _map_size.y;
+    }
+
+    public Vector2Int GetMapSize()
+    {
+        return _map_size;
     }
 
 }
