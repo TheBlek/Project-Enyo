@@ -39,9 +39,7 @@ public class Pathfinder
             foreach (MapCell neighbour in mapManager.GetNeighbours(current))
             {
                 if ((!neighbour.IsWalkable() && neighbour != target) || closedSet.Contains(neighbour))
-                {
                     continue;
-                }
 
                 int newDistanceToNeighbour = current.gCost + GetDistance(current, neighbour);
                 if (newDistanceToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))

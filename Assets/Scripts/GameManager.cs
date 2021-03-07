@@ -14,13 +14,22 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        player.GetBuilder().onBuild += BuildingInsertion;
+        SetUpBuilders();
         buildings = new List<Building>();
 
         mapManager = GetComponent<MapManager>();
         pathRequestManager = GetComponent<PathRequestManager>();
 
         _random = new System.Random();
+    }
+
+    private void SetUpBuilders()
+    {
+        Builder[] builderers = FindObjectsOfType<Builder>();
+        foreach (Builder builder in builderers)
+        {
+            builder.onBuild += BuildingInsertion;
+        }
     }
 
     public void BuildingInsertion(Building building)

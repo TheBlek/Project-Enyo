@@ -16,15 +16,15 @@ public class MapManager : GridManager<MapCell>
     protected override void InitGrid()
     {
         base.InitGrid();
-        if (grid == null || _generate_map_on_start)
+        if (_generate_map_on_start)
             HandleMapGeneration();
         ReadjustWalkability();
     }
 
     public void HandleMapGeneration()
     {
-        if (grid == null)
-            InitGrid();
+        if (grid == null || grid.GetLength(0) != grid_size.x || grid.GetLength(1) != grid_size.y)
+            base.InitGrid();
         GenerateMap();
         SetUpLayout();
     }
@@ -49,7 +49,9 @@ public class MapManager : GridManager<MapCell>
         {
             for (int y = 0; y < grid_size.y; y++)
             {
-                grid[x, y].SetTileWalkable(!collidable_tiles[Array.IndexOf(tiles_by_name, _tilemap.GetTile(new Vector3Int(x - grid_size.x / 2, y - grid_size.y / 2, 0)))]);
+                MapTiles tile = (MapTiles)Array.IndexOf(tiles_by_name, _tilemap.GetTile(new Vector3Int(x - grid_size.x / 2, y - grid_size.y / 2, 0)));
+                grid[x, y].Tile = tile;
+                grid[x, y].SetTileWalkable(!collidable_tiles[(int)tile]);
             }
         } 
     }
@@ -83,6 +85,7 @@ public class MapManager : GridManager<MapCell>
         MapCell[] cells = GetCellsInRect(building.transform.position, building.GetSize());
         foreach (MapCell cell in cells)
             cell.BuildingInCell = building;
+        OnGridChange?.Invoke();
     }
 
     public bool IsCellBuildable(Vector2Int grid_position)

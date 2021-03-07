@@ -12,19 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97b524b73d7adf044bd434a262eb9d11, type: 3}
   m_Name: MapGenerator
   m_EditorClassIdentifier: 
-  start_frequency: 5.37
+  start_frequency: 9.95
   lacunarity: 1.05
   persistance: 0.05
   octaves_count: 7
   _thresholds:
   - 0
-  - 0.22
+  - 0.214
   - 0.423
-  - 0.681
-  - 0.933
-  test_thresholds:
-  - 0.36
-  - 0.39
-  - 0.58
-  - 0.6
-  - 0.86
+  - 0.645
+  - 0.801

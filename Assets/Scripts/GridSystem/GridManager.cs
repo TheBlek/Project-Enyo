@@ -19,6 +19,8 @@ public class GridManager<T> : MonoBehaviour where T : IGridItem
     [SerializeField] protected float cell_size = 0.5f;
 
     [SerializeField] protected T[,] grid;
+
+    public Action OnGridChange;
     private void Awake()
     {
         InitGrid();
@@ -61,10 +63,27 @@ public class GridManager<T> : MonoBehaviour where T : IGridItem
 
     public T GetCellFromGlobalPosition(Vector2 global)
     {
-        Vector2Int temp = GetGridPositionFromGlobal(global);
-        if (AbnormalGridPosition(temp))
-            Debug.Log("Position seems to be abnormal " + temp.x + " " + temp.y);
-        return grid[temp.x, temp.y];
+        return GetCellFromGridPosition(GetGridPositionFromGlobal(global));
+    }
+
+    public T GetCellFromGridPosition(Vector2Int grid_pos)
+    {
+        if (AbnormalGridPosition(grid_pos))
+        {
+            Debug.LogError("Position seems to be abnormal " + grid_pos.x + " " + grid_pos.y);
+            return default;
+        }
+        return grid[grid_pos.x, grid_pos.y];
+    }
+
+    public Vector2 GetGlobalPositionFromGrid(Vector2Int grid_pos)
+    {
+        return grid_origin + (Vector2)grid_pos * cell_size + Vector2.one * cell_size / 2;
+    }
+
+    public Vector2 GetGlobalPositionFromGrid(int x, int y)
+    {
+        return GetGlobalPositionFromGrid(new Vector2Int(x, y));
     }
 
     public Vector3 GetGlobalPosition(T cell)
@@ -94,15 +113,19 @@ public class GridManager<T> : MonoBehaviour where T : IGridItem
 
     public T[] GetNeighbours(T cell) // This returns neighbours with corners
     {
-        List<T> neighbours = new List<T>();
-        Vector2Int pos = cell.GridPosition;
+        return GetNeighboursInRadius(cell.GridPosition, 1);
+    }
 
-        for (int x = -1; x <= 1; x++)
+    public T[] GetNeighboursInRadius(Vector2Int center, int radius)
+    {
+        List<T> neighbours = new List<T>();
+
+        for (int x = -radius; x <= radius; x++)
         {
-            for (int y = -1; y <= 1; y++)
+            for (int y = -radius; y <= radius; y++)
             {
-                if (!AbnormalGridPosition(pos + new Vector2Int(x, y)))
-                    neighbours.Add(grid[pos.x + x, pos.y + y]);
+                if (!AbnormalGridPosition(center + new Vector2Int(x, y)))
+                    neighbours.Add(grid[center.x + x, center.y + y]);
             }
         }
         return neighbours.ToArray();
@@ -112,11 +135,23 @@ public class GridManager<T> : MonoBehaviour where T : IGridItem
     {
         grid[pos.x, pos.y] = new_cell;
         new_cell.GridPosition = pos;
+        OnGridChange?.Invoke();
     }
 
     public void SetCellByGlobalPosition(Vector2 global_pos, T new_cell)
     {
         SetCellByGridPosition(GetGridPositionFromGlobal(global_pos), new_cell);
+    }
+
+    public int GetDistance(MapCell start, MapCell end)
+    {
+        int distX = Mathf.Abs(start.GridPosition.x - end.GridPosition.x);
+        int distY = Mathf.Abs(start.GridPosition.y - end.GridPosition.y);
+
+
+        if (distX > distY)
+            return 14 * distY + 10 * (distX - distY);
+        return 14 * distX + 10 * (distY - distX);
     }
 
     public bool AbnormalGridPosition(Vector2Int position)
