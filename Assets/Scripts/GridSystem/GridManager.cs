@@ -131,6 +131,23 @@ public class GridManager<T> : MonoBehaviour where T : IGridItem
         return neighbours.ToArray();
     }
 
+    public T[] GetNeighboursInCircle(Vector2Int center, int radius)
+    {
+        List<T> neighbours = new List<T>();
+
+        for (int x = -radius; x <= radius; x++)
+        {
+            for (int y = -radius; y <= radius; y++)
+            {
+                if (x != -radius && y != -radius && x != radius && y != radius)
+                    continue;
+                if (!AbnormalGridPosition(center + new Vector2Int(x, y)))
+                    neighbours.Add(grid[center.x + x, center.y + y]);
+            }
+        }
+        return neighbours.ToArray();
+    }
+
     public void SetCellByGridPosition(Vector2Int pos, T new_cell)
     {
         grid[pos.x, pos.y] = new_cell;

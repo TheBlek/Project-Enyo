@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Diagnostics;
+using System.Linq;
 
 public enum MapTypes
 {
@@ -20,7 +22,9 @@ public class State
 
     public Action OnStateChange;
 
-    private MapCell[,] _distance_source;
+    private Vector2Int[,] _distance_source;
+    private MapCell[] _old_minerals;
+    private List<Vector2Int>[,] _cells_for_concrete_mineral;
 
     public State(MapManager mapManager)
     {
@@ -28,6 +32,9 @@ public class State
         _mapManager.OnGridChange += UpdateMaps;
         _map_size = _mapManager.GetMapSize();
         _maps = new Dictionary<MapTypes, float[,]>();
+        _max_distance = Mathf.Max(_map_size.x, _map_size.y);
+
+        _cells_for_concrete_mineral = new List<Vector2Int>[_map_size.x, _map_size.y];
         UpdateMaps();
     }
 
@@ -78,21 +85,158 @@ public class State
 
     private float[,] GetMineralMap()
     {
+        Stopwatch sw = Stopwatch.StartNew();
         if (_distance_source == null)
-            _distance_source = new MapCell[_map_size.x, _map_size.y];
-
-        if (!_maps.TryGetValue(MapTypes.Mineral, out float[,] map))
-            map = new float[_map_size.x, _map_size.y];
+            _distance_source = new Vector2Int[_map_size.x, _map_size.y];
 
         MapCell[] minerals = GetAllTargetCells((x) => x.Tile == MapTiles.Minerals && x.BuildingInCell == null);
+
+        if (!_maps.TryGetValue(MapTypes.Mineral, out float[,] map))
+        {
+            map = SetUpMineralMap(minerals);
+            sw.Stop();
+            UnityEngine.Debug.Log("Building mineral map took " + sw.ElapsedMilliseconds + " ms");
+
+            return map;
+        }
+
+        if (minerals.Length == _old_minerals?.Length) return map;
+
+        map = UpdateMineralMapCached(Array.ConvertAll(minerals, (el) => (Vector2Int)el));
+
+        _old_minerals = minerals;
+
+        sw.Stop();
+        UnityEngine.Debug.Log("Updating mineral map took " + sw.ElapsedMilliseconds + " ms");
+
+        return map;
+
+    }
+    private float[,] SetUpMineralMap(MapCell[] minerals)
+    {
+        float[,] map = new float[_map_size.x, _map_size.y];
+        for (int x = 0; x < _map_size.x; x++)
+        {
+            for (int y = 0; y < _map_size.y; y++)
+            {
+                map[x, y] = 1f;
+            }
+        }
+
+        foreach (MapCell mineral in minerals)
+        {
+            List<Vector2Int> temp = new List<Vector2Int>();
+            int max_radius = Mathf.Max(mineral.GridPosition.x, mineral.GridPosition.y);
+            int tmp = Mathf.Max(_map_size.x - mineral.GridPosition.x, _map_size.y - mineral.GridPosition.y);
+            max_radius = Mathf.Max(max_radius, tmp);
+            int i = 0;
+            bool useful = false;
+            while (i < max_radius && !useful)
+            {
+                MapCell[] cells = _mapManager.GetNeighboursInCircle(mineral.GridPosition, i);
+                float new_value = i / _max_distance;
+                useful = true;
+                foreach (Vector2Int cell in cells)
+                {
+                    if (map[cell.x, cell.y] > new_value)
+                    {
+                        map[cell.x, cell.y] = new_value;
+                        _distance_source[cell.x, cell.y] = mineral.GridPosition;
+                        useful = false;
+                        temp.Add(new Vector2Int(cell.x, cell.y));
+                    }
+                }
+                i++;
+            }
+            _cells_for_concrete_mineral[mineral.GridPosition.x, mineral.GridPosition.y] = temp;
+        }
+
+        _old_minerals = minerals;
+        return map;
+    }
+
+    private float[,] UpdateMineralMapCached(Vector2Int[] minerals)
+    {
+        float[,] map = _maps[MapTypes.Mineral];
+
+
+        foreach (Vector2Int mineral in _old_minerals)
+        {
+            if (Array.Exists(minerals, (element) => element == mineral))
+                continue;
+
+            foreach (Vector2Int cell in _cells_for_concrete_mineral[mineral.x, mineral.y].ToArray())
+            {
+                int i = Mathf.RoundToInt(map[cell.x, cell.y] * _max_distance);
+                bool useful = true;
+                while (i < _max_distance && useful)
+                {
+                    MapCell[] neighbours = _mapManager.GetNeighboursInCircle(cell, i);
+                    float min_value = Mathf.Infinity;
+                    Vector2Int new_mineral = default;
+                    foreach (Vector2Int neighbour in neighbours)
+                    {
+                        if (min_value > map[neighbour.x, neighbour.y] && Array.Exists(minerals, (el) => el == _distance_source[neighbour.x, neighbour.y]))
+                        {
+                            min_value = map[neighbour.x, neighbour.y];
+                            new_mineral = _distance_source[neighbour.x, neighbour.y];
+                        }
+                    }
+                    if (min_value != Mathf.Infinity)
+                    {
+                        map[cell.x, cell.y] = min_value + i / _max_distance;
+                        _distance_source[cell.x, cell.y] = new_mineral;
+                        _cells_for_concrete_mineral[new_mineral.x, new_mineral.y].Add(cell);
+                        useful = false;
+                        break;
+                    }
+
+                    i++;
+                }
+            }
+
+            _cells_for_concrete_mineral[mineral.x, mineral.y].Clear();
+        }
+
+        return map;
+    }
+
+    private float[,] UpdateMineralMapNonCached(Vector2Int[] minerals)
+    {
+        float[,] map = _maps[MapTypes.Mineral];
 
         for (int x = 0; x < _map_size.x; x++)
         {
             for (int y = 0; y < _map_size.y; y++)
             {
-                if (_distance_source[x, y] != null && Array.Exists(minerals, (element) => element.GridPosition == _distance_source[x, y].GridPosition))
+                if (Array.Exists(minerals, (el) => el == _distance_source[x, y]))
                     continue;
-                map[x, y] = EvaluateCellByDistanceToTarget(new Vector2Int(x, y), minerals);
+
+                int i = Mathf.RoundToInt(map[x, y] * _max_distance);
+                bool useful = true;
+                while (i < _max_distance && useful)
+                {
+                    MapCell[] neighbours = _mapManager.GetNeighboursInCircle(new Vector2Int(x, y), i);
+                    float min_value = Mathf.Infinity;
+                    Vector2Int supposed_mineral = default;
+                    foreach (Vector2Int neighbour in neighbours)
+                    {
+                        if (min_value > map[neighbour.x, neighbour.y] && Array.Exists(minerals, (el) => el == _distance_source[neighbour.x, neighbour.y]))
+                        {
+                            min_value = map[neighbour.x, neighbour.y];
+                            supposed_mineral = _distance_source[neighbour.x, neighbour.y];
+                        }
+                    }
+                    if (min_value != Mathf.Infinity)
+                    {
+                        map[x, y] = min_value + i / _max_distance;
+                        _distance_source[x, y] = supposed_mineral;
+                        useful = false;
+                        break;
+                    }
+
+                    i++;
+                }
             }
         }
 
@@ -124,7 +268,7 @@ public class State
             if (dist < distance)
             {
                 distance = dist;
-                _distance_source[cell_pos.x, cell_pos.y] = mineral;
+                _distance_source[cell_pos.x, cell_pos.y] = mineral.GridPosition;
             }
         }
         return EvaluateByDistance(distance);

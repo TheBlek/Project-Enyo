@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,14 +20,19 @@ class Superviser : MonoBehaviour
     [SerializeField] bool _show_gizmos;
     [SerializeField] MapTypes _current_type;
     [SerializeField] private Behaviour[] _behaviours;
+    [SerializeField] private float _turn_delay;
     private State _state;
 
     private Builder _builder;
 
     private Behaviour _behaviour_to_follow;
 
+    private bool _processing_instruction;
+
     private void Start()
     {
+        Array.Sort(_behaviours, (x, y) => -x.Value.CompareTo(y.Value));
+
         random = new System.Random();
 
         _gameManager = FindObjectOfType<GameManager>();
@@ -38,6 +44,7 @@ class Superviser : MonoBehaviour
         _state.OnStateChange += ReEvaluateBestBehaviour;
 
         _builder = GetComponent<Builder>();
+
     }
 
     private void InitEnemies()
@@ -52,7 +59,7 @@ class Superviser : MonoBehaviour
 
     public void SelfUpdate()
     {
-        Vector3 player_pos = _gameManager.GetPlayerPosition();
+        /*Vector3 player_pos = _gameManager.GetPlayerPosition();
         foreach (Enemy enemy in enemies)
         {
             if (enemy == null)
@@ -76,7 +83,7 @@ class Superviser : MonoBehaviour
         }
         foreach (Enemy enemy in dead_enemies)
             HandleVoidEnemy(enemy);
-        dead_enemies.Clear();
+        dead_enemies.Clear();*/
 
         if (_behaviour_to_follow == null)
             return;
@@ -98,25 +105,24 @@ class Superviser : MonoBehaviour
 
     private Behaviour PickBestAvailableBehaviour()
     {
-        Behaviour best_behaviour = null;
-
         foreach (Behaviour behaviour in _behaviours)
         {
             if (behaviour.Trigger(_state))
             {
-                if ((best_behaviour != null && best_behaviour.Value < behaviour.Value) || best_behaviour == null)
-                    best_behaviour = behaviour;
+                return behaviour;
             }
         }
-        return best_behaviour;
+        return null;
     }
 
     private void ProcessInstruction(Instruction instruction)
     {
+        if (_processing_instruction)
+            return;
         switch (instruction.Type)
         {
             case InstructionTypes.Build:
-                Build(instruction.Parameters);
+                StartCoroutine(Build(instruction.Parameters));
                 break;
 
             default:
@@ -124,11 +130,15 @@ class Superviser : MonoBehaviour
         }
     }
 
-    private void Build(object[] parameters)
+    private IEnumerator Build(object[] parameters)
     {
+        _processing_instruction = true;
+        yield return new WaitForSeconds(_turn_delay);
         _builder.SetBuildingType((Buildings)parameters[1]);
 
         _builder.Build(_gameManager, _builder.StickPositionToGrid(_mapManager.GetGlobalPositionFromGrid((Vector2Int)parameters[0]), _mapManager.GetCellSize()));
+        _processing_instruction = false;
+        yield return null;
     }
 
     private void HandleVoidEnemy(Enemy enemy)

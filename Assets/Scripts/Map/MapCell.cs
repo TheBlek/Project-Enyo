@@ -45,4 +45,6 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
             compare = hCost.CompareTo(cellToCompare.hCost);
         return -compare;
     }
+
+    public static implicit operator Vector2Int(MapCell target) => target.GridPosition;
 }
