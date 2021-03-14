@@ -27,7 +27,7 @@ class Superviser : MonoBehaviour
 
     private Behaviour _behaviour_to_follow;
 
-    private bool _processing_instruction;
+    private bool _ready_to_process_instruction = true;
 
     private void Start()
     {
@@ -117,28 +117,32 @@ class Superviser : MonoBehaviour
 
     private void ProcessInstruction(Instruction instruction)
     {
-        if (_processing_instruction)
+        if (!_ready_to_process_instruction)
             return;
+        _ready_to_process_instruction = false;
         switch (instruction.Type)
         {
             case InstructionTypes.Build:
-                StartCoroutine(Build(instruction.Parameters));
+                Build(instruction.Parameters);
                 break;
 
             default:
                 break;
         }
+        Invoke(nameof(ResetReadyness), _turn_delay);
     }
 
-    private IEnumerator Build(object[] parameters)
+    private void ResetReadyness()
     {
-        _processing_instruction = true;
-        yield return new WaitForSeconds(_turn_delay);
+        _ready_to_process_instruction = true;
+    }
+
+    private void Build(object[] parameters)
+    {
         _builder.SetBuildingType((Buildings)parameters[1]);
 
-        _builder.Build(_gameManager, _builder.StickPositionToGrid(_mapManager.GetGlobalPositionFromGrid((Vector2Int)parameters[0]), _mapManager.GetCellSize()));
-        _processing_instruction = false;
-        yield return null;
+        Vector2 global_pos = _mapManager.GetGlobalPositionFromGrid((Vector2Int)parameters[0]);
+        _builder.Build(_gameManager, _builder.StickPositionToGrid(global_pos, _mapManager.GetCellSize()));
     }
 
     private void HandleVoidEnemy(Enemy enemy)

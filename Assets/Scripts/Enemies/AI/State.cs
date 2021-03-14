@@ -2,13 +2,48 @@
 using UnityEngine;
 using System;
 using System.Diagnostics;
-using System.Linq;
+using Unity.Jobs;
+using Unity.Collections;
+using Unity.Burst;
+using UnityEditor;
+
 
 public enum MapTypes
 {
     Mineral,
     Influence,
     Buildability
+}
+
+[BurstCompile]
+public struct UpdateMIneralMapOldWayJob : IJobParallelFor
+{
+    public float _max_distance;
+    public int _map_width;
+    [ReadOnly]
+    public NativeArray<Vector2Int> _minerals;
+
+    public NativeArray<float> _map;
+    public NativeArray<Vector2Int> _distance_source;
+
+    public void Execute(int index)
+    {
+        int x = index / _map_width;
+        int y = index % _map_width;
+        float distance = Mathf.Infinity;
+        Vector2Int source = default;
+        for (int i = 0; i < _minerals.Length; i++)
+        {
+            float dist = Vector2.Distance(new Vector2Int(x, y), _minerals[i]);
+            if (dist < distance)
+            {
+                distance = dist;
+                source = _minerals[i];
+            }
+        }
+        _map[index] = distance / _max_distance;
+        _distance_source[index] = source;
+    }
 }
 
 public class State
@@ -102,7 +137,7 @@ public class State
 
         if (minerals.Length == _old_minerals?.Length) return map;
 
-        map = UpdateMineralMapCached(Array.ConvertAll(minerals, (el) => (Vector2Int)el));
+        map = UpdateMineralMapByJobOldWay(Array.ConvertAll(minerals, (el) => (Vector2Int)el));
 
         _old_minerals = minerals;
 
@@ -158,7 +193,6 @@ public class State
     private float[,] UpdateMineralMapCached(Vector2Int[] minerals)
     {
         float[,] map = _maps[MapTypes.Mineral];
-
 
         foreach (Vector2Int mineral in _old_minerals)
         {
@@ -243,6 +277,175 @@ public class State
         return map;
     }
 
+    private float[,] UpdateMineralMapByJob(Vector2Int[] minerals)
+    {
+        float[,] map = _maps[MapTypes.Mineral];
+
+        NativeArray<float> map_array = new NativeArray<float>(_map_size.x * _map_size.y, Allocator.TempJob);
+        NativeArray<Vector2Int> distance_source = new NativeArray<Vector2Int>(_map_size.x * _map_size.y, Allocator.TempJob);
+        NativeArray<Vector2Int> minerals_array = new NativeArray<Vector2Int>(minerals.Length, Allocator.TempJob);
+
+        for (int x = 0; x < _map_size.x; x++)
+        {
+            for (int y = 0; y < _map_size.y; y++)
+            {
+                map_array[x * _map_size.x + y] = map[x, y];
+                distance_source[x * _map_size.x + y] = _distance_source[x, y];
+            }
+        }
+        for (int i = 0; i < minerals.Length; i++)
+        {
+            minerals_array[i] = minerals[i];
+        }
+
+        UpdateMineralMapJob job = new UpdateMineralMapJob
+        {
+            _giver = new NeighbourGiver { _map_size = _map_size },
+            _map_width = _map_size.x,
+            _minerals = minerals_array,
+            _max_distance = _max_distance,
+            _map = map_array,
+            _distance_source = distance_source
+        };
+        JobHandle handle = job.Schedule(map_array.Length, 1);
+        handle.Complete();
+
+        for (int x = 0; x < _map_size.x; x++)
+        {
+            for (int y = 0; y < _map_size.y; y++)
+            {
+                map[x, y] = map_array[x * _map_size.x + y];
+                _distance_source[x, y] = distance_source[x * _map_size.x + y];
+            }
+        }
+        map_array.Dispose();
+        distance_source.Dispose();
+        minerals_array.Dispose();
+
+        return map;
+    }
+
+    private float[,] UpdateMineralMapByJobOldWay(Vector2Int[] minerals)
+    {
+        float[,] map = _maps[MapTypes.Mineral];
+
+        NativeArray<float> map_array = new NativeArray<float>(_map_size.x * _map_size.y, Allocator.TempJob);
+        NativeArray<Vector2Int> distance_source = new NativeArray<Vector2Int>(_map_size.x * _map_size.y, Allocator.TempJob);
+        NativeArray<Vector2Int> minerals_array = new NativeArray<Vector2Int>(minerals.Length, Allocator.TempJob);
+
+        for (int x = 0; x < _map_size.x; x++)
+        {
+            for (int y = 0; y < _map_size.y; y++)
+            {
+                map_array[x * _map_size.x + y] = map[x, y];
+                distance_source[x * _map_size.x + y] = _distance_source[x, y];
+            }
+        }
+        for (int i = 0; i < minerals.Length; i++)
+        {
+            minerals_array[i] = minerals[i];
+        }
+        UpdateMIneralMapOldWayJob job = new UpdateMIneralMapOldWayJob
+        {
+            _map_width = _map_size.x,
+            _minerals = minerals_array,
+            _map = map_array,
+            _distance_source = distance_source,
+            _max_distance = Mathf.Sqrt(_map_size.x * _map_size.x + _map_size.y * _map_size.y)
+        };
+        JobHandle handle = job.Schedule(map_array.Length, 1);
+        handle.Complete();
+
+        for (int x = 0; x < _map_size.x; x++)
+        {
+            for (int y = 0; y < _map_size.y; y++)
+            {
+                map[x, y] = map_array[x * _map_size.x + y];
+                _distance_source[x, y] = distance_source[x * _map_size.x + y];
+            }
+        }
+        map_array.Dispose();
+        distance_source.Dispose();
+        minerals_array.Dispose();
+
+        return map;
+    }
+
+    private struct NeighbourGiver
+    {
+        public Vector2Int _map_size;
+        public Vector2Int[] GetNeighboursInCircle(Vector2Int center, int radius)
+        {
+            List<Vector2Int> neighbours = new List<Vector2Int>();
+
+            for (int i = -radius; i <= radius; i++)
+            {
+                if (!AbnormalGridPosition(center + new Vector2Int(radius, i)))
+                    neighbours.Add(center + new Vector2Int(radius, i));
+                if (!AbnormalGridPosition(center + new Vector2Int(i, radius)))
+                    neighbours.Add(center + new Vector2Int(i, radius));
+                if (!AbnormalGridPosition(center + new Vector2Int(-radius, i)))
+                    neighbours.Add(center + new Vector2Int(-radius, i));
+                if (!AbnormalGridPosition(center + new Vector2Int(i, -radius)))
+                    neighbours.Add(center + new Vector2Int(i, -radius));
+            }
+            return neighbours.ToArray();
+        }
+        private bool AbnormalGridPosition(Vector2Int position)
+        {
+            return position.x < 0 || position.x >= _map_size.x || position.y < 0 || position.y >= _map_size.y;
+        }
+    }
+
+    private struct UpdateMineralMapJob : IJobParallelFor
+    {
+        public NeighbourGiver _giver;
+        public int _map_width;
+        public float _max_distance;
+
+        public NativeArray<Vector2Int> _minerals;
+        public NativeArray<float> _map;
+        public NativeArray<Vector2Int> _distance_source; 
+        public void Execute(int index)
+        {
+            Vector2Int mineral = _distance_source[index];
+            Vector2Int[] minerals = _minerals.ToArray();
+            if (Array.Exists(minerals, (el) => el == mineral))
+                return;
+
+            int x = index / _map_width;
+            int y = index % _map_width;
+            Vector2Int[] distance_source = _distance_source.ToArray();
+            float[] map = _map.ToArray(); 
+
+            int i = Mathf.RoundToInt(map[index] * _max_distance);
+            while (i < _max_distance)
+            {
+                Vector2Int[] neighbours = _giver.GetNeighboursInCircle(new Vector2Int(x, y), i);
+                float min_value = Mathf.Infinity;
+                Vector2Int supposed_mineral = default;
+                foreach (Vector2Int neighbour in neighbours)
+                {
+                    int neighbour_index = neighbour.x * _map_width + neighbour.y;
+                    Vector2Int neighbour_mineral = distance_source[neighbour_index];
+                    if (min_value > map[neighbour_index] && Array.Exists(minerals, (el) => el == neighbour_mineral))
+                    {
+                        min_value = map[neighbour_index];
+                        supposed_mineral = distance_source[neighbour_index];
+                    }
+                }
+                if (min_value != Mathf.Infinity)
+                {
+                    _map[index] = min_value + i / _max_distance;
+                    _distance_source[index] = supposed_mineral;
+                    return;
+                }
+
+                i++;
+            }
+        }
+    }
+
     private MapCell[] GetAllTargetCells(Func<MapCell, bool> targeting)
     { 
         List<MapCell> cells = new List<MapCell>();
@@ -259,16 +462,16 @@ public class State
         return cells.ToArray();
     }
 
-    private float EvaluateCellByDistanceToTarget(Vector2Int cell_pos, MapCell[] target_cells)
+    private float EvaluateCellByDistanceToTarget(Vector2Int cell_pos, Vector2Int[] target_cells)
     {
         float distance = Mathf.Infinity;
-        foreach (MapCell mineral in target_cells)
+        foreach (Vector2Int mineral in target_cells)
         {
-            float dist = Vector2.Distance(cell_pos, mineral.GridPosition);
+            float dist = Vector2.Distance(cell_pos, mineral);
             if (dist < distance)
             {
                 distance = dist;
-                _distance_source[cell_pos.x, cell_pos.y] = mineral.GridPosition;
+                _distance_source[cell_pos.x, cell_pos.y] = mineral;
             }
         }
         return EvaluateByDistance(distance);

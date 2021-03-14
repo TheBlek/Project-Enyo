@@ -135,15 +135,15 @@ public class GridManager<T> : MonoBehaviour where T : IGridItem
     {
         List<T> neighbours = new List<T>();
 
-        for (int x = -radius; x <= radius; x++)
-        {
-            for (int y = -radius; y <= radius; y++)
-            {
-                if (x != -radius && y != -radius && x != radius && y != radius)
-                    continue;
-                if (!AbnormalGridPosition(center + new Vector2Int(x, y)))
-                    neighbours.Add(grid[center.x + x, center.y + y]);
-            }
+        for (int i = -radius; i <= radius; i++) {
+            if (!AbnormalGridPosition(center + new Vector2Int(radius, i)))
+                neighbours.Add(grid[center.x + radius, center.y + i]);
+            if (!AbnormalGridPosition(center + new Vector2Int(i, radius)))
+                neighbours.Add(grid[center.x + i, center.y + radius]);
+            if (!AbnormalGridPosition(center + new Vector2Int(-radius, i)))
+                neighbours.Add(grid[center.x - radius, center.y + i]);
+            if (!AbnormalGridPosition(center + new Vector2Int(i, -radius)))
+                neighbours.Add(grid[center.x + i, center.y - radius]);
         }
         return neighbours.ToArray();
     }
