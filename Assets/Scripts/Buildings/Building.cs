@@ -9,6 +9,7 @@ public abstract class Building : MonoBehaviour
     [SerializeField] protected Vector2 size;
     [SerializeField] protected int cost;
     [SerializeField] protected GameObject _explosion_prefab;
+    public bool IsEnemy { get; set; }
 
     protected void Start()
     {

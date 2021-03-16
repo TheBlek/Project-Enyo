@@ -24,7 +24,7 @@ public class Mine : Building
         if (time_since_last_addition >= 1)
         {
             time_since_last_addition -= 1;
-            _gameManager.AddMetals(MpS);
+            _gameManager.AddMetals(MpS, IsEnemy);
         }
     }
 

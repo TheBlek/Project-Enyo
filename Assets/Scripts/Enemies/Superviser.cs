@@ -44,7 +44,6 @@ class Superviser : MonoBehaviour
         _state.OnStateChange += ReEvaluateBestBehaviour;
 
         _builder = GetComponent<Builder>();
-
     }
 
     private void InitEnemies()
@@ -84,6 +83,9 @@ class Superviser : MonoBehaviour
         foreach (Enemy enemy in dead_enemies)
             HandleVoidEnemy(enemy);
         dead_enemies.Clear();*/
+
+        if (_behaviour_to_follow == null)
+            ReEvaluateBestBehaviour();
 
         if (_behaviour_to_follow == null)
             return;
@@ -138,7 +140,7 @@ class Superviser : MonoBehaviour
     }
 
     private void Build(object[] parameters)
-    {
+    { 
         _builder.SetBuildingType((Buildings)parameters[1]);
 
         Vector2 global_pos = _mapManager.GetGlobalPositionFromGrid((Vector2Int)parameters[0]);

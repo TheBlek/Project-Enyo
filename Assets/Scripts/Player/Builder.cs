@@ -6,6 +6,7 @@ public class Builder : MonoBehaviour
 {
     [SerializeField] private GameObject[] prefabs;
     [SerializeField] private GameObject preview_prefab;
+    [SerializeField] private bool _is_enemy = false;
 
     public delegate void OnBuild(Building building);
     public OnBuild onBuild = null;
@@ -80,7 +81,7 @@ public class Builder : MonoBehaviour
     {
         Building current_building = buildings_prefab[(int)building_type];
 
-        if (!gameManager.IsAffordable(current_building))
+        if (!gameManager.IsAffordable(current_building, _is_enemy))
             return;
 
         if (!gameManager.GetMapManager().IsRectBuildable(position, current_building.GetSize()))
@@ -89,8 +90,10 @@ public class Builder : MonoBehaviour
         if (!current_building.IsPositionAcceptable(gameManager, position))
             return;
 
-        GameObject building = Instantiate(prefabs[(int)building_type], position, Quaternion.identity);
+        GameObject building_obj = Instantiate(prefabs[(int)building_type], position, Quaternion.identity);
+        Building building = building_obj.GetComponent<Building>();
+        building.IsEnemy = _is_enemy;
 
-        onBuild(building.GetComponent<Building>());
+        onBuild(building);
     }
 }

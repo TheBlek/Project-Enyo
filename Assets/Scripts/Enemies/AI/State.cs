@@ -72,7 +72,7 @@ public class State
     {
         float[,] map = new float[_map_size.x, _map_size.y];
 
-        MapCell[] buildings = GetAllTargetCells((x) => x.BuildingInCell != null);
+        MapCell[] buildings = GetAllTargetCells((x) => x.BuildingInCell != null && x.BuildingInCell.IsEnemy);
 
         foreach (MapCell building in buildings)
         {

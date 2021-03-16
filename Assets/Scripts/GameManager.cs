@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private int metals = 0;
+    [SerializeField] private int _player_metals = 0;
+    [SerializeField] private int _enemy_metals = 0;
     [SerializeField] private PlayerControls player;
     [SerializeField] private Superviser superviser;
 
@@ -28,13 +29,16 @@ public class GameManager : MonoBehaviour
         Builder[] builderers = FindObjectsOfType<Builder>();
         foreach (Builder builder in builderers)
         {
-            builder.onBuild += BuildingInsertion;
+            builder.onBuild += InsertBuilding;
         }
     }
 
-    public void BuildingInsertion(Building building)
+    private void InsertBuilding(Building building)
     {
-        metals -= building.GetCost();
+        if (building.IsEnemy)
+            _enemy_metals -= building.GetCost();
+        else
+            _player_metals -= building.GetCost();
 
         buildings.Add(building);
         mapManager.AdjustCellsForBuilding(building);
@@ -69,14 +73,19 @@ public class GameManager : MonoBehaviour
 
     public PathRequestManager GetPathRequestManager() => pathRequestManager;
 
-    public bool IsAffordable(Building building)
+    public bool IsAffordable(Building building, bool is_enemy)
     {
-        return building.GetCost() <= metals;
+        if (is_enemy)
+            return building.GetCost() <= _enemy_metals;
+        return building.GetCost() <= _player_metals;
     }
 
-    public void AddMetals(int addition)
+    public void AddMetals(int addition, bool is_enemy)
     {
-        metals += addition;
+        if (is_enemy)
+            _enemy_metals += addition;
+        else
+            _player_metals += addition;
     }
 
     public Vector3 GetPlayerPosition()
@@ -93,6 +102,6 @@ public class GameManager : MonoBehaviour
 
     public bool IsThereAnyBuilding() => buildings.Count > 0;
 
-    public float GetMetalCount() => metals;
+    public float GetMetalCount() => _player_metals;
     #endregion
 }
