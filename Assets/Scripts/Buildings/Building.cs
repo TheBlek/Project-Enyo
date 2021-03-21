@@ -3,7 +3,7 @@
 [RequireComponent(typeof(Damagable))]
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(BoxCollider2D))]
-public abstract class Building : MonoBehaviour
+public class Building : MonoBehaviour
 {
     [SerializeField] protected Buildings type;
     [SerializeField] protected Vector2 size;

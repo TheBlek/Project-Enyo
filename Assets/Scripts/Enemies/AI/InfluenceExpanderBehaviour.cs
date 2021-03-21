@@ -27,7 +27,7 @@ public class InfluenceExpanderBehaviour : Behaviour
         }
         if (result != default)
         {
-            Instructions[0].Parameters = new object[] { result, Buildings.Wall };
+            Instructions[0].Parameters = new object[] { result, Buildings.InfluenceExpander };
             return true;
         }
 

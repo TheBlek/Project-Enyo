@@ -106,49 +106,6 @@ public class State
 
     }
 
-    private float[,] SetUpMineralMap(MapCell[] minerals)
-    {
-        float[,] map = new float[_map_size.x, _map_size.y];
-        for (int x = 0; x < _map_size.x; x++)
-        {
-            for (int y = 0; y < _map_size.y; y++)
-            {
-                map[x, y] = 1f;
-            }
-        }
-
-        foreach (MapCell mineral in minerals)
-        {
-            List<Vector2Int> temp = new List<Vector2Int>();
-            int max_radius = Mathf.Max(mineral.GridPosition.x, mineral.GridPosition.y);
-            int tmp = Mathf.Max(_map_size.x - mineral.GridPosition.x, _map_size.y - mineral.GridPosition.y);
-            max_radius = Mathf.Max(max_radius, tmp);
-            int i = 0;
-            bool useful = false;
-            while (i < max_radius && !useful)
-            {
-                MapCell[] cells = _mapManager.GetNeighboursInCircle(mineral.GridPosition, i);
-                float new_value = i / _max_distance;
-                useful = true;
-                foreach (Vector2Int cell in cells)
-                {
-                    if (map[cell.x, cell.y] > new_value)
-                    {
-                        map[cell.x, cell.y] = new_value;
-                        //_distance_source[cell.x, cell.y] = mineral.GridPosition;
-                        useful = false;
-                        temp.Add(new Vector2Int(cell.x, cell.y));
-                    }
-                }
-                i++;
-            }
-            _cells_for_concrete_mineral[mineral.GridPosition.x, mineral.GridPosition.y] = temp;
-        }
-
-        _old_minerals = minerals;
-        return map;
-    }
-
     private float[,] UpdateMineralMap(Vector2Int[] minerals)
     {
         

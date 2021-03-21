@@ -1,7 +1,7 @@
 ﻿public enum Buildings
 {
     AboutToDie, // Disasterous
-    building1,
+    InfluenceExpander,
     Mine,
     Wall,
     Gate,
