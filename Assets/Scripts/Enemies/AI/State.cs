@@ -29,17 +29,18 @@ public class State
 
     private Dictionary<Buildings, List<Building>> _buildings;
 
-    private float _average_spending_per_sec;
-    private float _average_earnings_per_sec;
+    private List<Enemy> _units;
 
-    public float EstimateEarnings => _average_earnings_per_sec;
-    public float EstimateSpendings => _average_spending_per_sec;
-    public float EstimateProfit => _average_earnings_per_sec - _average_spending_per_sec;
+    public float EstimateEarnings { get; private set; }
+    public float EstimateSpendings { get; private set; }
+    public float EstimateProfit => EstimateEarnings - EstimateSpendings;
 
     public State(MapManager mapManager, Builder builder, Buildings[] buildings_to_keep_track_of)
     {
         InitMaps(mapManager);
         InitBuildings(builder, buildings_to_keep_track_of);
+
+        _units = new List<Enemy>();
 
         UpdateMaps();
     }
@@ -64,14 +65,23 @@ public class State
 
     private void AddBuilding(Building building)
     {
-        if (building is Mine m) _average_earnings_per_sec += m.Earnings;
-        if (building is Barrack b) _average_spending_per_sec += 80f;
+        if (building is Mine m) EstimateEarnings += m.Earnings;
+        if (building is Barrack b)
+        {
+            EstimateSpendings += 80f;
+            b.onSpawn += AddUnit;
+        }
 
         if (_buildings.TryGetValue(building.GetBuildingType(), out List<Building> target))
         {
             target.Add(building);
             building.GetComponent<Damagable>().onKill += UpdateBuildings;
         }
+    }
+
+    private void AddUnit(Enemy spawned_enemy)
+    {
+        _units.Add(spawned_enemy);
     }
 
     private void UpdateBuildings()
@@ -337,5 +347,7 @@ public class State
         UnityEngine.Debug.LogError("State wasn't keeping track of this type of buildings: " + type.ToString());
         return null;
     }
+
+    public Enemy[] GetUnits() => _units.ToArray();
 
 }

@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (Building building in buildings)
         {
-            AddMetals(-building.MaintenanceCost, building.IsEnemy);
+            AddMetals((int)-building.MaintenanceCost, building.IsEnemy);
         }
     }
 
