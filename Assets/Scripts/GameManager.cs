@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     private MapManager mapManager;
     private PathRequestManager pathRequestManager;
     private System.Random _random;
+    private float _time_since_last_maintenance = 0;
 
     void Awake()
     {
@@ -46,20 +47,42 @@ public class GameManager : MonoBehaviour
         building.SetUp();
     }
     
+    private void Maintenance()
+    {
+        foreach (Building building in buildings)
+        {
+            AddMetals(-building.MaintenanceCost, building.IsEnemy);
+        }
+    }
 
-    private void Update()
+    private void RemoveNullBuildings()
     {
         List<Building> buildings_to_remove = new List<Building>();
         foreach (Building building in buildings)
         {
             if (building == null)
+            {
                 buildings_to_remove.Add(building);
+            }
             else
+            {
                 building.SelfUpdate();
+            }
         }
         foreach (Building building in buildings_to_remove)
         {
             buildings.Remove(building);
+        }
+    }
+
+    private void Update()
+    {
+        _time_since_last_maintenance += Time.deltaTime;
+        RemoveNullBuildings();
+        if (_time_since_last_maintenance > 1)
+        {
+            _time_since_last_maintenance = 0;
+            Maintenance();
         }
     }
 

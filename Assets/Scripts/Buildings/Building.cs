@@ -9,6 +9,7 @@ public class Building : MonoBehaviour
     [SerializeField] protected Vector2 size;
     [SerializeField] protected int cost;
     [SerializeField] protected GameObject _explosion_prefab;
+    [SerializeField] protected int _maintenance_cost;
     public bool IsEnemy { get; set; }
 
     protected void Start()
@@ -44,5 +45,7 @@ public class Building : MonoBehaviour
     public Buildings GetBuildingType() => type;
 
     public int GetCost() => cost;
+
+    public int MaintenanceCost => _maintenance_cost;
  
 }

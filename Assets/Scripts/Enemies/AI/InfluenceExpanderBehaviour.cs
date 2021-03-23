@@ -28,11 +28,17 @@ public class InfluenceExpanderBehaviour : Behaviour
         if (result != default)
         {
             Instructions[0].Parameters = new object[] { result, Buildings.InfluenceExpander };
+            AssignValue();
             return true;
         }
 
-
         return false;
+
+        void AssignValue()
+        {
+            if (state.EstimateEarnings == 0) Value = _max_value;
+            else Value = SigmoidActivation(state.EstimateProfit / state.EstimateEarnings);
+        }
     }
 
 }

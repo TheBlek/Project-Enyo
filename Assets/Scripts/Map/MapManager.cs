@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public class MapManager : GridManager<MapCell>
@@ -86,6 +87,18 @@ public class MapManager : GridManager<MapCell>
         foreach (MapCell cell in cells)
             cell.BuildingInCell = building;
         OnGridChange?.Invoke();
+    }
+
+    public MapCell[] GetCellsAroundBuilding(Building building)
+    {
+        List<MapCell> result = new List<MapCell>();
+
+        foreach (MapCell cell in grid)
+            if (cell.BuildingInCell == building)
+                foreach (MapCell neighbour in GetNeighboursInCircle(cell.GridPosition, 1))
+                    if (neighbour.BuildingInCell != building)
+                        result.Add(neighbour);
+        return result.ToArray();
     }
 
     public bool IsCellBuildable(Vector2Int grid_position)

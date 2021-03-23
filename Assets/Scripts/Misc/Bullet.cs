@@ -31,7 +31,6 @@ public class Bullet : MonoBehaviour
 
     private void HandleCollision(GameObject collider)
     {
-        Debug.Log(collider.gameObject.name);
         if (is_in_animation)
             return;
 

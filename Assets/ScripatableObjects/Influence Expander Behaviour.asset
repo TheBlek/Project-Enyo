@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03d235f114026f942b1184e2e1bdfbb7, type: 3}
   m_Name: Influence Expander Behaviour
   m_EditorClassIdentifier: 
-  Value: 5
+  Value: 2.0757656
+  _max_value: 3
+  _min_value: 1
   Instructions:
   - Type: 0

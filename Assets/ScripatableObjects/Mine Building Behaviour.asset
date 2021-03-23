@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dd20fcb84c4e944a9ca0ec6a6861a1f, type: 3}
   m_Name: Mine Building Behaviour
   m_EditorClassIdentifier: 
-  Value: 10
+  Value: 3.397978
+  _max_value: 13.27
+  _min_value: 2.37
   Instructions:
   - Type: 0

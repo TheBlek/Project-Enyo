@@ -8,6 +8,6 @@
     Cannon,
     Sniper,
     Artillery,
-    building8,
+    Barrack,
     building9
 }

@@ -17,14 +17,25 @@ public class MineBuildingBehaviour : Behaviour
                 {
                     best_option = state.GetNumberOfMinerals(rect);
                     Instructions[0].Parameters = new object[] { rect.position, Buildings.Mine };
+
                     if (best_option == 4)
+                    {
+                        AssignValue();
                         return true;
+                    }
                 }
             }
         }
         if (best_option == 0)
             return false;
+        AssignValue();
 
         return true;
+
+        void AssignValue()
+        {
+            if (state.EstimateEarnings == 0) Value = _max_value;
+            else Value = best_option * SigmoidActivation(state.EstimateProfit / state.EstimateEarnings) / 4;
+        }
     }
 }

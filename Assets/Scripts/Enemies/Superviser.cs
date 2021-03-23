@@ -29,21 +29,21 @@ class Superviser : MonoBehaviour
 
     private bool _ready_to_process_instruction = true;
 
+    private bool _is_behaviour_to_follow_exists = true;
+
     private void Start()
     {
-        Array.Sort(_behaviours, (x, y) => -x.Value.CompareTo(y.Value));
-
         random = new System.Random();
 
         _gameManager = FindObjectOfType<GameManager>();
         _mapManager = _gameManager.GetMapManager();
+        _builder = GetComponent<Builder>();
 
         InitEnemies();
 
-        _state = new State(_mapManager);
+        _state = new State(_mapManager, _builder, new Buildings[]{ Buildings.Mine, Buildings.Barrack });
         _state.OnStateChange += ReEvaluateBestBehaviour;
 
-        _builder = GetComponent<Builder>();
     }
 
     private void InitEnemies()
@@ -83,12 +83,10 @@ class Superviser : MonoBehaviour
         foreach (Enemy enemy in dead_enemies)
             HandleVoidEnemy(enemy);
         dead_enemies.Clear();*/
-
         if (_behaviour_to_follow == null)
             ReEvaluateBestBehaviour();
 
-        if (_behaviour_to_follow == null)
-            return;
+        if (!_is_behaviour_to_follow_exists) return;
 
         if (!_behaviour_to_follow.IsDone)
         {
@@ -103,18 +101,16 @@ class Superviser : MonoBehaviour
     private void ReEvaluateBestBehaviour()
     {
         _behaviour_to_follow = PickBestAvailableBehaviour();
+        _is_behaviour_to_follow_exists = _behaviour_to_follow != null;
     }
 
     private Behaviour PickBestAvailableBehaviour()
     {
+        Behaviour best = null;
         foreach (Behaviour behaviour in _behaviours)
-        {
-            if (behaviour.Trigger(_state))
-            {
-                return behaviour;
-            }
-        }
-        return null;
+            if (behaviour.Trigger(_state) && ( best == null || best.Value < behaviour.Value))
+                best = behaviour;
+        return best;
     }
 
     private void ProcessInstruction(Instruction instruction)

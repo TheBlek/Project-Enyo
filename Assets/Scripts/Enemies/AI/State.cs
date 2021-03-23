@@ -26,18 +26,67 @@ public class State
     public Action OnStateChange;
 
     private MapCell[] _old_minerals;
-    private List<Vector2Int>[,] _cells_for_concrete_mineral;
 
-    public State(MapManager mapManager)
+    private Dictionary<Buildings, List<Building>> _buildings;
+
+    private float _average_spending_per_sec;
+    private float _average_earnings_per_sec;
+
+    public float EstimateEarnings => _average_earnings_per_sec;
+    public float EstimateSpendings => _average_spending_per_sec;
+    public float EstimateProfit => _average_earnings_per_sec - _average_spending_per_sec;
+
+    public State(MapManager mapManager, Builder builder, Buildings[] buildings_to_keep_track_of)
+    {
+        InitMaps(mapManager);
+        InitBuildings(builder, buildings_to_keep_track_of);
+
+        UpdateMaps();
+    }
+
+    private void InitMaps(MapManager mapManager)
     {
         _mapManager = mapManager;
         _mapManager.OnGridChange += UpdateMaps;
         _map_size = _mapManager.GetMapSize();
         _maps = new Dictionary<MapTypes, float[,]>();
         _max_distance = Mathf.Max(_map_size.x, _map_size.y);
+    }
 
-        _cells_for_concrete_mineral = new List<Vector2Int>[_map_size.x, _map_size.y];
-        UpdateMaps();
+    private void InitBuildings(Builder builder, Buildings[] buildings_to_keep_track_of)
+    {
+        builder.onBuild += AddBuilding;
+
+        _buildings = new Dictionary<Buildings, List<Building>>();
+        foreach (Buildings building_type in buildings_to_keep_track_of)
+            _buildings.Add(building_type, new List<Building>());
+    }
+
+    private void AddBuilding(Building building)
+    {
+        if (building is Mine m) _average_earnings_per_sec += m.Earnings;
+        if (building is Barrack b) _average_spending_per_sec += 80f;
+
+        if (_buildings.TryGetValue(building.GetBuildingType(), out List<Building> target))
+        {
+            target.Add(building);
+            building.GetComponent<Damagable>().onKill += UpdateBuildings;
+        }
+    }
+
+    private void UpdateBuildings()
+    {
+        Buildings[] keys = new List<Buildings>(_buildings.Keys).ToArray();
+
+        foreach (Buildings key in keys)
+        {
+            List<Building> dead = new List<Building>();
+            foreach (Building building in _buildings[key])
+                if (building == null) dead.Add(building);
+            foreach (Building building in dead)
+                _buildings[key].Remove(building);
+        }
+        OnStateChange?.Invoke();
     }
 
     public void UpdateMaps()
@@ -279,6 +328,14 @@ public class State
     public Vector2Int GetMapSize()
     {
         return _map_size;
+    }
+
+    public Building[] GetBuildingsOfType(Buildings type)
+    {
+        if (_buildings.TryGetValue(type, out List<Building> buildings))
+            return buildings.ToArray();
+        UnityEngine.Debug.LogError("State wasn't keeping track of this type of buildings: " + type.ToString());
+        return null;
     }
 
 }
