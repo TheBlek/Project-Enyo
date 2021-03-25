@@ -23,9 +23,9 @@ public class PathRequestManager : MonoBehaviour
     private struct PathRequest
     {
         public Vector3 start, end;
-        public Action<Vector3[], bool> callback;
+        public Action<Vector2[], bool> callback;
 
-        public PathRequest(Vector3 _start, Vector3 _end, Action<Vector3[], bool> _callback)
+        public PathRequest(Vector2 _start, Vector2 _end, Action<Vector2[], bool> _callback)
         {
             start = _start;
             end = _end;
@@ -33,7 +33,7 @@ public class PathRequestManager : MonoBehaviour
         }
     }
 
-    public void RequestPath(Vector3 start, Vector3 end, Action<Vector3[], bool> callback)
+    public void RequestPath(Vector2 start, Vector2 end, Action<Vector2[], bool> callback)
     {
         PathRequest newRequest = new PathRequest(start, end, callback);
         requestQueue.Enqueue(newRequest);
@@ -52,7 +52,7 @@ public class PathRequestManager : MonoBehaviour
         }
     }
 
-    public void OnPathProccessingEnd(Vector3[] path, bool success)
+    public void OnPathProccessingEnd(Vector2[] path, bool success)
     {
         currentPathRequest.callback(path, success);
         IsProccessingPath = false;

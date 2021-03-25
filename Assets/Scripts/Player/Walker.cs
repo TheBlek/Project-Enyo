@@ -3,37 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class Walker: MonoBehaviour
 {
-    [SerializeField] private float speed = 1;
-    [SerializeField] private Rigidbody2D rig;
-    [SerializeField] private Transform upper_chest;
-    [SerializeField] private Transform legs;
+    [SerializeField] private float _speed = 1;
+    [SerializeField] private Rigidbody2D _rigidbody;
+    [SerializeField] private Transform _head;
+    [SerializeField] private Transform _legs;
+    [SerializeField] private bool _turn_legs;
+    [SerializeField] private float _sight_offset;
 
-    private Animator animator;
+    private Animator _animator;
+    private bool _animate_legs;
     private void Start()
     {
-        animator = legs.GetComponent<Animator>();
+        _animate_legs = _legs.TryGetComponent(out _animator);
     }
 
     public void LookAtMouse(Camera player_camera)
     {
         Vector3 mouse = player_camera.ScreenToWorldPoint(Input.mousePosition);
-        mouse.z = 0;
-        Vector3 relativePos = mouse - upper_chest.position;
-        float angle = Mathf.Atan2(relativePos.y, relativePos.x) * Mathf.Rad2Deg;
-
-        upper_chest.eulerAngles = Vector3.forward * (angle + 90);
+        LookAtTarget(mouse);
     }
 
-    public void Walk(Vector2 input)
+    public void LookAtTarget(Vector2 target)
     {
-        animator.SetBool("Is Walking", input != Vector2.zero);
+        Vector3 relativePos = target - (Vector2)_head.position;
 
-        float angle = input.x == 0 ? 0 : 90 + Math.Sign(input.x) * Math.Sign(input.y) * 45;
+        float angle = Mathf.Atan2(relativePos.y, relativePos.x) * Mathf.Rad2Deg;
 
-        legs.eulerAngles = Vector3.forward * angle;
+        _head.eulerAngles = Vector3.forward * (angle + _sight_offset);
+    }
 
-        rig.MovePosition((Vector2)transform.position + input * speed * Time.fixedDeltaTime);
+    public void Walk(Vector2 direction)
+    {
+        if (direction != Vector2.zero && _animate_legs)
+            _animator.Play("Walk");
+        else if (_animate_legs)
+            _animator.Play("Idle");
+
+        if (_turn_legs)
+            TurnLegs(direction);
+
+        _rigidbody.MovePosition((Vector2)transform.position + direction * _speed * Time.fixedDeltaTime);
+    }
+
+    private void TurnLegs(Vector2 direction)
+    {
+        float angle = direction.x == 0 ? 0 : 90 + Math.Sign(direction.x) * Math.Sign(direction.y) * 45;
+        _legs.eulerAngles = Vector3.forward * angle;
     }
 }

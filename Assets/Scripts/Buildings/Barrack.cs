@@ -2,12 +2,10 @@
 
 public class Barrack : Building
 {
-    [SerializeField] private GameObject[] _enemies_prefabs;
-    [SerializeField] private float[] _enemies_produce_time;
-    [SerializeField] private float[] _enemies_produce_cost;
+    [SerializeField] private UnitsHub _unit_hub;
 
     private bool _in_proccess = false;
-    private Enemies _enemy_in_production;
+    private Unit _unit_in_production;
     private Animator _animator;
 
     private MapManager _mapManager;
@@ -27,22 +25,22 @@ public class Barrack : Building
         if (_in_proccess) return;
 
         _in_proccess = true;
-        _enemy_in_production = enemy;
+        _unit_in_production = _unit_hub.GetUnit(enemy);
         HandleProducingAnimation();
-        _maintenance_cost = _enemies_produce_cost[(int)enemy] / _enemies_produce_time[(int)enemy];
-        Invoke(nameof(SpawnEnemy), _enemies_produce_time[(int)enemy]);
+        _maintenance_cost = _unit_in_production.ProductionCost / _unit_in_production.ProductionTime;
+        Invoke(nameof(SpawnEnemy), _unit_in_production.ProductionTime);
     }
 
     private void HandleProducingAnimation()
     {
-        _animator.speed = 1 / _enemies_produce_time[(int) _enemy_in_production];
+        _animator.speed = 1 / _unit_in_production.ProductionTime;
         //_animator.Play(_enemy_in_production.ToString());
         _animator.Play("Working");
     }
 
     private void SpawnEnemy()
     {
-        GameObject obj = Instantiate(_enemies_prefabs[(int)_enemy_in_production], PickSpawnPlace(), Quaternion.identity);
+        GameObject obj = Instantiate(_unit_in_production.Prefab, PickSpawnPlace(), Quaternion.identity);
         _in_proccess = false;
         _maintenance_cost = 0;
         _animator.Play("Idle");

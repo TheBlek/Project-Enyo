@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Damagable : MonoBehaviour
 {
@@ -8,13 +9,10 @@ public class Damagable : MonoBehaviour
     [SerializeField] private Color hurtColor;
     public float death_offset;
 
-    public delegate void OnKill();
-    public delegate void OnDamage();
-    public delegate void OnHeal();
-
-    public OnHeal onHeal;
-    public OnDamage onDamage;
-    public OnKill onKill;
+    public Action onHeal;
+    public Action onDamage;
+    public Action onKill;
+    public Action<Damagable> onDestroy;
 
     public bool is_enemy;
 
@@ -34,7 +32,7 @@ public class Damagable : MonoBehaviour
         HP -= damage;
         onDamage();
         if (HP <= 0)
-            onKill();
+            onKill?.Invoke();
     }
 
     public void Heal(float heal_amount)
@@ -43,13 +41,17 @@ public class Damagable : MonoBehaviour
         if (HP > maxHP)
             HP = maxHP;
 
-        if (onHeal != null)
-            onHeal();
+        onHeal?.Invoke();
     }
 
     private void Destroy()
     {
         Destroy(gameObject, death_offset);
+    }
+
+    private void OnDestroy()
+    {
+        onDestroy?.Invoke(this);
     }
 
     private void StartWhiteEffect()

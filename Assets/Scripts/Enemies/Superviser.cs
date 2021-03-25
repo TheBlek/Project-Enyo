@@ -46,11 +46,13 @@ class Superviser : MonoBehaviour
         if (!_behaviour_to_follow.IsDone)
         {
             ProcessInstruction(_behaviour_to_follow.NextInstruction());
-        }else if (_behaviour_to_follow.IsDone)
-        {
+        } else {
             _behaviour_to_follow.Reset();
             ReEvaluateBestBehaviour();
         }
+
+        foreach (Enemy enemy in _state.GetUnits())
+            enemy.SelfUpdate();
     }
 
     private void ReEvaluateBestBehaviour()

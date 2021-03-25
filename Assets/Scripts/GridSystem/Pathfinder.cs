@@ -7,14 +7,14 @@ public class Pathfinder
 {
     private MapManager mapManager;
 
-    private Action<Vector3[], bool> OnPathProcessingEnd;
-    public Pathfinder (MapManager _gridManager, Action<Vector3[], bool> _OnPathProccessingEnd)
+    private Action<Vector2[], bool> _OnPathProcessingEnd;
+    public Pathfinder (MapManager _gridManager, Action<Vector2[], bool> OnPathProccessingEnd)
     {
         mapManager = _gridManager;
-        OnPathProcessingEnd = _OnPathProccessingEnd;
+        _OnPathProcessingEnd = OnPathProccessingEnd;
     }
 
-    public IEnumerator FindPath(Vector3 start_pos, Vector3 target_pos) // A* Algorithm
+    public IEnumerator FindPath(Vector2 start_pos, Vector2 target_pos) // A* Algorithm
     { 
         MapCell start = mapManager.GetCellFromGlobalPosition(start_pos);
         MapCell target = mapManager.GetCellFromGlobalPosition(target_pos);
@@ -31,8 +31,8 @@ public class Pathfinder
             
             if (target == current)
             {
-                Vector3[] path = RetracePath(start, target);
-                OnPathProcessingEnd(path, true);
+                Vector2[] path = RetracePath(start, target);
+                _OnPathProcessingEnd(path, true);
                 yield break;
             }
 
@@ -54,10 +54,10 @@ public class Pathfinder
             }
         }
         yield return null;
-        OnPathProcessingEnd(null, false);
+        _OnPathProcessingEnd(null, false);
     }
 
-    private Vector3[] RetracePath(MapCell start, MapCell end)
+    private Vector2[] RetracePath(MapCell start, MapCell end)
     {
         List<MapCell> cellPath = new List<MapCell>();
 
@@ -75,14 +75,14 @@ public class Pathfinder
         return SimplifyPath(cellPath);
     }
 
-    private Vector3[] SimplifyPath(List<MapCell> cellPath)
+    private Vector2[] SimplifyPath(List<MapCell> cellPath)
     {
-        Vector3 lastDirection = Vector3.zero;
-        List<Vector3> path = new List<Vector3>();
+        Vector2 lastDirection = Vector2.zero;
+        List<Vector2> path = new List<Vector2>();
 
         for (int i = 1; i < cellPath.Count; i++)
         {
-            Vector3 direction = (Vector2)cellPath[i].GridPosition - cellPath[i - 1].GridPosition;
+            Vector2 direction = cellPath[i].GridPosition - cellPath[i - 1].GridPosition;
             if (direction != lastDirection)
             {
                 path.Add(mapManager.GetGlobalPosition(cellPath[i-1]));

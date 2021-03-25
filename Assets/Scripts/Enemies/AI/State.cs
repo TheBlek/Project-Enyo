@@ -75,28 +75,27 @@ public class State
         if (_buildings.TryGetValue(building.GetBuildingType(), out List<Building> target))
         {
             target.Add(building);
-            building.GetComponent<Damagable>().onKill += UpdateBuildings;
+            building.GetComponent<Damagable>().onDestroy += DeleteBuilding;
         }
+    }
+
+    private void DeleteBuilding(Damagable building)
+    {
+        Building target = building.GetComponent<Building>();
+        _buildings[target.GetBuildingType()].Remove(target);
+
+        OnStateChange?.Invoke();
     }
 
     private void AddUnit(Enemy spawned_enemy)
     {
         _units.Add(spawned_enemy);
+        spawned_enemy.GetComponent<Damagable>().onDestroy += DeleteUnit;
     }
 
-    private void UpdateBuildings()
+    private void DeleteUnit(Damagable unit)
     {
-        Buildings[] keys = new List<Buildings>(_buildings.Keys).ToArray();
-
-        foreach (Buildings key in keys)
-        {
-            List<Building> dead = new List<Building>();
-            foreach (Building building in _buildings[key])
-                if (building == null) dead.Add(building);
-            foreach (Building building in dead)
-                _buildings[key].Remove(building);
-        }
-        OnStateChange?.Invoke();
+        _units.Remove(unit.GetComponent<Enemy>());
     }
 
     public void UpdateMaps()
