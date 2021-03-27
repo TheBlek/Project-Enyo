@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Units Hub
   m_EditorClassIdentifier: 
   Units:
+  - {fileID: 11400000, guid: f05adc36d2d92ee46bd6eca54413546d, type: 2}
   - {fileID: 0}
   - {fileID: 0}

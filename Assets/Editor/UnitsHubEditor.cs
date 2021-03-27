@@ -5,24 +5,29 @@ using System;
 [CustomEditor(typeof(UnitsHub))]
 public class UnitsHubEditor : Editor
 {
+    private SerializedProperty _units;
+
+    private void OnEnable()
+    {
+        _units = serializedObject.FindProperty("Units");
+    }
 
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
-        UnitsHub hub = (UnitsHub)target;
 
-        if (hub.Units == null || hub.Units.Length != Enum.GetNames(typeof(Enemies)).Length)
+        serializedObject.Update();
+
+        if (_units.arraySize != Enum.GetNames(typeof(Enemies)).Length)
+            _units.arraySize = Enum.GetNames(typeof(Enemies)).Length;
+
+        for (int i = 0; i < _units.arraySize; i++)
         {
-            Debug.Log("I had to refresh");
-            hub.Units = new Unit[Enum.GetNames(typeof(Enemies)).Length];
+            SerializedProperty element = _units.GetArrayElementAtIndex(i);
+            EditorGUILayout.ObjectField(element, new GUIContent(((Enemies)i).ToString()));
         }
-        for (int i = 0; i < hub.Units.Length; i++)
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(((Enemies)i).ToString());
-            hub.Units[i] = (Unit)EditorGUILayout.ObjectField(hub.Units[i], typeof(Unit), true, GUILayout.ExpandWidth(false));
-            GUILayout.EndHorizontal();
-        }
+
+        serializedObject.ApplyModifiedProperties();
     }
 
 }

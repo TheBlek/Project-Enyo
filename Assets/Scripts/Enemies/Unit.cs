@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[System.Serializable]
 [CreateAssetMenu(menuName = "ScriptableObjects/Unit")]
 public class Unit : ScriptableObject
 {

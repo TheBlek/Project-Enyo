@@ -128,10 +128,11 @@ public class Enemy : MonoBehaviour
         if (!ShowGizmos || _waypoints == null)
             return;
 
+        Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, _waypoints[_current_waypoint]);
         for (int i = _current_waypoint; i < _waypoints.Length - 1; i++)
         {
-            Gizmos.DrawCube(_waypoints[i], Vector3.one * 0.2f);
+            Gizmos.DrawCube(_waypoints[i], Vector3.one * 0.1f);
             Gizmos.DrawLine(_waypoints[i], _waypoints[i + 1]);
         }
         Gizmos.DrawCube(_target_pos, Vector3.one * 0.2f);

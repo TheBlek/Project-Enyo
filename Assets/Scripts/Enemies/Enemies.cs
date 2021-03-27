@@ -1,5 +1,6 @@
 ﻿public enum Enemies
 {
     BlockHead,
-    Ranger
+    Ranger,
+    Test
 }
