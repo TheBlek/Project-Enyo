@@ -10,8 +10,8 @@ public class MapManager : GridManager<MapCell>
     [SerializeField] private MapGenerator _map_generator;
     [SerializeField] private bool _generate_map_on_start;
 
-    [HideInInspector] public RuleTile[] tiles_by_name;
-    [HideInInspector] public bool[] collidable_tiles;
+    [HideInInspector] public RuleTile[] Tiles;
+    [HideInInspector] public bool[] Collidability;
 
     
     protected override void InitGrid()
@@ -37,9 +37,9 @@ public class MapManager : GridManager<MapCell>
         {
             for (int y = 0; y < grid_size.y; y++)
             {
-                _tilemap.SetTile(new Vector3Int(x - grid_size.x/2, y - grid_size.y / 2, 0), tiles_by_name[(int)grid[x, y].Tile]);
+                _tilemap.SetTile(new Vector3Int(x - grid_size.x/2, y - grid_size.y / 2, 0), Tiles[(int)grid[x, y].Tile]);
 
-                grid[x, y].SetTileWalkable(!collidable_tiles[(int)grid[x, y].Tile]);
+                grid[x, y].SetTileWalkable(!Collidability[(int)grid[x, y].Tile]);
             }
         }
     }
@@ -50,9 +50,9 @@ public class MapManager : GridManager<MapCell>
         {
             for (int y = 0; y < grid_size.y; y++)
             {
-                MapTiles tile = (MapTiles)Array.IndexOf(tiles_by_name, _tilemap.GetTile(new Vector3Int(x - grid_size.x / 2, y - grid_size.y / 2, 0)));
+                MapTiles tile = (MapTiles)Array.IndexOf(Tiles, _tilemap.GetTile(new Vector3Int(x - grid_size.x / 2, y - grid_size.y / 2, 0)));
                 grid[x, y].Tile = tile;
-                grid[x, y].SetTileWalkable(!collidable_tiles[(int)tile]);
+                grid[x, y].SetTileWalkable(!Collidability[(int)tile]);
             }
         } 
     }
