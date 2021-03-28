@@ -5,7 +5,7 @@ using UnityEngine;
 public class PathRequestManager : MonoBehaviour
 {
     private Pathfinder pathfinder;
-    private GameManager gameManager;
+    private MapManager _mapManager;
 
     private Queue<PathRequest> requestQueue;
     private PathRequest currentPathRequest;
@@ -16,8 +16,8 @@ public class PathRequestManager : MonoBehaviour
     private void Awake()
     {
         requestQueue = new Queue<PathRequest>();
-        gameManager = FindObjectOfType<GameManager>();
-        pathfinder = new Pathfinder(gameManager.GetMapManager(), OnPathProccessingEnd);
+        _mapManager = FindObjectOfType<GameManager>().GetMapManager();
+        pathfinder = new Pathfinder(_mapManager, OnPathProccessingEnd);
     }
 
     private struct PathRequest
@@ -54,8 +54,28 @@ public class PathRequestManager : MonoBehaviour
 
     public void OnPathProccessingEnd(Vector2[] path, bool success)
     {
+        if (success)
+            ReservePath(path);
+
         currentPathRequest.callback(path, success);
         IsProccessingPath = false;
         TryProccessNext();
+    }
+
+    private void ReservePath(Vector2[] path)
+    {
+        foreach (Vector2 node in path)
+            _mapManager.GetCellFromGlobalPosition(node).ReservedForPath = true;
+    }
+
+    public void UnreserveNode(Vector2 node)
+    {
+        _mapManager.GetCellFromGlobalPosition(node).ReservedForPath = false;
+    }
+
+    public void UnreservePath(Vector2[] path)
+    {
+        foreach (Vector2 node in path)
+            UnreserveNode(node);
     }
 }

@@ -16,7 +16,7 @@ public class Tab : GridManager<TabElement>
         SetUpMetrics();
         InitGrid();
         ScrapGrid();
-        foreach (TabElement element in grid)
+        foreach (TabElement element in _grid)
         {
             element.OnButtonDown += Pressed;
             element.OnButtonEnter += Entered;
@@ -28,7 +28,7 @@ public class Tab : GridManager<TabElement>
     private void SetUpMetrics()
     {
         Rect rect = GetComponent<RectTransform>().rect;
-        cell_size = Math.Min(rect.width / grid_size.x, rect.height / grid_size.y);
+        cell_size = Math.Min(rect.width / _grid_size.x, rect.height / _grid_size.y);
         grid_origin = new Vector2(rect.xMin, rect.yMin);
     }
 

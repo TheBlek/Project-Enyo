@@ -24,7 +24,7 @@ public class MapManager : GridManager<MapCell>
 
     public void HandleMapGeneration()
     {
-        if (grid == null || grid.GetLength(0) != grid_size.x || grid.GetLength(1) != grid_size.y)
+        if (_grid == null || _grid.GetLength(0) != _grid_size.x || _grid.GetLength(1) != _grid_size.y)
             base.InitGrid();
         GenerateMap();
         SetUpLayout();
@@ -33,39 +33,39 @@ public class MapManager : GridManager<MapCell>
     private void SetUpLayout()
     {
         _tilemap.ClearAllTiles();
-        for (int x = 0; x < grid_size.x; x++)
+        for (int x = 0; x < _grid_size.x; x++)
         {
-            for (int y = 0; y < grid_size.y; y++)
+            for (int y = 0; y < _grid_size.y; y++)
             {
-                _tilemap.SetTile(new Vector3Int(x - grid_size.x/2, y - grid_size.y / 2, 0), Tiles[(int)grid[x, y].Tile]);
+                _tilemap.SetTile(new Vector3Int(x - _grid_size.x/2, y - _grid_size.y / 2, 0), Tiles[(int)_grid[x, y].Tile]);
 
-                grid[x, y].SetTileWalkable(!Collidability[(int)grid[x, y].Tile]);
+                _grid[x, y].SetTileWalkable(!Collidability[(int)_grid[x, y].Tile]);
             }
         }
     }
 
     private void ReadjustWalkability()
     {
-        for (int x = 0; x < grid_size.x; x++)
+        for (int x = 0; x < _grid_size.x; x++)
         {
-            for (int y = 0; y < grid_size.y; y++)
+            for (int y = 0; y < _grid_size.y; y++)
             {
-                MapTiles tile = (MapTiles)Array.IndexOf(Tiles, _tilemap.GetTile(new Vector3Int(x - grid_size.x / 2, y - grid_size.y / 2, 0)));
-                grid[x, y].Tile = tile;
-                grid[x, y].SetTileWalkable(!Collidability[(int)tile]);
+                MapTiles tile = (MapTiles)Array.IndexOf(Tiles, _tilemap.GetTile(new Vector3Int(x - _grid_size.x / 2, y - _grid_size.y / 2, 0)));
+                _grid[x, y].Tile = tile;
+                _grid[x, y].SetTileWalkable(!Collidability[(int)tile]);
             }
         } 
     }
 
     private void GenerateMap()
     {
-        MapTiles[,] map = _map_generator.GenerateMap(grid_size);
+        MapTiles[,] map = _map_generator.GenerateMap(_grid_size);
 
-        for (int x = 0; x < grid_size.x; x++)
+        for (int x = 0; x < _grid_size.x; x++)
         {
-            for (int y = 0; y < grid_size.y; y++)
+            for (int y = 0; y < _grid_size.y; y++)
             {
-                grid[x, y].Tile = map[x, y];
+                _grid[x, y].Tile = map[x, y];
             }
         }
     }
@@ -93,7 +93,7 @@ public class MapManager : GridManager<MapCell>
     {
         List<MapCell> result = new List<MapCell>();
 
-        foreach (MapCell cell in grid)
+        foreach (MapCell cell in _grid)
             if (cell.BuildingInCell == building)
                 foreach (MapCell neighbour in GetNeighboursInCircle(cell.GridPosition, 1))
                     if (neighbour.BuildingInCell != building)
@@ -105,13 +105,29 @@ public class MapManager : GridManager<MapCell>
     {
         if (AbnormalGridPosition(grid_position))
             return false;
-        return grid[grid_position.x, grid_position.y].Buildable();
+        return _grid[grid_position.x, grid_position.y].Buildable();
     }
 
     public Building GetBuildingInCell(Vector2Int grid_position)
     {
         if (AbnormalGridPosition(grid_position))
             return null;
-        return grid[grid_position.x, grid_position.y].BuildingInCell;
+        return _grid[grid_position.x, grid_position.y].BuildingInCell;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!ShowGizmos || _grid == null)
+            return;
+
+        Gizmos.color = Color.black * 0.8f;
+        for (int x = 0; x < _grid_size.x; x++)
+        {
+            for (int y = 0; y < _grid_size.y; y++)
+            {
+                if (_grid[x, y].ReservedForPath)
+                    Gizmos.DrawCube(GetGlobalPositionFromGrid(x, y), Vector3.one * 0.4f);
+            }
+        }
     }
 }

@@ -84,11 +84,22 @@ class Superviser : MonoBehaviour
             case InstructionTypes.BuildUnit:
                 ProduceUnit(instruction.Parameters);
                 break;
+            case InstructionTypes.MoveUnit:
+                MoveUnit(instruction.Parameters);
+                break;
 
             default:
                 break;
         }
         Invoke(nameof(ResetReadyness), _turn_delay);
+    }
+
+    private void MoveUnit(object[] parameters)
+    {
+        Enemy unit = (Enemy)parameters[0];
+        Vector2 pos = _mapManager.GetGlobalPositionFromGrid((Vector2Int)parameters[1]);
+        //Debug.Log("yeah, I'm setting him at pos: " + pos);
+        unit.Target = pos;
     }
 
     private void ResetReadyness()

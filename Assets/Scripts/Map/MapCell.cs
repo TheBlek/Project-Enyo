@@ -20,7 +20,7 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
         return BuildingInCell == null && _walkable_tile;
     }
 
-    public bool IsWalkable() => BuildingInCell == null && _walkable_tile;
+    public bool IsWalkable() => BuildingInCell == null && _walkable_tile && !ReservedForPath;
 
     public int fCost
     {
@@ -46,5 +46,6 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
         return -compare;
     }
 
-    public static implicit operator Vector2Int(MapCell target) => target.GridPosition;
+    public bool ReservedForPath { get; set; }
+    //public static implicit operator Vector2Int(MapCell target) => target.GridPosition;
 }

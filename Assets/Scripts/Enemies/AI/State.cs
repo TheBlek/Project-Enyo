@@ -11,7 +11,8 @@ public enum MapTypes
 {
     Mineral,
     Influence,
-    Buildability
+    Buildability,
+    PlayerBuildings
 }
 
 public class State
@@ -107,10 +108,22 @@ public class State
                 case MapTypes.Mineral: _maps[type] = GetMineralMap(); break;
                 case MapTypes.Influence: _maps[type] = GetInfluenceMap(); break;
                 case MapTypes.Buildability: _maps[type] = GetBuildabilityMap(); break;
+                case MapTypes.PlayerBuildings: _maps[type] = GetPlayerBuildingsMap(); break;
                 default: break;
             }
         }
         OnStateChange?.Invoke();
+    }
+
+    private float[,] GetPlayerBuildingsMap()
+    {
+        MapCell[] buildings = GetAllTargetCells((cell) => cell.BuildingInCell != null && !cell.BuildingInCell.IsEnemy);
+
+        float[,] map = new float[_map_size.x, _map_size.y];
+        foreach (MapCell building in buildings)
+            map[building.GridPosition.x, building.GridPosition.y] = 1f;
+
+        return map;
     }
 
     private float[,] GetBuildabilityMap()
@@ -153,7 +166,7 @@ public class State
 
         if (minerals.Length == _old_minerals?.Length) return map;
 
-        map = UpdateMineralMap(Array.ConvertAll(minerals, (el) => (Vector2Int)el));
+        map = UpdateMineralMap(Array.ConvertAll(minerals, (el) => el.GridPosition));
 
         _old_minerals = minerals;
 
@@ -219,25 +232,21 @@ public class State
         public NativeArray<Vector2Int> _minerals;
 
         public NativeArray<float> _map;
-        //public NativeArray<Vector2Int> _distance_source;
 
         public void Execute(int index)
         {
             int x = index / _map_width;
             int y = index % _map_width;
             float distance = Mathf.Infinity;
-            Vector2Int source = default;
             for (int i = 0; i < _minerals.Length; i++)
             {
                 float dist = Vector2.Distance(new Vector2Int(x, y), _minerals[i]);
                 if (dist < distance)
                 {
                     distance = dist;
-                    source = _minerals[i];
                 }
             }
             _map[index] = distance / _max_distance;
-            //_distance_source[index] = source;
         }
     }
 

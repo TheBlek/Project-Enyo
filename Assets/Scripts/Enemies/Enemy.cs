@@ -57,14 +57,14 @@ public class Enemy : MonoBehaviour
             return;
 
         if (_pursueing_transform != null && Vector3.Distance(_pursueing_transform.position, transform.position) < _vision_radius)
-        {
             _target_pos = _pursueing_transform.position;
-        }
 
-        if ((_waypoints == null || _target_pos != _waypoints[_waypoints.Length - 1]) && !_path_requested)
+        bool no_correct_path = _waypoints == null || _current_waypoint >= _waypoints.Length;
+
+        if ((no_correct_path || _target_pos != _waypoints[_waypoints.Length - 1]) && !_path_requested)
         {
             RequestPath();
-            if (_waypoints == null)
+            if (no_correct_path)
                 return;
         }
 
@@ -74,6 +74,8 @@ public class Enemy : MonoBehaviour
             _walker.Walk((_waypoints[_current_waypoint] - (Vector2)transform.position).normalized);
         else if (++_current_waypoint == _waypoints.Length)
             OnTargetAchived();
+        else
+            _pathRequestManager.UnreserveNode(_waypoints[_current_waypoint - 1]);
     }
 
     protected void OnTargetAchived()
@@ -85,8 +87,16 @@ public class Enemy : MonoBehaviour
 
     protected void RequestPath()
     {
+        if (_waypoints != null)
+            _pathRequestManager.UnreservePath(_waypoints);
         _path_requested = true;
         _pathRequestManager.RequestPath(transform.position, _target_pos, OnPathFound);
+    }
+
+    private void OnDestroy()
+    {
+        if (_waypoints != null)
+            _pathRequestManager.UnreservePath(_waypoints);
     }
 
     public void OnPathFound(Vector2[] waypoints, bool success)
@@ -94,6 +104,7 @@ public class Enemy : MonoBehaviour
         if (success)
         {
             _waypoints = waypoints;
+            _pathRequestManager.UnreserveNode(_waypoints[0]);
             _current_waypoint = 1;
             _waypoints[_waypoints.Length - 1] = _target_pos;
         }
@@ -116,11 +127,18 @@ public class Enemy : MonoBehaviour
         _stunned = false;
     }
 
-    public void SetTarget(Vector2 target_pos)
+    public Vector2 Target
     {
-        _target_pos = target_pos;
-        _waypoints = null; // useless with new target
-        _pursueing_transform = null;
+        get
+        {
+            return _target_pos;
+        }
+        set
+        {
+            _target_pos = value;
+            _waypoints = null;
+            _pursueing_transform = null;
+        }
     }
 
     private void OnDrawGizmos()

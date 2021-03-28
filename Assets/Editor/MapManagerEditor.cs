@@ -8,7 +8,6 @@ public class MapManagerEditor : Editor
     private SerializedProperty _tiles;
     private SerializedProperty _collidability;
 
-
     private void OnEnable()
     {
         _tiles = serializedObject.FindProperty("Tiles");
@@ -41,4 +40,3 @@ public class MapManagerEditor : Editor
         serializedObject.ApplyModifiedProperties();
     }
 }
-
