@@ -56,7 +56,7 @@ public class Enemy : MonoBehaviour
         if (_path_requested)
             return;
 
-        if (_pursueing_transform != null && Vector3.Distance(_pursueing_transform.position, transform.position) < _vision_radius)
+        if (_pursueing_transform != null && Vector2.Distance(_pursueing_transform.position, transform.position) < _vision_radius)
             _target_pos = _pursueing_transform.position;
 
         bool no_correct_path = _waypoints == null || _current_waypoint >= _waypoints.Length;

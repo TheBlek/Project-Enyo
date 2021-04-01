@@ -50,7 +50,10 @@ class Superviser : MonoBehaviour
             _behaviour_to_follow.Reset();
             ReEvaluateBestBehaviour();
         }
+    }
 
+    private void FixedUpdate()
+    {
         foreach (Enemy enemy in _state.GetUnits())
             enemy.SelfUpdate();
     }

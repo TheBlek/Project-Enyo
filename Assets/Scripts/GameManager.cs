@@ -84,11 +84,13 @@ public class GameManager : MonoBehaviour
             _time_since_last_maintenance = 0;
             Maintenance();
         }
+
+        superviser.SelfUpdate();
     }
 
     private void FixedUpdate()
     {
-        superviser.SelfUpdate();
+        
     }
 
     #region Some Get Methods

@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 7301330275974522879}
   - component: {fileID: 1449683162684997451}
   - component: {fileID: 3805770776333311194}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BlockHead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,9 +102,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowGizmos: 1
-  _vision_radius: 2
+  _vision_radius: 4.07
   _knock_back: 0.19
-  _knock_back_cooldown: 0.7
+  _knock_back_cooldown: 1
 --- !u!114 &6159167054575030898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,6 +137,7 @@ MonoBehaviour:
   _head: {fileID: 1095661051140562368}
   _legs: {fileID: 1095661051140562368}
   _turn_legs: 0
+  _sight_offset: 0
 --- !u!114 &1314622237481621226
 MonoBehaviour:
   m_ObjectHideFlags: 0

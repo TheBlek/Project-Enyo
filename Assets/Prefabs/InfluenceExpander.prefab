@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4826662990100331799}
   - component: {fileID: 7334114238334158520}
   - component: {fileID: 2481124417808032796}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: InfluenceExpander
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,3 +143,4 @@ MonoBehaviour:
   cost: 150
   _explosion_prefab: {fileID: 5046511379225573602, guid: 8ed8729fad97c004687933f8fa01ba20,
     type: 3}
+  _maintenance_cost: 0

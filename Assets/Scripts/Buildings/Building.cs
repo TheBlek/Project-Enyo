@@ -18,6 +18,7 @@ public class Building : MonoBehaviour
         exp.TryGetComponent(out Explosion explosion);
         explosion.SetRadius(size.x);
         explosion.SetTarget(GetComponent<Damagable>());
+        explosion.transform.SetParent(transform);
     }
 
     public virtual void SelfUpdate()

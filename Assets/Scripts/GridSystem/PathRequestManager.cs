@@ -54,8 +54,8 @@ public class PathRequestManager : MonoBehaviour
 
     public void OnPathProccessingEnd(Vector2[] path, bool success)
     {
-        if (success)
-            ReservePath(path);
+        //if (success)
+            //ReservePath(path);
 
         currentPathRequest.callback(path, success);
         IsProccessingPath = false;

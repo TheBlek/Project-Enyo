@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6084760176602447479}
   - component: {fileID: 190561925}
   - component: {fileID: 2636693758459121315}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: EnemyMine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,4 +163,5 @@ MonoBehaviour:
   cost: 300
   _explosion_prefab: {fileID: 5046511379225573602, guid: 8ed8729fad97c004687933f8fa01ba20,
     type: 3}
+  _maintenance_cost: -12
   money_per_mineral_tile: 6
