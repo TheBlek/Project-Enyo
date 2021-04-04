@@ -101,11 +101,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3012a0b8beede4b8ba453b6b9272ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowGizmos: 1
+  ShowGizmos: 0
   _player_mask:
     serializedVersion: 2
     m_Bits: 256
-  _vision_radius: 4.07
+  _vision_radius: 2
   _knock_back: 0.19
   _knock_back_cooldown: 1
 --- !u!114 &6159167054575030898

@@ -37,6 +37,11 @@ public class MapManagerEditor : Editor
             element.boolValue = EditorGUILayout.Toggle(new GUIContent(((MapTiles)i).ToString()), element.boolValue);
         }
 
+        if (GUILayout.Button("Generate Map"))
+        {
+            ((MapManager)target).HandleMapGeneration();
+        }
+
         serializedObject.ApplyModifiedProperties();
     }
 }

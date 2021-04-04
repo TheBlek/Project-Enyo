@@ -66,7 +66,7 @@ public struct Steer
     public void AddDangerToVectorWithThreshold(Vector2 danger, float weight, float threshold)
     {
         danger = danger.normalized;
-        AddDanger((direction) => Vector2.Dot(direction, danger) < threshold ? 0 : Vector2.Dot(direction, danger), weight);
+        AddDanger((direction) => Vector2.Dot(direction, danger) * weight < threshold ? 0 : Vector2.Dot(direction, danger), weight);
     }
 
     private void AddDanger(Func<Vector2, float> function, float weight)
@@ -83,7 +83,7 @@ public struct Steer
 
         if (max_interest == 0)
         {
-            Debug.LogError("You tried to call normalization with empty interests");
+            Debug.LogWarning("You tried to call normalization with empty interests");
             return;
         }
 
@@ -101,7 +101,7 @@ public struct Steer
 
         if (max_danger == 0)
         {
-            Debug.LogError("You tried to call normalization with empty dangers");
+            Debug.LogWarning("You tried to call normalization with empty dangers");
             return;
         }
 
@@ -124,7 +124,7 @@ public struct Steer
     {
         Gizmos.color = Color.green;
         for (int i = 0; i < _directions.Length; i++)
-            if (_dangers[i] <= 0)
+            //if (_dangers[i] <= 0)
                 Gizmos.DrawLine(position, position + _directions[i] * _interests[i]);
     }
 
@@ -132,7 +132,7 @@ public struct Steer
     {
         Gizmos.color = Color.red;
         for (int i = 0; i < _directions.Length; i++)
-                    Gizmos.DrawLine(position, position + _directions[i] * _dangers[i]);
+            Gizmos.DrawLine(position, position + _directions[i] * _dangers[i]);
     }
 
     public void VisualizePickedDirection(Vector2 position)

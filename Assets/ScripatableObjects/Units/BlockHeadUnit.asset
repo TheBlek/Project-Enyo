@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: BlockHeadUnit
   m_EditorClassIdentifier: 
   _prefab: {fileID: 1095661051140562365, guid: 07a83ec06d5a715449f63f8f6f68ae1c, type: 3}
-  _production_cost: 150
-  _production_time: 5
+  _production_cost: 300
+  _production_time: 10

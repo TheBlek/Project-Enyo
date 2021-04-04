@@ -1,5 +1,11 @@
 ﻿using UnityEngine;
 
+public enum BehaviourPattern
+{
+    Local,
+    Path
+}
+
 [RequireComponent(typeof(Damagable))]
 [RequireComponent(typeof(Walker))]
 [RequireComponent(typeof(SpriteRenderer))]
@@ -10,18 +16,18 @@ public class Enemy : MonoBehaviour
     [SerializeField] LayerMask _player_mask;
     [SerializeField] protected float _vision_radius;
 
-    protected Vector2 _target_pos = default;
-    protected Transform _pursueing_transform = null;
     protected PathRequestManager _pathRequestManager;
+    protected Walker _walker;
 
+    protected Vector2 _path_target = default;
     protected Vector2[] _waypoints = null;
     protected int _current_waypoint;
     protected bool _path_requested = false;
-    protected Walker _walker;
-    protected bool _stunned = false;
 
     protected Steer _steer;
+    protected BehaviourPattern _behaviour_pattern = BehaviourPattern.Local;
 
+    protected bool _stunned = false;
     protected virtual void Start()
     {
         _pathRequestManager = FindObjectOfType<GameManager>().GetPathRequestManager();
@@ -34,35 +40,57 @@ public class Enemy : MonoBehaviour
         if (_stunned)
             return;
 
-        if (_target_pos != default)
+        if (_behaviour_pattern == BehaviourPattern.Path)
             FollowPath();
         else
-            TryFindNewTarget();
-
+            ActLocal();
     }
 
-    protected void TryFindNewTarget()
+    public void Update()
+    {
+        
+    }
+
+    protected void ReportAllTargets()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, _vision_radius, _player_mask);
         foreach (Collider2D collider in colliders)
         {
             if (collider.TryGetComponent(out Damagable damagable) && !damagable.is_enemy)
-            {
-                _target_pos = damagable.transform.position;
-                _pursueing_transform = damagable.transform;
+            { 
+                float weight = (_vision_radius - Vector2.Distance(damagable.transform.position, transform.position)) / _vision_radius;
+                _steer.AddInterestToVector(damagable.transform.position - transform.position, 2 * weight);
             }
         }
     }
 
     protected void ReportAllObstructions()
     {
-        foreach (Vector2 direction in _steer.GetDirections())
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, _vision_radius, ~_player_mask);
+        foreach (Collider2D collider in colliders)
         {
-            Vector2 raycast_pos = transform.position;
-            RaycastHit2D[] hits = Physics2D.RaycastAll(raycast_pos, direction, 0.4f, ~_player_mask);
-            if (hits.Length > 1)
-                _steer.AddDangerToVector(direction, 1f);
+            if (collider.gameObject == gameObject)
+                continue;
+            float weight = (_vision_radius - Vector2.Distance(collider.transform.position, transform.position)) / _vision_radius;
+            if (weight < 0)
+                continue;
+            Vector2 danger = collider.transform.position - transform.position;
+            _steer.AddInterestToVectorWithDesirableDot(-danger, weight / 2, 0.65f);
+            _steer.AddDangerToVectorWithThreshold(danger, weight, 0.65f);
         }
+    }
+
+    protected void ActLocal()
+    {
+        _steer.ResetSteerData();
+        ReportAllTargets();
+        ReportAllObstructions();
+        _steer.NormalizeInterests();
+        _steer.NormalizeDangers();
+
+        Vector2 direction = _steer.GetResultDirection();
+        _walker.LookAtTarget((Vector2)transform.position + direction);
+        _walker.Walk(direction);
     }
 
     protected virtual void FollowPath()
@@ -70,38 +98,25 @@ public class Enemy : MonoBehaviour
         if (_path_requested)
             return;
 
-        if (_pursueing_transform != null && Vector2.Distance(_pursueing_transform.position, transform.position) < _vision_radius)
-            _target_pos = _pursueing_transform.position;
-
-        bool no_correct_path = _waypoints == null || _current_waypoint >= _waypoints.Length;
-
-        if ((no_correct_path || _target_pos != _waypoints[_waypoints.Length - 1]) && !_path_requested)
+        if (_waypoints == null || _current_waypoint >= _waypoints.Length)
         {
             RequestPath();
-            if (no_correct_path)
-                return;
+            return;
         }
 
         _walker.LookAtTarget(_waypoints[_current_waypoint]);
 
-        _steer.ResetSteerData();
-        _steer.AddInterestToVector(_waypoints[_current_waypoint] - (Vector2)transform.position, 1f);
-        ReportAllObstructions();
-        _steer.NormalizeInterests();
-
-        if (Vector2.Distance(_waypoints[_current_waypoint], transform.position) > 0.01f)
-            _walker.Walk(_steer.GetResultDirection());
-        else if (++_current_waypoint == _waypoints.Length)
+        if (Vector2.Distance(_waypoints[_current_waypoint], transform.position) <= 0.01f && ++_current_waypoint == _waypoints.Length)
             OnTargetAchived();
-        else
-            _pathRequestManager.UnreserveNode(_waypoints[_current_waypoint - 1]);
+        else _walker.Walk((_waypoints[_current_waypoint] - (Vector2)transform.position).normalized);
     }
 
     protected void OnTargetAchived()
     {
-        _target_pos = default;
+        _path_target = default;
         _waypoints = null;
         _current_waypoint = 1;
+        _behaviour_pattern = BehaviourPattern.Local;
     }
 
     protected void RequestPath()
@@ -109,7 +124,7 @@ public class Enemy : MonoBehaviour
         if (_waypoints != null)
             _pathRequestManager.UnreservePath(_waypoints);
         _path_requested = true;
-        _pathRequestManager.RequestPath(transform.position, _target_pos, OnPathFound);
+        _pathRequestManager.RequestPath(transform.position, _path_target, OnPathFound);
     }
 
     private void OnDestroy()
@@ -125,7 +140,7 @@ public class Enemy : MonoBehaviour
             _waypoints = waypoints;
             _pathRequestManager.UnreserveNode(_waypoints[0]);
             _current_waypoint = 1;
-            _waypoints[_waypoints.Length - 1] = _target_pos;
+            _waypoints[_waypoints.Length - 1] = _path_target;
         }
         _path_requested = false;
     }
@@ -150,23 +165,30 @@ public class Enemy : MonoBehaviour
     {
         get
         {
-            return _target_pos;
+            return _path_target;
         }
         set
         {
-            _target_pos = value;
+            _path_target = value;
             _waypoints = null;
-            _pursueing_transform = null;
         }
+    }
+
+    public void SetBehaviourPatter(BehaviourPattern pattern)
+    {
+        _behaviour_pattern = pattern;
     }
 
     private void OnDrawGizmos()
     {
-        if (!ShowGizmos || _waypoints == null)
+        if (!ShowGizmos)
             return;
 
         _steer.VisualizeInterests(transform.position);
         _steer.VisualizeDangers(transform.position);
+        _steer.VisualizePickedDirection(transform.position);
+        Gizmos.color = Color.black;
+        Gizmos.DrawWireSphere(transform.position, _vision_radius);
         /*Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, _waypoints[_current_waypoint]);
         for (int i = _current_waypoint; i < _waypoints.Length - 1; i++)
