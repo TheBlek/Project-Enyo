@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8024812880699409492}
   - component: {fileID: 7785226698098684463}
   - component: {fileID: 1545982760489011897}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,6 +104,7 @@ MonoBehaviour:
   cost: 100
   _explosion_prefab: {fileID: 5046511379225573602, guid: 8ed8729fad97c004687933f8fa01ba20,
     type: 3}
+  _maintenance_cost: 0
   _max_fire_radius: 2
   _min_fire_radius: 0
   _turn_speed: 135
@@ -181,7 +182,7 @@ GameObject:
   - component: {fileID: 4890856201541899676}
   - component: {fileID: 4890856201541899678}
   - component: {fileID: 4890856201541899679}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -282,7 +283,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1635881763253654275}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -314,7 +315,7 @@ GameObject:
   - component: {fileID: 8881445116266926920}
   - component: {fileID: 8881445116266926922}
   - component: {fileID: 8881445116266926923}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}

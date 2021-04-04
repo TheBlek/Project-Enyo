@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1779991969863886896}
   - component: {fileID: 1779991969863886862}
   - component: {fileID: 1779991969863886863}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,7 @@ GameObject:
   - component: {fileID: 1779991970842436321}
   - component: {fileID: 5535277417417508547}
   - component: {fileID: 2590028344432081123}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Artillery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,6 +157,7 @@ MonoBehaviour:
   cost: 200
   _explosion_prefab: {fileID: 5046511379225573602, guid: 8ed8729fad97c004687933f8fa01ba20,
     type: 3}
+  _maintenance_cost: 0
   _max_fire_radius: 7
   _min_fire_radius: 2
   _turn_speed: 360
@@ -284,7 +285,7 @@ GameObject:
   - component: {fileID: 1779991970920208039}
   - component: {fileID: 1779991970920208041}
   - component: {fileID: 1779991970920208040}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -383,7 +384,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1779991970994347039}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shooting Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}

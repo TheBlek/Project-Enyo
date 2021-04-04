@@ -102,6 +102,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowGizmos: 1
+  _player_mask:
+    serializedVersion: 2
+    m_Bits: 256
   _vision_radius: 4.07
   _knock_back: 0.19
   _knock_back_cooldown: 1
@@ -188,7 +191,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.02, y: 0}
+  m_Offset: {x: -0.04, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -199,7 +202,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.42, y: 0.01}
+  m_Size: {x: 0.42, y: 0.21}
   m_EdgeRadius: 0
 --- !u!95 &3805770776333311194
 Animator:

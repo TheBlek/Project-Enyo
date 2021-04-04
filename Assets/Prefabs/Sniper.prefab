@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1967142135355441340}
   - component: {fileID: 1967142135355441341}
   - component: {fileID: 1639380243}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sniper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 1967142135773953340}
   - component: {fileID: 1967142135773953342}
   - component: {fileID: 1967142135773953343}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blow Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -281,7 +281,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1967142136295762732}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shooting Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -313,7 +313,7 @@ GameObject:
   - component: {fileID: 1967142137197869958}
   - component: {fileID: 1967142137197869953}
   - component: {fileID: 1063293602683430605}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
