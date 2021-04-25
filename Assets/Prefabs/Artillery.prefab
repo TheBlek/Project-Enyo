@@ -117,6 +117,7 @@ GameObject:
   - component: {fileID: 1779991970842436321}
   - component: {fileID: 5535277417417508547}
   - component: {fileID: 2590028344432081123}
+  - component: {fileID: 5302507746077401826}
   m_Layer: 8
   m_Name: Artillery
   m_TagString: Untagged
@@ -160,10 +161,8 @@ MonoBehaviour:
   _maintenance_cost: 0
   _max_fire_radius: 7
   _min_fire_radius: 2
-  _turn_speed: 360
-  _barrel: {fileID: 1779991969863886897}
-  _barrel_angle_offset: -90
   _check_for_obstacles: 0
+  _barrel: {fileID: 1779991969863886897}
 --- !u!212 &1779991970842436320
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -274,6 +273,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.45, y: 0.45}
   m_EdgeRadius: 0
+--- !u!114 &5302507746077401826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1779991970842436322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ede2105a681200140b61d5c0f6e32322, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pointer: {fileID: 1779991969863886896}
+  _angular_speed: 180
+  _sight_offset: -90
+  _instant_pointing: 0
 --- !u!1 &1779991970920208042
 GameObject:
   m_ObjectHideFlags: 0

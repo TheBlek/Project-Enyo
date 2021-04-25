@@ -231,7 +231,8 @@ MonoBehaviour:
   _danger_prefab: {fileID: 257409831}
   _direction_number: 16
   _desirable_dot: 0.5
-  _threshold: 0.83
+  _threshold: 0.6
+  _vision_radius: 3.68
 --- !u!1 &257409831
 GameObject:
   m_ObjectHideFlags: 0

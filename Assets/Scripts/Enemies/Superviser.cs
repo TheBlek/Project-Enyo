@@ -102,7 +102,7 @@ class Superviser : MonoBehaviour
         Enemy unit = (Enemy)parameters[0];
         Vector2 pos = _mapManager.GetGlobalPositionFromGrid((Vector2Int)parameters[1]);
         //Debug.Log("yeah, I'm setting him at pos: " + pos);
-        unit.Target = pos;
+        unit.GetComponent<PathFollower>().Target = pos;
         unit.SetBehaviourPatter(BehaviourPattern.Path);
     }
 

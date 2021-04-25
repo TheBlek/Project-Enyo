@@ -2,36 +2,32 @@
 using System.Collections.Generic;
 
 [RequireComponent(typeof(Shooter))]
+[RequireComponent(typeof(Looker))]
 public abstract class AttackBuilding : Building
 {
     [SerializeField] protected float _max_fire_radius;
     [SerializeField] protected float _min_fire_radius;
-    [SerializeField] protected float _turn_speed;
-    [SerializeField] protected GameObject _barrel;
-    [SerializeField] protected float _barrel_angle_offset;
     [SerializeField] protected bool _check_for_obstacles;
 
-    protected Enemy _target;
-    protected bool _ready_to_shoot;
-
     protected Shooter _shooter;
-    protected Transform _barrel_transform;
+    protected Looker _looker;
 
     protected new void Start()
     {
         base.Start();
-        _barrel_transform = _barrel.transform;
         _shooter = GetComponent<Shooter>();
+        _looker = GetComponent<Looker>();
     }
 
     public override void SelfUpdate()
     {
-        Collider2D[] _near_colliders = Physics2D.OverlapCircleAll(transform.position, _max_fire_radius);
-        _target = GetNearestEnemy(GetAllEnemies(_near_colliders));
-
-        LookAtTarget();
-
         TryToShoot();
+
+        Collider2D[] _near_colliders = Physics2D.OverlapCircleAll(transform.position, _max_fire_radius);
+        Enemy target = GetNearestEnemy(GetAllEnemies(_near_colliders));
+
+        if (target != null) _looker.Target = target.transform.position;
+        else _looker.Target = transform.position;
     }
 
     protected Enemy GetNearestEnemy(Enemy[] enemies)
@@ -58,54 +54,17 @@ public abstract class AttackBuilding : Building
         List<Enemy> enemies = new List<Enemy>();
 
         foreach (Collider2D collider in colliders)
-        {
             if (collider.TryGetComponent<Enemy>(out var enemy))
-            {
                 enemies.Add(enemy);
-            }
-        }
+
         return enemies.ToArray();
     }
 
     protected void TryToShoot()
     {
-        if (!_ready_to_shoot || _target == null || (_shooter.IsThereObstacleBeforeTarget(_target.transform.position) && _check_for_obstacles))
+        if (!_looker.IsPointedOnTarget || _looker.Target == (Vector2)transform.position || (_shooter.IsThereObstacleBeforeTarget(_looker.Target) && _check_for_obstacles))
             return;
 
-        _shooter.Shoot(_target.transform);
+        _shooter.Shoot(_looker.Target);
     }
-
-    protected void LookAtTarget()
-    {
-        if (_target == null)
-        {
-            _ready_to_shoot = false;
-            return;
-        }
-
-        Vector2 relative_pos = _target.transform.position - transform.position;
-        float target_angle = Mathf.Atan2(relative_pos.y, relative_pos.x) * Mathf.Rad2Deg + _barrel_angle_offset;
-
-        float angle_diff = target_angle - _barrel_transform.eulerAngles.z;
-
-        while (Mathf.Abs(angle_diff) > 180)
-        {
-            if (target_angle < _barrel_transform.eulerAngles.z)
-                target_angle += 360;
-            else
-                target_angle -= 360;
-            angle_diff = target_angle - _barrel_transform.eulerAngles.z;
-        }
-
-        if (Mathf.Abs(angle_diff) > _turn_speed * Time.deltaTime)
-        {
-            _ready_to_shoot = false;
-            target_angle = _barrel_transform.eulerAngles.z + _turn_speed * Time.deltaTime * Mathf.Sign(angle_diff);
-        }
-        else
-            _ready_to_shoot = true;
-
-        _barrel_transform.eulerAngles = Vector3.forward * target_angle;
-    }
-
 }

@@ -30,7 +30,7 @@ public class ArtilleryBullet : Bullet
     private void ApplyForce()
     {
         TryGetComponent(out _rb);
-        Vector3 relative_target = (_target.position - transform.position);
+        Vector3 relative_target = (Target - (Vector2)transform.position);
         float speed_req = relative_target.magnitude / _detonate_time;
         _rb.velocity = speed_req * relative_target.normalized;
     }

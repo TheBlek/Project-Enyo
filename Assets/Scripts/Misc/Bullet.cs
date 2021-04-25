@@ -6,7 +6,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] protected float damage = 50;
     [SerializeField] protected float life_time = 1;
 
-    public Transform _target;
+    public Vector2 Target;
 
     protected Animator _animator;
     private bool is_in_animation;

@@ -12,9 +12,10 @@ public class PlayerControls : MonoBehaviour
 { 
     [SerializeField] private Camera player_camera;
     [SerializeField] private GameManager gameManager;
-    [SerializeField] private Builder builder;
-    [SerializeField] private Shooter shooter;
-    [SerializeField] private Walker walker;
+    [SerializeField] private Builder _builder;
+    [SerializeField] private Shooter _shooter;
+    [SerializeField] private Walker _walker;
+    [SerializeField] private Looker _looker;
 
     private float cell_size;
 
@@ -33,7 +34,7 @@ public class PlayerControls : MonoBehaviour
         HandleMouseInput();
 
         if (building_mode)
-            builder.Preview(player_camera, cell_size);
+            _builder.Preview(player_camera, cell_size);
 
         input_movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
     }
@@ -43,12 +44,12 @@ public class PlayerControls : MonoBehaviour
         bool lShiftInput = Input.GetKey(KeyCode.LeftShift);
         if (building_mode && GetMouseInput(lShiftInput))
         {
-            builder.Build(gameManager);
+            _builder.Build(gameManager);
             if (!lShiftInput)
                 ChangeBuildingStateRequest(ChangeRequestType.Anyway);
         }
         else if (GetMouseInput(false))
-            shooter.Shoot();
+            _shooter.Shoot();
     }
 
     private bool GetMouseInput(bool _is_multiple_during_press) => // Freaking long and complex line. Should I divide it?
@@ -75,21 +76,21 @@ public class PlayerControls : MonoBehaviour
                 Debug.Log("Somehow this type is not processing");
                 break;
         }
-        builder.SwitchPreviewState(building_mode);
+        _builder.SwitchPreviewState(building_mode);
     }
 
     public Buildings BuildingType
     {
         set
         {
-            builder.SetBuildingType(value);
+            _builder.SetBuildingType(value);
         }
     }
 
     private void FixedUpdate()
     {
-        walker.LookAtMouse(player_camera);
-        walker.Walk(input_movement);
+        _looker.Target = player_camera.ScreenToWorldPoint(Input.mousePosition);
+        _walker.Walk(input_movement);
     }
 
     public Vector3 GetPlayerPosition()
@@ -97,5 +98,5 @@ public class PlayerControls : MonoBehaviour
         return transform.position;
     }
 
-    public Builder GetBuilder() => builder;
+    public Builder GetBuilder() => _builder;
 }
