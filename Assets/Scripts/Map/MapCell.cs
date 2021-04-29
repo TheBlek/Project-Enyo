@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 
+[System.Serializable]
 public class MapCell : IGridItem, IHeapItem<MapCell>
 {   
     public int gCost;
     public int hCost;
     public MapCell parent;
 
-    private bool _walkable_tile;
+    public bool _walkable_tile = true;
+    [SerializeField] MapTiles _tile;
 
     public void SetTileWalkable(bool walkable_tile)
     {
@@ -18,7 +20,7 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
         return BuildingInCell == null && _walkable_tile;
     }
 
-    public bool IsWalkable() => BuildingInCell == null && _walkable_tile;
+    public bool IsWalkable() => BuildingInCell == null && _walkable_tile && !ReservedForPath;
 
     public int fCost
     {
@@ -30,7 +32,7 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
 
     public Building BuildingInCell { get; set; }
 
-    public MapTiles Tile { get; set; }
+    public MapTiles Tile { get => _tile; set { _tile = value; } }
 
     public int HeapIndex { get; set; }
 
@@ -43,4 +45,7 @@ public class MapCell : IGridItem, IHeapItem<MapCell>
             compare = hCost.CompareTo(cellToCompare.hCost);
         return -compare;
     }
+
+    public bool ReservedForPath { get; set; }
+    //public static implicit operator Vector2Int(MapCell target) => target.GridPosition;
 }

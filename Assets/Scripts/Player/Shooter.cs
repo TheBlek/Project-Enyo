@@ -25,7 +25,7 @@ public class Shooter : MonoBehaviour
         time_since_last_shot += Time.deltaTime;
     }
 
-    public void Shoot(Transform target=default)
+    public void Shoot(Vector2 target=default)
     {
         if (time_since_last_shot < delay)
             return;
@@ -33,7 +33,7 @@ public class Shooter : MonoBehaviour
         var bullet = Instantiate(bullet_prefab, _shoot_point.position, _shoot_point.rotation);
 
         if (target != default)
-            bullet.GetComponent<Bullet>()._target = target;
+            bullet.GetComponent<Bullet>().Target = target;
 
         OnShoot();
 

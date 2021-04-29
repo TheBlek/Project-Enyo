@@ -3,7 +3,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private int metals = 0;
+    [SerializeField] private int _player_metals = 0;
+    [SerializeField] private int _enemy_metals = 0;
     [SerializeField] private PlayerControls player;
     [SerializeField] private Superviser superviser;
 
@@ -11,10 +12,11 @@ public class GameManager : MonoBehaviour
     private MapManager mapManager;
     private PathRequestManager pathRequestManager;
     private System.Random _random;
+    private float _time_since_last_maintenance = 0;
 
     void Awake()
     {
-        player.GetBuilder().onBuild += BuildingInsertion;
+        SetUpBuilders();
         buildings = new List<Building>();
 
         mapManager = GetComponent<MapManager>();
@@ -23,9 +25,21 @@ public class GameManager : MonoBehaviour
         _random = new System.Random();
     }
 
-    public void BuildingInsertion(Building building)
+    private void SetUpBuilders()
     {
-        metals -= building.GetCost();
+        Builder[] builderers = FindObjectsOfType<Builder>();
+        foreach (Builder builder in builderers)
+        {
+            builder.onBuild += InsertBuilding;
+        }
+    }
+
+    private void InsertBuilding(Building building)
+    {
+        if (building.IsEnemy)
+            _enemy_metals -= building.GetCost();
+        else
+            _player_metals -= building.GetCost();
 
         buildings.Add(building);
         mapManager.AdjustCellsForBuilding(building);
@@ -33,16 +47,27 @@ public class GameManager : MonoBehaviour
         building.SetUp();
     }
     
+    private void Maintenance()
+    {
+        foreach (Building building in buildings)
+        {
+            AddMetals((int)-building.MaintenanceCost, building.IsEnemy);
+        }
+    }
 
-    private void Update()
+    private void RemoveNullBuildings()
     {
         List<Building> buildings_to_remove = new List<Building>();
         foreach (Building building in buildings)
         {
             if (building == null)
+            {
                 buildings_to_remove.Add(building);
+            }
             else
+            {
                 building.SelfUpdate();
+            }
         }
         foreach (Building building in buildings_to_remove)
         {
@@ -50,9 +75,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        _time_since_last_maintenance += Time.deltaTime;
+        RemoveNullBuildings();
+        if (_time_since_last_maintenance > 1)
+        {
+            _time_since_last_maintenance = 0;
+            Maintenance();
+        }
+
+        superviser.SelfUpdate();
+    }
+
     private void FixedUpdate()
     {
-        superviser.SelfUpdate();
+        
     }
 
     #region Some Get Methods
@@ -60,14 +98,19 @@ public class GameManager : MonoBehaviour
 
     public PathRequestManager GetPathRequestManager() => pathRequestManager;
 
-    public bool IsAffordable(Building building)
+    public bool IsAffordable(Building building, bool is_enemy)
     {
-        return building.GetCost() <= metals;
+        if (is_enemy)
+            return building.GetCost() <= _enemy_metals;
+        return building.GetCost() <= _player_metals;
     }
 
-    public void AddMetals(int addition)
+    public void AddMetals(int addition, bool is_enemy)
     {
-        metals += addition;
+        if (is_enemy)
+            _enemy_metals += addition;
+        else
+            _player_metals += addition;
     }
 
     public Vector3 GetPlayerPosition()
@@ -84,6 +127,6 @@ public class GameManager : MonoBehaviour
 
     public bool IsThereAnyBuilding() => buildings.Count > 0;
 
-    public float GetMetalCount() => metals;
+    public float GetMetalCount() => _player_metals;
     #endregion
 }

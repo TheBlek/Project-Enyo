@@ -1,85 +1,145 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System;
 using UnityEngine;
 
 class Superviser : MonoBehaviour
 {
-    [SerializeField] private GameObject enemyPrefab;
-    [SerializeField] private int number_of_enemies = 4;
-    [SerializeField] private float spawn_point_offset = 10;
-    [SerializeField] private Vector2 spawn_point;
+    private GameManager _gameManager;
+    private MapManager _mapManager;
 
-    private List<Enemy> enemies;
-    private List<Enemy> dead_enemies;
-    private GameManager gameManager;
-    private MapManager mapManager;
-    private System.Random random;
+    [SerializeField] private Gradient _gradient;
+    [SerializeField] bool _show_gizmos;
+    [SerializeField] MapTypes _current_type;
+    [SerializeField] private Behaviour[] _behaviours;
+    [SerializeField] private float _turn_delay;
+    private State _state;
+
+    private Builder _builder;
+
+    private Behaviour _behaviour_to_follow;
+
+    private bool _ready_to_process_instruction = true;
+
+    private bool _is_behaviour_to_follow_exists = true;
 
     private void Start()
-    {
-        random = new System.Random();
+    { 
+        _gameManager = FindObjectOfType<GameManager>();
+        _mapManager = _gameManager.GetMapManager();
+        _builder = GetComponent<Builder>();
 
-        gameManager = FindObjectOfType<GameManager>();
-        mapManager = gameManager.GetMapManager();
-
-        InitEnemies();
+        _state = new State(_mapManager, _builder, new Buildings[]{ Buildings.Mine, Buildings.Barrack });
+        _state.OnStateChange += ReEvaluateBestBehaviour;
     }
 
-    private void InitEnemies()
-    {
-        enemies = new List<Enemy>();
-        dead_enemies = new List<Enemy>();
-        for (int i = 0; i < number_of_enemies; i++)
-        {
-            enemies.Add(SpawnNewEnemy());
-        }
-    }
 
     public void SelfUpdate()
     {
-        Vector3 player_pos = gameManager.GetPlayerPosition();
-        foreach (Enemy enemy in enemies)
+        if (!_is_behaviour_to_follow_exists) return;
+
+        if (_behaviour_to_follow == null)
+            ReEvaluateBestBehaviour();
+
+        if (!_is_behaviour_to_follow_exists) return;
+
+        if (!_behaviour_to_follow.IsDone)
         {
-            if (enemy == null)
-                dead_enemies.Add(enemy);
-            else
+            ProcessInstruction(_behaviour_to_follow.NextInstruction());
+        } else {
+            _behaviour_to_follow.Reset();
+            ReEvaluateBestBehaviour();
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        foreach (Enemy enemy in _state.GetUnits())
+            enemy.SelfUpdate();
+    }
+
+    private void ReEvaluateBestBehaviour()
+    {
+        _behaviour_to_follow = PickBestAvailableBehaviour();
+        _is_behaviour_to_follow_exists = _behaviour_to_follow != null;
+    }
+
+    private Behaviour PickBestAvailableBehaviour()
+    {
+        Behaviour best = null;
+        foreach (Behaviour behaviour in _behaviours)
+            if (behaviour.Trigger(_state) && ( best == null || best.Value < behaviour.Value))
+                best = behaviour;
+        return best;
+    }
+
+    private void ProcessInstruction(Instruction instruction)
+    {
+        if (!_ready_to_process_instruction)
+            return;
+        _ready_to_process_instruction = false;
+        switch (instruction.Type)
+        {
+            case InstructionTypes.Build:
+                Build(instruction.Parameters);
+                break;
+
+            case InstructionTypes.BuildUnit:
+                ProduceUnit(instruction.Parameters);
+                break;
+            case InstructionTypes.MoveUnit:
+                MoveUnit(instruction.Parameters);
+                break;
+
+            default:
+                break;
+        }
+        Invoke(nameof(ResetReadyness), _turn_delay);
+    }
+
+    private void MoveUnit(object[] parameters)
+    {
+        Enemy unit = (Enemy)parameters[0];
+        Vector2 pos = _mapManager.GetGlobalPositionFromGrid((Vector2Int)parameters[1]);
+        //Debug.Log("yeah, I'm setting him at pos: " + pos);
+        unit.GetComponent<PathFollower>().Target = pos;
+        unit.SetBehaviourPatter(BehaviourPattern.Path);
+    }
+
+    private void ResetReadyness()
+    {
+        _ready_to_process_instruction = true;
+    }
+
+    private void Build(object[] parameters)
+    { 
+        _builder.SetBuildingType((Buildings)parameters[1]);
+
+        Vector2 global_pos = _mapManager.GetGlobalPositionFromGrid((Vector2Int)parameters[0]);
+        _builder.Build(_gameManager, _builder.StickPositionToGrid(global_pos, _mapManager.GetCellSize()));
+    }
+
+    private void ProduceUnit(object[] parameters)
+    {
+        Barrack b = (Barrack)parameters[0];
+        b.TrySchedule((Enemies)parameters[1]);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!_show_gizmos || _state == null) return;
+        float[,] map = _state.GetMapByType(_current_type);
+        int xMax = map.GetLength(0);
+        int yMax = map.GetLength(1);
+        float cell_size = _mapManager.GetCellSize();
+        for (int x = 0; x < xMax; x++)
+        {
+            for (int y = 0; y < yMax; y++)
             {
-                if (enemy.GetTarget() == EnemyTargets.player || !gameManager.IsThereAnyBuilding()) // If target is player then set player pos as target
-                    enemy.SetTarget(player_pos);
-                else
-                {
-                    if (enemy.IsTargetEleminated && gameManager.IsThereAnyBuilding())
-                    {
-                        // If previous building or any target was eliminated set new building as target
-                        var a = gameManager.GetRandomBuilding();
-                        enemy.SetTarget(a.transform.position);
-                        enemy.IsTargetEleminated = false;
-                    }
-                }
-                enemy.SelfUpdate();
+                if (map[x, y] == 0) continue;
+                Gizmos.color = _gradient.Evaluate(map[x, y]);
+                Gizmos.DrawCube(_mapManager.GetGlobalPositionFromGrid(x, y), Vector3.one * cell_size);
             }
         }
-        foreach (Enemy enemy in dead_enemies)
-            HandleVoidEnemy(enemy);
-        dead_enemies.Clear();
     }
-
-    private void HandleVoidEnemy(Enemy enemy)
-    {
-        enemies.Remove(enemy);
-        enemies.Add(SpawnNewEnemy());
-    }
-
-    private Enemy SpawnNewEnemy()
-    {
-        Vector2 relative_pos = spawn_point_offset * new Vector2((float)random.NextDouble(), (float)random.NextDouble());
-
-        while (!mapManager.GetCellFromGlobalPosition(relative_pos + spawn_point).IsWalkable()) // Reroll pos while it's not walkable
-            relative_pos = spawn_point_offset * new Vector2((float)random.NextDouble(), (float)random.NextDouble());
-
-        var enemyObj = Instantiate(enemyPrefab, relative_pos + spawn_point, Quaternion.identity);
-        return enemyObj.GetComponent<Enemy>();
-    }
-
 }

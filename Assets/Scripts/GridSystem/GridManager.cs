@@ -9,31 +9,34 @@ public interface IGridItem
 
 }
 
+[Serializable]
 public class GridManager<T> : MonoBehaviour where T : IGridItem
 {
     public bool ShowGizmos;
 
     [SerializeField] protected Vector2 grid_origin;
-    [SerializeField] protected Vector2Int grid_size;
+    [SerializeField] protected Vector2Int _grid_size;
     [SerializeField] protected float cell_size = 0.5f;
 
-    [SerializeField] protected T[,] grid;
+    [SerializeField] protected T[,] _grid;
+
+    public Action OnGridChange;
     private void Awake()
     {
         InitGrid();
     }
 
-    public virtual void InitGrid()
+    protected virtual void InitGrid()
     { 
-        grid = new T[grid_size.x, grid_size.y];
-        grid_origin = -Vector2.one * cell_size * grid_size / 2;
+        _grid = new T[_grid_size.x, _grid_size.y];
+        grid_origin = -Vector2.one * cell_size * _grid_size / 2;
 
-        for (int i = 0; i < grid_size.x; i++)
+        for (int i = 0; i < _grid_size.x; i++)
         {
-            for (int j = 0; j < grid_size.y; j++)
+            for (int j = 0; j < _grid_size.y; j++)
             {
-                grid[i, j] = (T)Activator.CreateInstance(typeof(T), new object[] { });
-                grid[i, j].GridPosition = new Vector2Int(i,j);
+                _grid[i, j] = (T)Activator.CreateInstance(typeof(T), new object[] { });
+                _grid[i, j].GridPosition = new Vector2Int(i,j);
             }
         }
     }
@@ -60,10 +63,27 @@ public class GridManager<T> : MonoBehaviour where T : IGridItem
 
     public T GetCellFromGlobalPosition(Vector2 global)
     {
-        Vector2Int temp = GetGridPositionFromGlobal(global);
-        if (AbnormalGridPosition(temp))
-            Debug.Log("Position seems to be abnormal " + temp.x + " " + temp.y);
-        return grid[temp.x, temp.y];
+        return GetCellFromGridPosition(GetGridPositionFromGlobal(global));
+    }
+
+    public T GetCellFromGridPosition(Vector2Int grid_pos)
+    {
+        if (AbnormalGridPosition(grid_pos))
+        {
+            Debug.LogError("Position seems to be abnormal " + grid_pos.x + " " + grid_pos.y);
+            return default;
+        }
+        return _grid[grid_pos.x, grid_pos.y];
+    }
+
+    public Vector2 GetGlobalPositionFromGrid(Vector2Int grid_pos)
+    {
+        return grid_origin + (Vector2)grid_pos * cell_size + Vector2.one * cell_size / 2;
+    }
+
+    public Vector2 GetGlobalPositionFromGrid(int x, int y)
+    {
+        return GetGlobalPositionFromGrid(new Vector2Int(x, y));
     }
 
     public Vector3 GetGlobalPosition(T cell)
@@ -80,37 +100,59 @@ public class GridManager<T> : MonoBehaviour where T : IGridItem
     {
         T[] neighbours = new T[4];
 
-        if (grid_position.y + 1 < grid_size.y)
-            neighbours[0] = grid[grid_position.x, grid_position.y + 1];
-        if (grid_position.x + 1 < grid_size.x)
-            neighbours[1] = grid[grid_position.x + 1, grid_position.y];
+        if (grid_position.y + 1 < _grid_size.y)
+            neighbours[0] = _grid[grid_position.x, grid_position.y + 1];
+        if (grid_position.x + 1 < _grid_size.x)
+            neighbours[1] = _grid[grid_position.x + 1, grid_position.y];
         if (grid_position.y - 1 >= 0)
-            neighbours[2] = grid[grid_position.x, grid_position.y - 1];
+            neighbours[2] = _grid[grid_position.x, grid_position.y - 1];
         if (grid_position.x - 1 >= 0)
-            neighbours[3] = grid[grid_position.x - 1, grid_position.y];
+            neighbours[3] = _grid[grid_position.x - 1, grid_position.y];
         return neighbours;
     }
 
     public T[] GetNeighbours(T cell) // This returns neighbours with corners
     {
-        List<T> neighbours = new List<T>();
-        Vector2Int pos = cell.GridPosition;
+        return GetNeighboursInRadius(cell.GridPosition, 1);
+    }
 
-        for (int x = -1; x <= 1; x++)
+    public T[] GetNeighboursInRadius(Vector2Int center, int radius)
+    {
+        List<T> neighbours = new List<T>();
+
+        for (int x = -radius; x <= radius; x++)
         {
-            for (int y = -1; y <= 1; y++)
+            for (int y = -radius; y <= radius; y++)
             {
-                if (!AbnormalGridPosition(pos + new Vector2Int(x, y)))
-                    neighbours.Add(grid[pos.x + x, pos.y + y]);
+                if (!AbnormalGridPosition(center + new Vector2Int(x, y)))
+                    neighbours.Add(_grid[center.x + x, center.y + y]);
             }
+        }
+        return neighbours.ToArray();
+    }
+
+    public T[] GetNeighboursInCircle(Vector2Int center, int radius)
+    {
+        List<T> neighbours = new List<T>();
+
+        for (int i = -radius; i <= radius; i++) {
+            if (!AbnormalGridPosition(center + new Vector2Int(radius, i)))
+                neighbours.Add(_grid[center.x + radius, center.y + i]);
+            if (!AbnormalGridPosition(center + new Vector2Int(i, radius)))
+                neighbours.Add(_grid[center.x + i, center.y + radius]);
+            if (!AbnormalGridPosition(center + new Vector2Int(-radius, i)))
+                neighbours.Add(_grid[center.x - radius, center.y + i]);
+            if (!AbnormalGridPosition(center + new Vector2Int(i, -radius)))
+                neighbours.Add(_grid[center.x + i, center.y - radius]);
         }
         return neighbours.ToArray();
     }
 
     public void SetCellByGridPosition(Vector2Int pos, T new_cell)
     {
-        grid[pos.x, pos.y] = new_cell;
+        _grid[pos.x, pos.y] = new_cell;
         new_cell.GridPosition = pos;
+        OnGridChange?.Invoke();
     }
 
     public void SetCellByGlobalPosition(Vector2 global_pos, T new_cell)
@@ -118,29 +160,38 @@ public class GridManager<T> : MonoBehaviour where T : IGridItem
         SetCellByGridPosition(GetGridPositionFromGlobal(global_pos), new_cell);
     }
 
+    public int GetDistance(MapCell start, MapCell end)
+    {
+        int distX = Mathf.Abs(start.GridPosition.x - end.GridPosition.x);
+        int distY = Mathf.Abs(start.GridPosition.y - end.GridPosition.y);
+
+
+        if (distX > distY)
+            return 14 * distY + 10 * (distX - distY);
+        return 14 * distX + 10 * (distY - distX);
+    }
+
     public bool AbnormalGridPosition(Vector2Int position)
     {
-        return position.x < 0 || position.x >= grid_size.x || position.y < 0 || position.y >= grid_size.y;
+        return position.x < 0 || position.x >= _grid_size.x || position.y < 0 || position.y >= _grid_size.y;
     }
 
     public float GetCellSize() => cell_size;
 
-    public Vector2Int GetMapSize() => grid_size;
+    public Vector2Int GetMapSize() => _grid_size;
 
-    public int GetMapArea() => grid_size.x * grid_size.y;
+    public int GetMapArea() => _grid_size.x * _grid_size.y;
 
     private void OnDrawGizmos()
     {
         if (!ShowGizmos)
             return;
 
-        Gizmos.DrawWireCube(grid_origin + (Vector2)grid_size * cell_size / 2, (Vector2)grid_size * cell_size);
-        if (grid == null)
+        Gizmos.DrawWireCube(grid_origin + (Vector2)_grid_size * cell_size / 2, (Vector2)_grid_size * cell_size);
+        if (_grid == null)
             return;
 
-        foreach (T cell in grid)
-        {
+        foreach (T cell in _grid)
             Gizmos.DrawWireCube(GetGlobalPosition(cell), Vector3.one * (cell_size - .1f));
-        }
     }
 }

@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 
-public abstract class Building : MonoBehaviour
+[RequireComponent(typeof(Damagable))]
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(BoxCollider2D))]
+public class Building : MonoBehaviour
 {
     [SerializeField] protected Buildings type;
     [SerializeField] protected Vector2 size;
     [SerializeField] protected int cost;
     [SerializeField] protected GameObject _explosion_prefab;
+    [SerializeField] protected float _maintenance_cost;
+    public bool IsEnemy { get; set; }
 
     protected void Start()
     {
@@ -13,6 +18,7 @@ public abstract class Building : MonoBehaviour
         exp.TryGetComponent(out Explosion explosion);
         explosion.SetRadius(size.x);
         explosion.SetTarget(GetComponent<Damagable>());
+        explosion.transform.SetParent(transform);
     }
 
     public virtual void SelfUpdate()
@@ -40,5 +46,7 @@ public abstract class Building : MonoBehaviour
     public Buildings GetBuildingType() => type;
 
     public int GetCost() => cost;
+
+    public float MaintenanceCost => _maintenance_cost;
  
 }

@@ -30,9 +30,7 @@ public class MapGenerator : ScriptableObject
     {
         List<float[,]> samples = new List<float[,]>();
         for (int i = 0; i < octaves_count; i++)
-        {
             samples.Add(GenerateSample(map_size, start_frequency * Mathf.Pow(lacunarity, i), Mathf.Pow(persistance, i)));
-        }
 
         return CollapseLayersToOne(samples, map_size);
     }

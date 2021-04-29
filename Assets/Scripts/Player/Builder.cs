@@ -6,6 +6,7 @@ public class Builder : MonoBehaviour
 {
     [SerializeField] private GameObject[] prefabs;
     [SerializeField] private GameObject preview_prefab;
+    [SerializeField] private bool _is_enemy = false;
 
     public delegate void OnBuild(Building building);
     public OnBuild onBuild = null;
@@ -54,7 +55,7 @@ public class Builder : MonoBehaviour
         preview_obj.transform.position = position;
     }
 
-    private Vector3 StickPositionToGrid(Vector3 pos, float cell_size)
+    public Vector3 StickPositionToGrid(Vector3 pos, float cell_size)
     {
         Vector3 shift = CalculateShift();
         pos.x -= pos.x % cell_size - cell_size / 2 * Mathf.Sign(pos.x) - shift.x * cell_size / 2; // stick to the grid
@@ -73,20 +74,26 @@ public class Builder : MonoBehaviour
 
     public void Build(GameManager gameManager)
     {
+        Build(gameManager, preview_obj.transform.position);
+    }
+
+    public void Build(GameManager gameManager, Vector3 position)
+    {
         Building current_building = buildings_prefab[(int)building_type];
 
-        if (!gameManager.IsAffordable(current_building))
+        if (!gameManager.IsAffordable(current_building, _is_enemy))
             return;
 
-        Vector3 position = preview_obj.transform.position;
         if (!gameManager.GetMapManager().IsRectBuildable(position, current_building.GetSize()))
             return;
 
         if (!current_building.IsPositionAcceptable(gameManager, position))
             return;
-        
-        GameObject building = Instantiate(prefabs[(int)building_type], position, Quaternion.identity);
 
-        onBuild(building.GetComponent<Building>());
+        GameObject building_obj = Instantiate(prefabs[(int)building_type], position, Quaternion.identity);
+        Building building = building_obj.GetComponent<Building>();
+        building.IsEnemy = _is_enemy;
+
+        onBuild(building);
     }
 }

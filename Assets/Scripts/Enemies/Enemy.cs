@@ -1,38 +1,75 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+public enum BehaviourPattern
+{
+    Local,
+    Path
+}
+
+[RequireComponent(typeof(Damagable))]
+[RequireComponent(typeof(Walker))]
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(MeleeDamager))]
+[RequireComponent(typeof(ContextSteerer))]
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] protected float ApS;
-    [SerializeField] protected float damage;
-    [SerializeField] protected float speed;
-    [SerializeField] protected LayerMask player_mask;
+    public bool ShowGizmos;
 
-    protected EnemyTargets target;
-    protected Vector3 target_pos;
-    protected PathRequestManager pathRequestManager;
+    [SerializeField] protected float _vision_radius;
 
-    public bool IsTargetEleminated;
+    protected PathRequestManager _pathRequestManager;
+    protected Walker _walker;
+    protected ContextSteerer _steerer;
+    protected PathFollower _path_follower;
 
-    private void Start()
+    protected BehaviourPattern _behaviour_pattern = BehaviourPattern.Local;
+
+    protected bool _stunned = false;
+    protected virtual void Start()
     {
-        pathRequestManager = FindObjectOfType<GameManager>().GetPathRequestManager();
+        _pathRequestManager = FindObjectOfType<GameManager>().GetPathRequestManager();
+        _walker = GetComponent<Walker>();
+        _steerer = GetComponent<ContextSteerer>();
+        _path_follower = GetComponent<PathFollower>();
+        _steerer.TargetIdentification = (collider) => collider.TryGetComponent(out Damagable damagable) && !damagable.is_enemy;
+        _steerer.DangerIdentification = (collider) => collider.gameObject != gameObject;
+        _steerer.VisionRadius = _vision_radius;
     }
 
     public virtual void SelfUpdate()
     {
-
+        
     }
 
-    public EnemyTargets GetTarget()
+    public void Update()
     {
-        return target;
+        if (_stunned)
+            return;
+
+        if (_behaviour_pattern == BehaviourPattern.Path)
+            _path_follower.FollowPath();
+        else
+            _steerer.Act();
     }
 
-    public void SetTarget(Vector3 _target_pos)
+    protected void KnockBack(float knock_back_distance, Vector2 direction)
     {
-        target_pos = _target_pos;
+        transform.position = (Vector2)transform.position + direction.normalized * knock_back_distance;
     }
 
+    protected void Stun(float duration)
+    {
+        _stunned = true;
+        Invoke(nameof(ResetStun), duration);
+    }
+
+    private void ResetStun()
+    {
+        _stunned = false;
+    }
+
+    public void SetBehaviourPatter(BehaviourPattern pattern)
+    {
+        _behaviour_pattern = pattern;
+    }
 }

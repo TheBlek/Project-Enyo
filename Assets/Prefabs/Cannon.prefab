@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 8024812880699409492}
   - component: {fileID: 7785226698098684463}
   - component: {fileID: 1545982760489011897}
-  m_Layer: 0
+  - component: {fileID: 5777554880271327675}
+  m_Layer: 8
   m_Name: Cannon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,12 +105,11 @@ MonoBehaviour:
   cost: 100
   _explosion_prefab: {fileID: 5046511379225573602, guid: 8ed8729fad97c004687933f8fa01ba20,
     type: 3}
+  _maintenance_cost: 0
   _max_fire_radius: 2
   _min_fire_radius: 0
-  _turn_speed: 135
-  _barrel: {fileID: 4890856201541899677}
-  _barrel_angle_offset: 180
   _check_for_obstacles: 1
+  _barrel: {fileID: 4890856201541899677}
 --- !u!114 &8024812880699409492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,6 +170,22 @@ MonoBehaviour:
   hurtColor: {r: 0, g: 0, b: 0, a: 0}
   death_offset: 0
   is_enemy: 0
+--- !u!114 &5777554880271327675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4890856199933004736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ede2105a681200140b61d5c0f6e32322, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pointer: {fileID: 4890856201541899676}
+  _angular_speed: 100
+  _sight_offset: 180
+  _instant_pointing: 0
 --- !u!1 &4890856201541899677
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,7 +197,7 @@ GameObject:
   - component: {fileID: 4890856201541899676}
   - component: {fileID: 4890856201541899678}
   - component: {fileID: 4890856201541899679}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -282,7 +298,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1635881763253654275}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ShootPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -314,7 +330,7 @@ GameObject:
   - component: {fileID: 8881445116266926920}
   - component: {fileID: 8881445116266926922}
   - component: {fileID: 8881445116266926923}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}

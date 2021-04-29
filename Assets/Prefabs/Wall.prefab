@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 793036732}
   - component: {fileID: 793036734}
   - component: {fileID: 793036733}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ GameObject:
   - component: {fileID: 7211070283343541459}
   - component: {fileID: 3728343655747523259}
   - component: {fileID: -5927669417007015562}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -220,6 +220,7 @@ MonoBehaviour:
   cost: 200
   _explosion_prefab: {fileID: 5046511379225573602, guid: 8ed8729fad97c004687933f8fa01ba20,
     type: 3}
+  _maintenance_cost: 0
   sprites:
   - {fileID: 2868539044483428322, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}
   - {fileID: -5107677499478342438, guid: 51672202b4842f0458691f3f5ff1f563, type: 3}

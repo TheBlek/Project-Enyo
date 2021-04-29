@@ -16,7 +16,7 @@ public class MapGeneratorEditor : Editor
         if(mapGen._thresholds == null || mapGen._thresholds.Length != length)
         {
             Debug.Log("Had to reset threshold array");
-            mapGen._thresholds = new float[Enum.GetNames(typeof(MapTiles)).Length];
+            mapGen._thresholds = new float[length];
         }
 
         GUILayout.Label("Regions Thresholds");

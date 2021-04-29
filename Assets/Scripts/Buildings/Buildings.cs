@@ -1,13 +1,13 @@
 ﻿public enum Buildings
 {
     AboutToDie, // Disasterous
-    building1,
+    InfluenceExpander,
     Mine,
     Wall,
     Gate,
     Cannon,
     Sniper,
     Artillery,
-    building8,
+    Barrack,
     building9
 }

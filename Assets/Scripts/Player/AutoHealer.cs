@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
+[RequireComponent(typeof(Damagable))]
 public class AutoHealer : MonoBehaviour
 {
     [SerializeField] private float time_delay;

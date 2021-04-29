@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 1967142135355441340}
   - component: {fileID: 1967142135355441341}
   - component: {fileID: 1639380243}
-  m_Layer: 0
+  - component: {fileID: 2735366956392788448}
+  m_Layer: 8
   m_Name: Sniper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,12 +105,11 @@ MonoBehaviour:
   cost: 200
   _explosion_prefab: {fileID: 5046511379225573602, guid: 8ed8729fad97c004687933f8fa01ba20,
     type: 3}
+  _maintenance_cost: 0
   _max_fire_radius: 4
   _min_fire_radius: 0.5
-  _turn_speed: 90
-  _barrel: {fileID: 1967142137197869959}
-  _barrel_angle_offset: 180
   _check_for_obstacles: 1
+  _barrel: {fileID: 1967142137197869959}
 --- !u!114 &1967142135355441340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,6 +170,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.45, y: 0.45}
   m_EdgeRadius: 0
+--- !u!114 &2735366956392788448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967142135355441314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ede2105a681200140b61d5c0f6e32322, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _pointer: {fileID: 1967142137197869958}
+  _angular_speed: 80
+  _sight_offset: 180
+  _instant_pointing: 0
 --- !u!1 &1967142135773953341
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,7 +197,7 @@ GameObject:
   - component: {fileID: 1967142135773953340}
   - component: {fileID: 1967142135773953342}
   - component: {fileID: 1967142135773953343}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Blow Animation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +296,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1967142136295762732}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Shooting Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -295,7 +311,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1967142136295762733}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: -0.399, y: 0, z: 0}
+  m_LocalPosition: {x: -0.429, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1967142137197869958}
@@ -312,7 +328,7 @@ GameObject:
   - component: {fileID: 1967142137197869958}
   - component: {fileID: 1967142137197869953}
   - component: {fileID: 1063293602683430605}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

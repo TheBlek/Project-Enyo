@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
+[RequireComponent(typeof(Animator))]
 public class Cannon : AttackBuilding
 {
     private Animator _shoot_animator;
+    [SerializeField] GameObject _barrel;
 
     private new void Start()
     {
