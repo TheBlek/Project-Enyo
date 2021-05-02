@@ -11,11 +11,11 @@ public enum ChangeRequestType
 public class PlayerControls : MonoBehaviour
 { 
     [SerializeField] private Camera player_camera;
-    [SerializeField] private GameManager gameManager;
     [SerializeField] private Builder _builder;
     [SerializeField] private Shooter _shooter;
     [SerializeField] private Walker _walker;
     [SerializeField] private Looker _looker;
+    private GameManager _gameManager;
 
     private float cell_size;
 
@@ -26,7 +26,8 @@ public class PlayerControls : MonoBehaviour
 
     private void Start()
     {
-        cell_size = gameManager.GetMapManager().GetCellSize();
+        _gameManager = FindObjectOfType<GameManager>();
+        cell_size = _gameManager.GetMapManager().GetCellSize();
     }
 
     void Update()
@@ -37,6 +38,14 @@ public class PlayerControls : MonoBehaviour
             _builder.Preview(player_camera, cell_size);
 
         input_movement = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (PauseMenuManager.GameIsPaused)
+                _gameManager.PauseMenuManager.Resume();
+            else
+                _gameManager.PauseMenuManager.Pause();
+        }
     }
 
     private void HandleMouseInput()
@@ -44,7 +53,7 @@ public class PlayerControls : MonoBehaviour
         bool lShiftInput = Input.GetKey(KeyCode.LeftShift);
         if (building_mode && GetMouseInput(lShiftInput))
         {
-            _builder.Build(gameManager);
+            _builder.Build(_gameManager);
             if (!lShiftInput)
                 ChangeBuildingStateRequest(ChangeRequestType.Anyway);
         }
@@ -79,13 +88,6 @@ public class PlayerControls : MonoBehaviour
         _builder.SwitchPreviewState(building_mode);
     }
 
-    public Buildings BuildingType
-    {
-        set
-        {
-            _builder.SetBuildingType(value);
-        }
-    }
 
     private void FixedUpdate()
     {
@@ -99,4 +101,12 @@ public class PlayerControls : MonoBehaviour
     }
 
     public Builder GetBuilder() => _builder;
+
+    public Buildings BuildingType
+    {
+        set
+        {
+            _builder.SetBuildingType(value);
+        }
+    }
 }

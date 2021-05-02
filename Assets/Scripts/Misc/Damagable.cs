@@ -37,6 +37,8 @@ public class Damagable : MonoBehaviour
 
     public void Heal(float heal_amount)
     {
+        if (HP == maxHP) return;
+
         HP += heal_amount;
         if (HP > maxHP)
             HP = maxHP;
