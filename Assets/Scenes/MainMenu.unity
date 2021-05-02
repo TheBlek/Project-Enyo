@@ -416,7 +416,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _game_scene: SampleScene
   _buttons: {fileID: 797564617}
-  _progress_bar: {fileID: 831272227}
 --- !u!4 &581977709
 Transform:
   m_ObjectHideFlags: 0
@@ -787,7 +786,8 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
+    m_HighlightedSprite: {fileID: 7364238455121752455, guid: 2ec1b5ea2c2f3234282dda21e188e6ee,
+      type: 3}
     m_PressedSprite: {fileID: 5132153775253951326, guid: 2ec1b5ea2c2f3234282dda21e188e6ee,
       type: 3}
     m_SelectedSprite: {fileID: 0}
@@ -1145,7 +1145,8 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
+    m_HighlightedSprite: {fileID: 4581749389039591375, guid: 2ec1b5ea2c2f3234282dda21e188e6ee,
+      type: 3}
     m_PressedSprite: {fileID: -1692441373449392502, guid: 2ec1b5ea2c2f3234282dda21e188e6ee,
       type: 3}
     m_SelectedSprite: {fileID: 0}

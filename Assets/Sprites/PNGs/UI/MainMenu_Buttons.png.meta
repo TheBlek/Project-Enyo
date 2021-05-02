@@ -14,6 +14,12 @@ TextureImporter:
   - first:
       213: -1692441373449392502
     second: MainMenu_Buttons_Quit_Pressed
+  - first:
+      213: 7364238455121752455
+    second: MainMenu_Buttons_4
+  - first:
+      213: 4581749389039591375
+    second: MainMenu_Buttons_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -138,7 +144,7 @@ TextureImporter:
         x: 129
         y: 13
         width: 52
-        height: 16
+        height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 1, y: 0, z: 0, w: 0}
@@ -180,7 +186,7 @@ TextureImporter:
         x: 209
         y: 15
         width: 51
-        height: 16
+        height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -190,6 +196,48 @@ TextureImporter:
       bones: []
       spriteID: a8eef5ca98d3388e0800000000000000
       internalID: -1692441373449392502
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MainMenu_Buttons_4
+      rect:
+        serializedVersion: 2
+        x: 214
+        y: 110
+        width: 102
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 781bdc68bd7033660800000000000000
+      internalID: 7364238455121752455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MainMenu_Buttons_5
+      rect:
+        serializedVersion: 2
+        x: 262
+        y: 15
+        width: 51
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fcf519f4bc4a59f30800000000000000
+      internalID: 4581749389039591375
       vertices: []
       indices: 
       edges: []
