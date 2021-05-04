@@ -8,7 +8,7 @@ public class SceneLoader : MonoBehaviour
 
     public static void LoadScene(string name)
     {
-        SceneManager.LoadSceneAsync("LoadingScene");
+        SceneManager.LoadSceneAsync("LoadingScene", LoadSceneMode.Additive);
         
         SceneManager.sceneLoaded += OnSceneLoaded;
         _nextSceneName = name;
@@ -18,11 +18,16 @@ public class SceneLoader : MonoBehaviour
     {
         if (scene.name == "LoadingScene")
         {
-            SceneManager.SetActiveScene(scene);
-            FindObjectOfType<ProgressBar>().Proccesses = new List<AsyncOperation>
+            List<AsyncOperation> operations = new List<AsyncOperation>
             {
-                SceneManager.LoadSceneAsync(_nextSceneName)
+                SceneManager.LoadSceneAsync(_nextSceneName, LoadSceneMode.Additive),
+                SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene())
             };
+            FindObjectOfType<ProgressBar>().Proccesses = operations;
         }
+        if (scene.name == _nextSceneName)
+            SceneManager.UnloadSceneAsync("LoadingScene");
+        if (scene.name != "Initialization")
+            SceneManager.SetActiveScene(scene);
     }
 }
