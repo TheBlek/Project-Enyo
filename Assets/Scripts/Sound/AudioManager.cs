@@ -24,6 +24,6 @@ public class AudioManager : MonoBehaviour
 
     private void OnPlayingEnd(SoundEmitter emitter)
     {
-        Destroy(emitter);
+        Destroy(emitter.gameObject);
     }
 }

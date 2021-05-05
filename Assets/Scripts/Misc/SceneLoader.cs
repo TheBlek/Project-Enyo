@@ -25,9 +25,9 @@ public class SceneLoader : MonoBehaviour
             };
             FindObjectOfType<ProgressBar>().Proccesses = operations;
         }
-        if (scene.name == _nextSceneName)
-            SceneManager.UnloadSceneAsync("LoadingScene");
         if (scene.name != "Initialization")
             SceneManager.SetActiveScene(scene);
+        if (scene.name == _nextSceneName)
+            SceneManager.UnloadSceneAsync("LoadingScene");
     }
 }

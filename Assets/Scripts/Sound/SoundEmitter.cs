@@ -12,6 +12,12 @@ public class SoundEmitter : MonoBehaviour
     private void Awake()
     {
         _source = GetComponent<AudioSource>();
+        //OnPlayingEnd += Inform;
+    }
+
+    private void Inform(SoundEmitter emitter)
+    {
+        Debug.Log(emitter.name + " has ended playing his sound");
     }
 
     public void PlayClip(AudioClip clip, AudioCueConfiguration config, Vector2 position)

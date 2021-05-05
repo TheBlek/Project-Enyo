@@ -3,7 +3,6 @@
 public class MainMenuManager : MonoBehaviour
 {
     [SerializeField] private string _game_scene;
-    [SerializeField] private GameObject _buttons;
 
     public void LoadNewGame()
     {
