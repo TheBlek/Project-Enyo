@@ -1,4 +1,5 @@
-﻿public class GameQuitter
+﻿using UnityEngine;
+public class GameQuitter
 {
 
     public static void QuitGame()

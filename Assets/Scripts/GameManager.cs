@@ -24,12 +24,12 @@ public class GameManager : MonoBehaviour
         pathRequestManager = GetComponent<PathRequestManager>();
         PauseMenuManager = GetComponent<PauseMenuManager>();
 
-        player.Damagable.onDestroy += LoadGameOver;
+        player.Damagable.onKill += LoadGameOver;
 
         _random = new System.Random();
     }
 
-    private void LoadGameOver(Damagable obj)
+    private void LoadGameOver()
     {
         SceneLoader.LoadScene("GameOver");
     }

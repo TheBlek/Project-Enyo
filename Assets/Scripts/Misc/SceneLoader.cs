@@ -8,7 +8,6 @@ public class SceneLoader : MonoBehaviour
 
     public static void LoadScene(string name)
     {
-        Debug.Log("Loading requested");
         SceneManager.LoadSceneAsync("LoadingScene", LoadSceneMode.Additive);
         
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -19,7 +18,7 @@ public class SceneLoader : MonoBehaviour
     {
         if (scene.name == "LoadingScene")
         {
-            Debug.Log("Starting loading...");
+            Debug.Log("I'm gonna load " + _nextSceneName);
             List<AsyncOperation> operations = new List<AsyncOperation>
             {
                 SceneManager.LoadSceneAsync(_nextSceneName, LoadSceneMode.Additive),
