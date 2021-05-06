@@ -8,6 +8,10 @@ public class Shooter : MonoBehaviour
     [SerializeField] private GameObject muzzleflash_prefab;
     [SerializeField] private float fires_per_sec = 9;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip _shootSound;
+    [SerializeField] private AudioCueEventChannel _SFXChannel;
+
     private float delay;
     private float time_since_last_shot;
 
@@ -18,6 +22,9 @@ public class Shooter : MonoBehaviour
         delay = 1/fires_per_sec;
         if (muzzleflash_prefab != null)
             OnShoot += HandleMuzzleflash;
+
+        if (_shootSound != null && _SFXChannel != null)
+            OnShoot += PlayShootSound;
     }
 
     private void Update()
@@ -48,6 +55,11 @@ public class Shooter : MonoBehaviour
             return false;
 
         return true;
+    }
+
+    private void PlayShootSound()
+    {
+        _SFXChannel.RaiseEvent(_shootSound, new AudioCueConfiguration { volume=1f,pitch=1f,loop=false }, transform.position);
     }
 
     private void HandleMuzzleflash()

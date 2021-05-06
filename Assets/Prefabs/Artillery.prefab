@@ -231,6 +231,8 @@ MonoBehaviour:
   muzzleflash_prefab: {fileID: 4888336077852425765, guid: 1271cb78f868e1447b53423bd8cb6261,
     type: 3}
   fires_per_sec: 0.5
+  _shootSound: {fileID: 8300000, guid: 5f81f891a25bacb4c8440e6409ce570f, type: 3}
+  _SFXChannel: {fileID: 11400000, guid: 5dc8be45c03147f45b0dbf1bf753a41e, type: 2}
 --- !u!114 &5535277417417508547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -245,6 +247,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 200
   hurtColor: {r: 0, g: 0, b: 0, a: 0}
+  _hurtSound: {fileID: 8300000, guid: 5f13109c7b5e8534885f39c533d83a76, type: 3}
+  _SFXChannel: {fileID: 11400000, guid: 5dc8be45c03147f45b0dbf1bf753a41e, type: 2}
   death_offset: 0
   is_enemy: 0
 --- !u!61 &2590028344432081123
