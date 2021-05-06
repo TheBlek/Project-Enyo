@@ -15,6 +15,7 @@ public class PlayerControls : MonoBehaviour
     [SerializeField] private Shooter _shooter;
     [SerializeField] private Walker _walker;
     [SerializeField] private Looker _looker;
+    [SerializeField] private Damagable _damagable;
     private GameManager _gameManager;
 
     private float cell_size;
@@ -101,6 +102,8 @@ public class PlayerControls : MonoBehaviour
     }
 
     public Builder GetBuilder() => _builder;
+
+    public Damagable Damagable => _damagable;
 
     public Buildings BuildingType
     {

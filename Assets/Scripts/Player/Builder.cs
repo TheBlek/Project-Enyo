@@ -38,7 +38,7 @@ public class Builder : MonoBehaviour
 
     private void PlayBuildSound(Building building)
     {
-        _SFXChannel.RaiseEvent(_buildSound, new AudioCueConfiguration { volume = 1f, pitch = 1f, loop=false }, building.transform.position);
+        _SFXChannel.RaiseEvent(_buildSound, new AudioCueConfiguration { volume = 0.8f, pitch = 1f, loop=false }, building.transform.position);
     }
 
     private Vector2 CalculateShift()

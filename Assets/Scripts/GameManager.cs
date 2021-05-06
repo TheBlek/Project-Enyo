@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -23,7 +24,14 @@ public class GameManager : MonoBehaviour
         pathRequestManager = GetComponent<PathRequestManager>();
         PauseMenuManager = GetComponent<PauseMenuManager>();
 
+        player.Damagable.onDestroy += LoadGameOver;
+
         _random = new System.Random();
+    }
+
+    private void LoadGameOver(Damagable obj)
+    {
+        SceneLoader.LoadScene("GameOver");
     }
 
     private void SetUpBuilders()
