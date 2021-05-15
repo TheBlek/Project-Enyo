@@ -39,7 +39,7 @@ public struct Steer
         for (int i = 0; i < _context_map.DirectionsCount; i++)
             _context_map.Interests[i] = (_old_context_map.Interests[i] + time * _context_map.Interests[i]) / (time + 1);
         for (int i = 0; i < _context_map.DirectionsCount; i++)
-            _context_map.Dangers[i] = (_old_context_map.Dangers[i] + _context_map.Dangers[i]) / 2;
+            _context_map.Dangers[i] = (_old_context_map.Dangers[i] + time * _context_map.Dangers[i]) / (time + 1);
     }
     public void VisualizeInterests(Vector2 position)
     {
@@ -175,7 +175,7 @@ public struct Steer
         return result;
     }
 
-    public Vector2[] GetDirections() => _context_map.Directions;
+    public Vector2[] Directions => _context_map.Directions;
 
     public int DirectionsCount => _context_map.DirectionsCount;
 }

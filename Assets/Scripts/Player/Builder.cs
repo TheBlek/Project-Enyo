@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +9,12 @@ public class Builder : MonoBehaviour
     [SerializeField] private GameObject preview_prefab;
     [SerializeField] private bool _is_enemy = false;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip _buildSound;
+    [SerializeField] private AudioCueEventChannel _SFXChannel;
+
     public delegate void OnBuild(Building building);
-    public OnBuild onBuild = null;
+    public OnBuild onBuild;
 
     private GameObject preview_obj;
     private Building[] buildings_prefab;
@@ -26,6 +31,14 @@ public class Builder : MonoBehaviour
 
         for (int i = 0; i < prefabs.Length; i++)
             buildings_prefab[i] = prefabs[i].GetComponent<Building>();
+
+        if (_buildSound != null && _SFXChannel != null)
+            onBuild += PlayBuildSound;
+    }
+
+    private void PlayBuildSound(Building building)
+    {
+        _SFXChannel.RaiseEvent(_buildSound, new AudioCueConfiguration { volume = 0.8f, pitch = 1f, loop=false }, building.transform.position);
     }
 
     private Vector2 CalculateShift()

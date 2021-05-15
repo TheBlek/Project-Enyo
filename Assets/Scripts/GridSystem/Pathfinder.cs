@@ -52,8 +52,8 @@ public class Pathfinder
                         openSet.Add(neighbour);
                 }
             }
-            yield return null;
         }
+        yield return null;
         _OnPathProcessingEnd(null, false);
     }
 

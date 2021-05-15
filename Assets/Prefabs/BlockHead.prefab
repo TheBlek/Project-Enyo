@@ -137,6 +137,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHP: 500
   hurtColor: {r: 0, g: 0, b: 0, a: 0}
+  _hurtSound: {fileID: 8300000, guid: 5f13109c7b5e8534885f39c533d83a76, type: 3}
+  _SFXChannel: {fileID: 11400000, guid: 5dc8be45c03147f45b0dbf1bf753a41e, type: 2}
   death_offset: 0
   is_enemy: 1
 --- !u!114 &1955800006

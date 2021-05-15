@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -21,8 +22,16 @@ public class GameManager : MonoBehaviour
 
         mapManager = GetComponent<MapManager>();
         pathRequestManager = GetComponent<PathRequestManager>();
+        PauseMenuManager = GetComponent<PauseMenuManager>();
+
+        player.Damagable.onKill += LoadGameOver;
 
         _random = new System.Random();
+    }
+
+    private void LoadGameOver()
+    {
+        SceneLoader.LoadScene("GameOver");
     }
 
     private void SetUpBuilders()
@@ -50,9 +59,7 @@ public class GameManager : MonoBehaviour
     private void Maintenance()
     {
         foreach (Building building in buildings)
-        {
             AddMetals((int)-building.MaintenanceCost, building.IsEnemy);
-        }
     }
 
     private void RemoveNullBuildings()
@@ -97,6 +104,8 @@ public class GameManager : MonoBehaviour
     public MapManager GetMapManager() => mapManager;
 
     public PathRequestManager GetPathRequestManager() => pathRequestManager;
+
+    public PauseMenuManager PauseMenuManager { get; private set; }
 
     public bool IsAffordable(Building building, bool is_enemy)
     {

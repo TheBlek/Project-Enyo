@@ -7,6 +7,9 @@ public class Damagable : MonoBehaviour
 {
     [SerializeField] private float maxHP;
     [SerializeField] private Color hurtColor;
+    [SerializeField] private AudioClip _hurtSound;
+    [SerializeField] private AudioCueEventChannel _SFXChannel;
+    
     public float death_offset;
 
     public Action onHeal;
@@ -16,15 +19,22 @@ public class Damagable : MonoBehaviour
 
     public bool is_enemy;
 
-    private float HP;
+    private float HP; 
 
     private void Start()
     { 
         HP = maxHP;
         onKill += Destroy;
         onDamage += StartWhiteEffect;
+        if (_hurtSound != null && _SFXChannel != null)
+            onDamage += PlayHurtSound;
         if (hurtColor.a == 0)
             hurtColor = Color.red;
+    }
+
+    private void PlayHurtSound()
+    {
+        _SFXChannel.RaiseEvent(_hurtSound, new AudioCueConfiguration { volume=1f, pitch=1f, loop=false }, transform.position);
     }
 
     public void TakeDamage(float damage)
@@ -37,6 +47,8 @@ public class Damagable : MonoBehaviour
 
     public void Heal(float heal_amount)
     {
+        if (HP == maxHP) return;
+
         HP += heal_amount;
         if (HP > maxHP)
             HP = maxHP;
